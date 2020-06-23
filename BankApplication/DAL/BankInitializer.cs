@@ -39,7 +39,7 @@ namespace BankApplication.DAL
             userManager.AddToRole(user3.Id, "Admin");
 
             var worker = new ApplicationUser { UserName = "worker@wp.pl" };
-            string workerpass = "Employee.1";
+            string workerpass = "Worker.1";
             userManager.Create(worker, workerpass);
             userManager.AddToRole(worker.Id, "Worker");
 
