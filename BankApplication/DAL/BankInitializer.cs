@@ -59,6 +59,18 @@ namespace BankApplication.DAL
             };
 
             bankAccounts.ForEach(b => context.BankAccounts.Add(b));
+
+            var profiles = new List<Profile>
+            {
+                new Profile { Login = user.UserName, BankAccounts = {bankAccounts[0]}},
+                new Profile { Login = user2.UserName, BankAccounts = {bankAccounts[1]}},
+                new Profile { Login = user3.UserName, BankAccounts = {bankAccounts[2]}},
+                new Profile { Login = worker.UserName, },
+            };
+
+            profiles.ForEach(p => context.Profiles.Add(p));
+            context.SaveChanges();
+
             context.SaveChanges();
         }
     }
