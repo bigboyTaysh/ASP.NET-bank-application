@@ -1,4 +1,6 @@
 ﻿using BankApplication.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -11,6 +13,36 @@ namespace BankApplication.DAL
     {
         protected override void Seed(BankContext context)
         {
+            var roleManager = new RoleManager<IdentityRole>(
+                new RoleStore<IdentityRole>(new ApplicationDbContext()));
+
+            var userManager = new UserManager<ApplicationUser>(
+                new UserStore<ApplicationUser>(new ApplicationDbContext()));
+
+            roleManager.Create(new IdentityRole("Admin"));
+            roleManager.Create(new IdentityRole("User"));
+            roleManager.Create(new IdentityRole("Worker"));
+
+            var user = new ApplicationUser { UserName = "email1@wp.pl" };
+            string password = "Password.1";
+            userManager.Create(user, password);
+            userManager.AddToRole(user.Id, "User");
+
+            var user2 = new ApplicationUser { UserName = "email2@wp.pl" };
+            string password2 = "Password.2";
+            userManager.Create(user2, password2);
+            userManager.AddToRole(user2.Id, "User");
+
+            var user3 = new ApplicationUser { UserName = "admin@wp.pl" };
+            string password3 = "Admin.1";
+            userManager.Create(user3, password3);
+            userManager.AddToRole(user3.Id, "Admin");
+
+            var worker = new ApplicationUser { UserName = "worker@wp.pl" };
+            string workerpass = "Employee.1";
+            userManager.Create(worker, workerpass);
+            userManager.AddToRole(worker.Id, "Worker");
+
             var bankAccountTypes = new List<BankAccountType>
             {
                 new BankAccountType {TypeName = "Konto dla młodych", Commission = 0m},
