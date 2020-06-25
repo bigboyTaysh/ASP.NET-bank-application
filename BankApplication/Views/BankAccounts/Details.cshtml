@@ -58,6 +58,14 @@
             @Html.DisplayFor(model => model.CreationDate)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.FileName)
+        </dt>
+
+        <dd>
+            <img src="~/Images/@Html.DisplayFor(model => model.FileName)" alt="" height="50px" width="50px"/>
+        </dd>
+
     </dl>
 </div>
 <p>

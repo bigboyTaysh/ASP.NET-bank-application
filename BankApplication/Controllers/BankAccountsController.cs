@@ -116,6 +116,7 @@ namespace BankApplication.Controllers
             return PartialView("SearchResults", bankAccounts.Include(b => b.BankAccountType).ToPagedList(pageNumber, pageSize));
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: BankAccounts/Details/5
         public ActionResult Details(int? id)
         {
@@ -131,13 +132,16 @@ namespace BankApplication.Controllers
             return View(bankAccount);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: BankAccounts/Create
         public ActionResult Create()
         {
             ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "TypeName");
+            ViewData["Message"] = "";
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: BankAccounts/Create
         // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -145,17 +149,24 @@ namespace BankApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Balance,AvailableFounds,Lock,BankAccountNumber,CreationDate,BankAccountTypeID")] BankAccount bankAccount)
         {
-            if (ModelState.IsValid)
+            HttpPostedFileBase file = Request.Files["FileName"];
+
+            if (ModelState.IsValid && file != null && file.ContentLength > 0)
             {
+                bankAccount.FileName = file.FileName;
+                file.SaveAs(HttpContext.Server.MapPath("~/Images/") + bankAccount.FileName);
+
                 db.BankAccounts.Add(bankAccount);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "TypeName", bankAccount.BankAccountTypeID);
+            ViewData["Message"] = "Poszło";
             return View(bankAccount);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: BankAccounts/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -172,6 +183,7 @@ namespace BankApplication.Controllers
             return View(bankAccount);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: BankAccounts/Edit/5
         // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -189,6 +201,7 @@ namespace BankApplication.Controllers
             return View(bankAccount);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: BankAccounts/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -204,6 +217,7 @@ namespace BankApplication.Controllers
             return View(bankAccount);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: BankAccounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

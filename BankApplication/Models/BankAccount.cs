@@ -27,7 +27,6 @@ namespace BankApplication.Models
         [Display(Name = "Bank account number")]
         [MinLength(32)]
         [MaxLength(32)]
-        [DisplayFormat(DataFormatString = "{0:## #### #### #### #### #### ####}", ApplyFormatInEditMode = true)]
         public string BankAccountNumber { get; set; }
 
         [Required]
@@ -38,6 +37,8 @@ namespace BankApplication.Models
 
         [Required]
         public int BankAccountTypeID { get; set; }
+
+        public string FileName { get; set; }
 
         public virtual BankAccountType BankAccountType { get; set; }
     }

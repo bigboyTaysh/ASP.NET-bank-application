@@ -1,4 +1,5 @@
 ﻿@model BankApplication.Models.BankAccount
+@ViewBag
 
 @{
     ViewBag.Title = "Create";
@@ -7,10 +8,11 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "BankAccounts", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+    @ViewData["Message"]
+
     <div class="form-horizontal">
         <h4>BankAccount</h4>
         <hr />
@@ -60,6 +62,14 @@
             <div class="col-md-10">
                 @Html.DropDownList("BankAccountTypeID", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.BankAccountTypeID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="FileName" />
+                @Html.ValidationMessageFor(model => model.FileName, "", new { @class = "text-danger" })
             </div>
         </div>
 
