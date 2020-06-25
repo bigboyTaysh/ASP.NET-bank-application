@@ -4,15 +4,19 @@
 <script>
     $(document).ready(function () {
         $(".searchString").on("keyup", function (e) {
-            var data = $(".searchString").val();
+            var searchString = $(".searchString").val();
 
-            console.log(data);
+            var url = window.location.href;
+            var sortOrder = url.split("=").pop();
+
+            console.log("search by: " + sortOrder);
 
             $.ajax({
                 type: "POST",
                 url: "/BankAccounts",
                 data: {
-                    searchString: data
+                    searchString: searchString,
+                    sortOrder: sortOrder
                 },
                 datatype: "text",
                 success: function (data) {
@@ -40,7 +44,6 @@
 {
     <p>
         Find by number: @Html.TextBox("SearchString", null, new { @class = "searchString" })
-        <input class="search" type="submit" value="Search" />
     </p>
 }
 
