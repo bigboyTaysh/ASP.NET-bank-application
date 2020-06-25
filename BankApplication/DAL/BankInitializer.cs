@@ -54,8 +54,8 @@ namespace BankApplication.DAL
 
             var bankAccounts = new List<BankAccount>
             {
-                new BankAccount {Balance = 0m, AvailableFounds = 0m, Lock = 0m, BankAccountNumber = "12123412341234123412341230", CreationDate = new DateTime(2020, 06, 04), BankAccountType = bankAccountTypes[0]},
-                new BankAccount {Balance = 0m, AvailableFounds = 0m, Lock = 0m, BankAccountNumber = "12123412341234123412341231", CreationDate = new DateTime(2020, 06, 03), BankAccountType = bankAccountTypes[1]}
+                new BankAccount {Balance = 10.50m, AvailableFounds = 0m, Lock = 0m, BankAccountNumber = "12 1234 1234 1234 1234 1234 1230", CreationDate = new DateTime(2020, 06, 04), BankAccountType = bankAccountTypes[0]},
+                new BankAccount {Balance = 0m, AvailableFounds = 0m, Lock = 0m, BankAccountNumber = "12 1234 1234 1234 1234 1234 1230", CreationDate = new DateTime(2020, 06, 03), BankAccountType = bankAccountTypes[1]}
             };
 
             bankAccounts.ForEach(b => context.BankAccounts.Add(b));
