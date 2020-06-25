@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BankApplication.Models;
 using BankApplication.DAL;
+using System.Configuration;
 
 namespace BankApplication.Controllers
 {
@@ -168,6 +169,8 @@ namespace BankApplication.Controllers
                     BankContext db = new BankContext();
                     db.Profiles.Add(profile);
                     db.SaveChanges();
+
+                    SendMail("wolskiworldwidebank@gmail.com", "Tytuł testowy", "Właśnie się zarejestrowałeś " + profile.Email);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -427,6 +430,25 @@ namespace BankApplication.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        public static void SendMail(string to, string subject, string body)
+        {
+            var message = new System.Net.Mail.MailMessage(ConfigurationManager.AppSettings["sender"], to)
+            {
+                Subject = subject,
+                Body = body
+            };
+
+            var smtpClient = new System.Net.Mail.SmtpClient
+            {
+                Host = ConfigurationManager.AppSettings["smtpHost"],
+                Credentials = new System.Net.NetworkCredential(
+                    ConfigurationManager.AppSettings["sender"],
+                    ConfigurationManager.AppSettings["passwd"]),
+                EnableSsl = true
+            };
+            smtpClient.Send(message);
         }
 
         #region Pomocnicy

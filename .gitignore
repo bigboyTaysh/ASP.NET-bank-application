@@ -146,7 +146,7 @@ nCrunchTemp_*
 
 # MightyMoose
 *.mm.*
-AutoTest.Net/
+BankApplication/Web.config
 
 # Web workbench (sass)
 .sass-cache/
