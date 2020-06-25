@@ -25,6 +25,11 @@ namespace BankApplication
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/bundles/main").Include(
+                      "~/Scripts/main.js"));
+
+
         }
     }
 }

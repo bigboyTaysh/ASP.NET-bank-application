@@ -10,7 +10,7 @@ namespace BankApplication.DAL
 {
     public class BankContext : DbContext
     {
-        public BankContext() : base("DefaultConntection")
+        public BankContext() : base("DefaultConnection")
         {
         }
         public DbSet<BankAccountType> BankAccountTypes { get; set; }
