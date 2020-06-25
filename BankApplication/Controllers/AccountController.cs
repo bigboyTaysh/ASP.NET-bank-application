@@ -442,11 +442,12 @@ namespace BankApplication.Controllers
 
             var smtpClient = new System.Net.Mail.SmtpClient
             {
+                EnableSsl = true,
                 Host = ConfigurationManager.AppSettings["smtpHost"],
+                Port = 587,
                 Credentials = new System.Net.NetworkCredential(
                     ConfigurationManager.AppSettings["sender"],
                     ConfigurationManager.AppSettings["passwd"]),
-                EnableSsl = true
             };
             smtpClient.Send(message);
         }
