@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using BankApplication.DAL;
 using BankApplication.Models;
+using PagedList;
 
 namespace BankApplication.Controllers
 {
@@ -15,11 +16,104 @@ namespace BankApplication.Controllers
     {
         private BankContext db = new BankContext();
 
+        [HttpGet]
         // GET: BankAccounts
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            var bankAccounts = db.BankAccounts.Include(b => b.BankAccountType);
-            return View(bankAccounts.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NumberSortParm = String.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "date" ? "date_desc" : "date";
+
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var bankAccounts = from b in db.BankAccounts
+                               select b;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                bankAccounts = bankAccounts.Where(s => s.BankAccountNumber.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "number_desc":
+                    bankAccounts = bankAccounts.OrderByDescending(s => s.BankAccountNumber);
+                    break;
+                case "date":
+                    bankAccounts = bankAccounts.OrderBy(b => b.CreationDate);
+                    break;
+                case "date_desc":
+                    bankAccounts = bankAccounts.OrderByDescending(b => b.CreationDate);
+                    break;
+                default:
+                    bankAccounts = bankAccounts.OrderBy(b => b.CreationDate);
+                    break;
+            }
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+
+            return View(bankAccounts.Include(b => b.BankAccountType).ToPagedList(pageNumber, pageSize));
+        }
+
+        [ActionName("Index")]
+        [HttpPost]
+        public PartialViewResult IndexPost(string sortOrder, string currentFilter, string searchString, int? page)
+        {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NumberSortParm = String.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "date" ? "date_desc" : "date";
+
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var bankAccounts = from b in db.BankAccounts
+                               select b;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                bankAccounts = bankAccounts.Where(s => s.BankAccountNumber.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "number_desc":
+                    bankAccounts = bankAccounts.OrderByDescending(s => s.BankAccountNumber);
+                    break;
+                case "date":
+                    bankAccounts = bankAccounts.OrderBy(b => b.CreationDate);
+                    break;
+                case "date_desc":
+                    bankAccounts = bankAccounts.OrderByDescending(b => b.CreationDate);
+                    break;
+                default:
+                    bankAccounts = bankAccounts.OrderBy(b => b.CreationDate);
+                    break;
+            }
+
+            int pageSize = 3;
+            int pageNumber = page ?? 1;
+
+            return PartialView("SearchResults", bankAccounts.Include(b => b.BankAccountType).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: BankAccounts/Details/5
