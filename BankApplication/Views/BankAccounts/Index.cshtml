@@ -1,4 +1,30 @@
-﻿@model IEnumerable<BankApplication.Models.BankAccount>
+﻿@model PagedList.IPagedList<BankApplication.Models.BankAccount>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<script>
+    $(document).ready(function () {
+        $(".searchString").on("keyup", function (e) {
+            var data = $(".searchString").val();
+
+            console.log(data);
+
+            $.ajax({
+                type: "POST",
+                url: "/BankAccounts",
+                data: {
+                    searchString: data
+                },
+                datatype: "text",
+                success: function (data) {
+                    $('.resultsTable').html(data);
+                    console.log(data);
+                }
+            });
+
+        });
+    });
+
+</script>
 
 @{
     ViewBag.Title = "Index";
@@ -9,55 +35,73 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.BankAccountType.TypeName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Balance)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AvailableFounds)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Lock)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BankAccountNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.BankAccountType.TypeName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Balance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AvailableFounds)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Lock)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BankAccountNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreationDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
+@using (Html.BeginForm())
+{
+    <p>
+        Find by number: @Html.TextBox("SearchString", null, new { @class = "searchString" })
+        <input class="search" type="submit" value="Search" />
+    </p>
 }
 
-</table>
+<div class="resultsTable">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().BankAccountType.TypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Balance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().AvailableFounds)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Lock)
+            </th>
+            <th>
+                @Html.ActionLink("Bank account number", "Index", new { sortOrder = ViewBag.NumberSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Creation Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BankAccountType.TypeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Balance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AvailableFounds)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BankAccountNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
