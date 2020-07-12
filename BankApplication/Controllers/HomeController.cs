@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using BankApplication.DAL;
 using BankApplication.Models;
 using BankApplication.ViewModels;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Binder;
 
 namespace BankApplication.Controllers
 {
@@ -34,7 +36,6 @@ namespace BankApplication.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
