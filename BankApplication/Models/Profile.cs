@@ -11,6 +11,7 @@ namespace BankApplication.Models
         public string Login { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
+        public string Name { get; set; }
         public virtual List<BankAccount> BankAccounts { get; set; }
     }
 }
