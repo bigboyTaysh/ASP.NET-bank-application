@@ -19,6 +19,7 @@ namespace BankApplication.DAL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<BankAccount>().Property(x => x.BankAccountNumber).HasPrecision(26, 0);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
     }
