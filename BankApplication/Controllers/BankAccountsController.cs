@@ -41,7 +41,7 @@ namespace BankApplication.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                bankAccounts = bankAccounts.Where(s => s.BankAccountNumber.Contains(searchString));
+                bankAccounts = bankAccounts.Where(s => s.BankAccountNumber.ToString().Contains(searchString));
             }
 
             switch (sortOrder)
@@ -91,7 +91,7 @@ namespace BankApplication.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                bankAccounts = bankAccounts.Where(s => s.BankAccountNumber.Contains(searchString));
+                bankAccounts = bankAccounts.Where(s => s.BankAccountNumber.ToString().Contains(searchString));
             }
 
             switch (sortOrder)
@@ -189,10 +189,11 @@ namespace BankApplication.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Balance,AvailableFounds,Lock,BankAccountNumber,CreationDate,BankAccountTypeID")] BankAccount bankAccount)
+        public ActionResult Edit([Bind(Exclude = "BankAccountNumber", Include = "ID,Balance,AvailableFounds,Lock,CreationDate,BankAccountTypeID")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
+                bankAccount.BankAccountNumber = decimal.Parse(Request["BankAccountNumber"].Trim());
                 db.Entry(bankAccount).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

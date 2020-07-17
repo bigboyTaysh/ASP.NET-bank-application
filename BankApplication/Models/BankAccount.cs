@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
+using System.Web.Mvc;
 
 namespace BankApplication.Models
 {
@@ -24,10 +26,10 @@ namespace BankApplication.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Lock { get; set; }
 
+        [DataType(DataType.Text)]
         [Display(Name = "Bank account number")]
-        [MinLength(32)]
-        [MaxLength(32)]
-        public string BankAccountNumber { get; set; }
+        [DisplayFormat(DataFormatString = "{0:## #### #### #### #### #### ####}", ApplyFormatInEditMode = true)]
+        public decimal BankAccountNumber { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
