@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BankApplication.DAL;
+using BankApplication.ModelBinders;
 using BankApplication.Models;
 using PagedList;
 
@@ -21,9 +22,8 @@ namespace BankApplication.Controllers
         public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.NumberSortParm = String.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
+            ViewBag.NumberSortParm = string.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
             ViewBag.DateSortParm = sortOrder == "date" ? "date_desc" : "date";
-
 
             if (searchString != null)
             {
@@ -71,7 +71,7 @@ namespace BankApplication.Controllers
         public PartialViewResult IndexPost(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.NumberSortParm = String.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
+            ViewBag.NumberSortParm = string.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
             ViewBag.DateSortParm = sortOrder == "date" ? "date_desc" : "date";
 
 
@@ -89,7 +89,7 @@ namespace BankApplication.Controllers
             var bankAccounts = from b in db.BankAccounts
                                select b;
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 bankAccounts = bankAccounts.Where(s => s.BankAccountNumber.ToString().Contains(searchString));
             }
@@ -189,11 +189,10 @@ namespace BankApplication.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Exclude = "BankAccountNumber", Include = "ID,Balance,AvailableFounds,Lock,CreationDate,BankAccountTypeID")] BankAccount bankAccount)
+        public ActionResult Edit([ModelBinder(typeof(BankAccountNumberBinder))] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
-                bankAccount.BankAccountNumber = decimal.Parse(Request["BankAccountNumber"].Trim());
                 db.Entry(bankAccount).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

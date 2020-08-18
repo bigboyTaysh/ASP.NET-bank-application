@@ -1,9 +1,6 @@
 using BankApplication.DAL;
-using System;
-using System.Collections.Generic;
+using BankApplication.ModelBinders;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -14,8 +11,8 @@ namespace BankApplication
     {
         protected void Application_Start()
         {
+            System.Web.Mvc.ModelBinders.Binders.Add(typeof(BankAccountNumberBinder), new BankAccountNumberBinder());
             Database.SetInitializer(new BankInitializer());
-
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
