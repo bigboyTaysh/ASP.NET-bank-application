@@ -26,10 +26,9 @@ namespace BankApplication.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Lock { get; set; }
 
-        [DataType(DataType.Text)]
+        [Required]
         [Display(Name = "Bank account number")]
-        [DisplayFormat(DataFormatString = "{0:## #### #### #### #### #### ####}", ApplyFormatInEditMode = true)]
-        public decimal BankAccountNumber { get; set; }
+        public string BankAccountNumber { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -40,7 +39,7 @@ namespace BankApplication.Models
         [Required]
         public int BankAccountTypeID { get; set; }
 
-        public string FileName { get; set; }
+        //public string FileName { get; set; }
 
         public virtual BankAccountType BankAccountType { get; set; }
     }

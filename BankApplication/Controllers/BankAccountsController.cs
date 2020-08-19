@@ -149,12 +149,13 @@ namespace BankApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Balance,AvailableFounds,Lock,BankAccountNumber,CreationDate,BankAccountTypeID")] BankAccount bankAccount)
         {
-            HttpPostedFileBase file = Request.Files["FileName"];
+            //HttpPostedFileBase file = Request.Files["FileName"];
 
-            if (ModelState.IsValid && file != null && file.ContentLength > 0)
+            //if (ModelState.IsValid && file != null && file.ContentLength > 0)
+            if (ModelState.IsValid)
             {
-                bankAccount.FileName = file.FileName;
-                file.SaveAs(HttpContext.Server.MapPath("~/Images/") + bankAccount.FileName);
+                //bankAccount.FileName = file.FileName;
+                //file.SaveAs(HttpContext.Server.MapPath("~/Images/") + bankAccount.FileName);
 
                 db.BankAccounts.Add(bankAccount);
                 db.SaveChanges();
@@ -162,7 +163,6 @@ namespace BankApplication.Controllers
             }
 
             ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "TypeName", bankAccount.BankAccountTypeID);
-            ViewData["Message"] = "Poszło";
             return View(bankAccount);
         }
 
@@ -189,15 +189,15 @@ namespace BankApplication.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Exclude = "BankAccountNumber", Include = "ID,Balance,AvailableFounds,Lock,CreationDate,BankAccountTypeID")] BankAccount bankAccount)
+        public ActionResult Edit([Bind(Include = "ID,Balance,AvailableFounds,Lock,BankAccountNumber,CreationDate,BankAccountTypeID")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
-                bankAccount.BankAccountNumber = decimal.Parse(Request["BankAccountNumber"].Trim());
                 db.Entry(bankAccount).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "TypeName", bankAccount.BankAccountTypeID);
             return View(bankAccount);
         }
