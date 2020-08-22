@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using BankApplication.Models;
 using BankApplication.DAL;
 using System.Configuration;
+using System.Collections.Generic;
 
 namespace BankApplication.Controllers
 {
@@ -19,6 +20,7 @@ namespace BankApplication.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private BankContext db = new BankContext();
 
         public AccountController()
         {
@@ -141,6 +143,7 @@ namespace BankApplication.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "TypeName");
             return View();
         }
 
@@ -164,9 +167,25 @@ namespace BankApplication.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Potwierdź konto", "Potwierdź konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
+                    Profile profile = new Profile 
+                    { 
+                        Login = model.Email,
+                        Email = model.Email,
+                        BankAccounts = new List<BankAccount>()
+                    };
 
-                    Profile profile = new Profile { Login = model.Email };
-                    BankContext db = new BankContext();
+                    BankAccount bankAccount = new BankAccount()
+                    {
+                        Balance = 0.0m,
+                        AvailableFounds = 0.0m,
+                        Lock = 0.0m,
+                        BankAccountNumber = NewBankAcocuntNumber(),
+                        CreationDate = DateTime.Today,
+                        BankAccountTypeID = model.BankAccountTypeID
+                    };
+
+                    db.BankAccounts.Add(bankAccount);
+                    profile.BankAccounts.Add(bankAccount);
                     db.Profiles.Add(profile);
                     db.SaveChanges();
 
@@ -455,6 +474,19 @@ namespace BankApplication.Controllers
         #region Pomocnicy
         // Używane w przypadku ochrony XSRF podczas dodawania logowań zewnętrznych
         private const string XsrfKey = "XsrfId";
+
+        private string NewBankAcocuntNumber() 
+        {
+            BankContext db = new BankContext();
+            string last = db.BankAccounts.OrderByDescending(b => b.BankAccountNumber).First().BankAccountNumber;
+            int parts = int.Parse(last.Split(' ')[5] + last.Split(' ')[6]) + 1;
+            string newNumber = last;
+            newNumber = newNumber.Replace(newNumber.Split(' ')[5], parts.ToString().Substring(0,4));
+            newNumber = newNumber.Replace(newNumber.Split(' ')[6], parts.ToString().Substring(4,4));
+
+            return newNumber;
+        }
+
 
         private IAuthenticationManager AuthenticationManager
         {

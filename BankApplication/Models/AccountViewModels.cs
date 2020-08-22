@@ -79,6 +79,12 @@ namespace BankApplication.Models
         [Display(Name = "Potwierdź hasło")]
         [Compare("Password", ErrorMessage = "Hasło i jego potwierdzenie są niezgodne.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Typ konta")]
+        public int BankAccountTypeID { get; set; }
+        public virtual BankAccountType BankAccountType { get; set; }
+
     }
 
     public class ResetPasswordViewModel
