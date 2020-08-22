@@ -4,10 +4,13 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using BankApplication.DAL;
 using BankApplication.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BankApplication.Controllers
 {
@@ -19,7 +22,13 @@ namespace BankApplication.Controllers
         // GET: Transactions
         public ActionResult Index()
         {
-            var transaction = db.Transaction.Include(t => t.TransactionType);
+            var user = db.Profiles.Single(p => p.Login == User.Identity.Name);
+            var bankAccounts = user.BankAccounts.Select(b => b.BankAccountNumber);
+            var transaction = db.Transactions
+                .Where(t => bankAccounts
+                        .Any(b => b == t.FromBankAccountNumber || b == t.ToBankAccountNumber))
+                .Include(t => t.TransactionType);
+
             return View(transaction.ToList());
         }
 
@@ -30,7 +39,7 @@ namespace BankApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Transaction transaction = db.Transaction.Find(id);
+            Transaction transaction = db.Transactions.Find(id);
             if (transaction == null)
             {
                 return HttpNotFound();
@@ -38,29 +47,30 @@ namespace BankApplication.Controllers
             return View(transaction);
         }
 
-        // GET: Transactions/Create
-        public ActionResult Create()
+        // GET: Transactions/Transfer
+        public ActionResult Transfer()
         {
             ViewBag.TransactionTypeID = new SelectList(db.TransactionTypes, "ID", "Type");
-            return View();
+            return View("Transfer");
         }
 
-        // POST: Transactions/Create
+        // POST: Transactions/Transfer
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Value,BalanceAfterTransactionUserFrom,BalanceAfterTransactionUserTo,FromBankAccountNumber,ToBankAccountNumber,Date,TransactionTypeID")] Transaction transaction)
+        public ActionResult Transfer([Bind(Include = "ID,Value,BalanceAfterTransactionUserFrom,BalanceAfterTransactionUserTo,FromBankAccountNumber,ToBankAccountNumber,Date")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
-                db.Transaction.Add(transaction);
+                transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "TRANSFER").ID;
+                db.Transactions.Add(transaction);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             ViewBag.TransactionTypeID = new SelectList(db.TransactionTypes, "ID", "Type", transaction.TransactionTypeID);
-            return View(transaction);
+            return View("Transfer", transaction);
         }
 
         // GET: Transactions/Edit/5
@@ -70,7 +80,7 @@ namespace BankApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Transaction transaction = db.Transaction.Find(id);
+            Transaction transaction = db.Transactions.Find(id);
             if (transaction == null)
             {
                 return HttpNotFound();
@@ -103,7 +113,7 @@ namespace BankApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Transaction transaction = db.Transaction.Find(id);
+            Transaction transaction = db.Transactions.Find(id);
             if (transaction == null)
             {
                 return HttpNotFound();
@@ -116,8 +126,8 @@ namespace BankApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Transaction transaction = db.Transaction.Find(id);
-            db.Transaction.Remove(transaction);
+            Transaction transaction = db.Transactions.Find(id);
+            db.Transactions.Remove(transaction);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

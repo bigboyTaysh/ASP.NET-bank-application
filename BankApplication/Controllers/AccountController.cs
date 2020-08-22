@@ -143,7 +143,7 @@ namespace BankApplication.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "TypeName");
+            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
             return View();
         }
 

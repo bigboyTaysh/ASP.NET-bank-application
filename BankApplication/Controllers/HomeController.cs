@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration.Binder;
 
 namespace BankApplication.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private BankContext db = new BankContext();
