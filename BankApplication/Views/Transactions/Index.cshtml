@@ -29,27 +29,31 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
+@foreach (var item in Model)
+{
+<tr>
+    @if (item.TransactionType.Type == "TRANSFER")
+    {
         <td>
-            @Html.DisplayFor(modelItem => item.TransactionType.Type)
+            Przelew
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Value)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BalanceAfterTransactionUserTo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FromBankAccountNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "Details", new { id=item.ID })
-        </td>
-    </tr>
+    }
+    <td>
+        @Html.DisplayFor(modelItem => item.Value)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.BalanceAfterTransactionUserTo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FromBankAccountNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Date)
+    </td>
+    <td>
+        @Html.ActionLink("Details", "Details", new { id = item.ID })
+    </td>
+</tr>
 }
 
 </table>

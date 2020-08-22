@@ -154,6 +154,11 @@ namespace BankApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            if (db.Profiles.Any(p => p.PESEL == model.PESEL))
+            {
+                ModelState.AddModelError("PESEL", "Widnieje już taki numer PESEL w bazie");
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -171,6 +176,9 @@ namespace BankApplication.Controllers
                     { 
                         Login = model.Email,
                         Email = model.Email,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        PESEL = model.PESEL,
                         BankAccounts = new List<BankAccount>()
                     };
 
@@ -197,6 +205,7 @@ namespace BankApplication.Controllers
             }
 
             // Dotarcie do tego miejsca wskazuje, że wystąpił błąd, wyświetl ponownie formularz
+            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
             return View(model);
         }
 

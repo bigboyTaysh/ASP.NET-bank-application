@@ -24,12 +24,24 @@ namespace BankApplication.Models
         [Column(TypeName = "money")]
         public decimal BalanceAfterTransactionUserTo{ get; set; }
 
-        [Display(Name = "Nadawca")]
+        [Display(Name = "Numer konta nadawcy")]
         public string FromBankAccountNumber { get; set; }
 
         [Required]
-        [Display(Name = "Odbiorca")]
+        [Display(Name = "Numer konta odbiorcy")]
         public string ToBankAccountNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Nazwa nadawcy")]
+        public string SenderName { get; set; }
+
+        [Required]
+        [Display(Name = "Nazwa odbiorcy")]
+        public string ReceiverName { get; set; }
+
+        [Required]
+        [Display(Name = "Opis")]
+        public string Description { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
