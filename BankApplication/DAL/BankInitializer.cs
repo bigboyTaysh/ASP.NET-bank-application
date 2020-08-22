@@ -43,10 +43,21 @@ namespace BankApplication.DAL
             userManager.Create(worker, workerpass);
             userManager.AddToRole(worker.Id, "Worker");
 
+            var transactionTypes = new List<TransactionType>
+            {
+                new TransactionType {Type = "TRANSFER"},
+                new TransactionType {Type = "CASH_WITHDRAWAL"},
+                new TransactionType {Type = "CASH_PAYMENT"}
+            };
+
+            transactionTypes.ForEach(t => context.TransactionTypes.Add(t));
+            context.SaveChanges();
+
             var bankAccountTypes = new List<BankAccountType>
             {
-                new BankAccountType {TypeName = "Konto dla młodych", Commission = 0m},
-                new BankAccountType {TypeName = "Konto dla dorosłych", Commission = 5m}
+                new BankAccountType {Type = "PAY_ACC_FOR_YOUNG", Commission = 0m},
+                new BankAccountType {Type = "PAY_ACC_FOR_ADULT", Commission = 5m},
+                new BankAccountType {Type = "FOR_CUR_ACC", Commission = 7m}
             };
 
             bankAccountTypes.ForEach(b => context.BankAccountTypes.Add(b));
