@@ -22,14 +22,25 @@ namespace BankApplication.Controllers
         // GET: Transactions
         public ActionResult Index()
         {
-            var user = db.Profiles.Single(p => p.Login == User.Identity.Name);
-            var bankAccounts = user.BankAccounts.Select(b => b.BankAccountNumber);
-            var transaction = db.Transactions
-                .Where(t => bankAccounts
-                        .Any(b => b == t.FromBankAccountNumber || b == t.ToBankAccountNumber))
-                .Include(t => t.TransactionType);
+            Profile user;
+            IEnumerable<string> bankAccounts;
+            IQueryable<Transaction> transactions;
 
-            return View(transaction.ToList());
+            if (User.IsInRole("Admin"))
+            {
+                transactions = db.Transactions.Include(t => t.TransactionType);
+            } 
+            else
+            {
+                user = db.Profiles.Single(p => p.Login == User.Identity.Name);
+                bankAccounts = user.BankAccounts.Select(b => b.BankAccountNumber);
+                transactions = db.Transactions
+                    .Where(t => bankAccounts
+                            .Any(b => b == t.FromBankAccountNumber || b == t.ToBankAccountNumber))
+                    .Include(t => t.TransactionType);
+            }
+
+            return View(transactions.ToList());
         }
 
         // GET: Transactions/Details/5

@@ -15,11 +15,13 @@ namespace BankApplication.Controllers
     public class HomeController : Controller
     {
         private BankContext db = new BankContext();
+
         public ActionResult Index()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult About()
         {
             IQueryable<CreationDateGroup> data = from bankAccount in db.BankAccounts
@@ -34,6 +36,7 @@ namespace BankApplication.Controllers
             return View(data.ToList());
         }
 
+        [AllowAnonymous]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

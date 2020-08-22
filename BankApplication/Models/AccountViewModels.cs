@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PESEL.Attributes;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankApplication.Models
@@ -79,6 +80,23 @@ namespace BankApplication.Models
         [Display(Name = "Potwierdź hasło")]
         [Compare("Password", ErrorMessage = "Hasło i jego potwierdzenie są niezgodne.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "{0} musi zawierać co najmniej następującą liczbę znaków: {2}.", MinimumLength = 3)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Imię")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "{0} musi zawierać co najmniej następującą liczbę znaków: {2}.", MinimumLength = 3)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Nazwisko")]
+        public string LastName { get; set; }
+
+        [Required]
+        [Pesel]
+        [Display(Name = "PESEL")]
+        public string PESEL { get; set; }
 
         [Required]
         [Display(Name = "Typ konta")]
