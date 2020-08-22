@@ -7,7 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Przelew", "Transfer")
 </p>
 <table class="table">
     <tr>
@@ -18,16 +18,10 @@
             @Html.DisplayNameFor(model => model.Value)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.BalanceAfterTransactionUserFrom)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.BalanceAfterTransactionUserTo)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.FromBankAccountNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ToBankAccountNumber)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Date)
@@ -44,24 +38,16 @@
             @Html.DisplayFor(modelItem => item.Value)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.BalanceAfterTransactionUserFrom)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.BalanceAfterTransactionUserTo)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.FromBankAccountNumber)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ToBankAccountNumber)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Date)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Details", "Details", new { id=item.ID })
         </td>
     </tr>
 }

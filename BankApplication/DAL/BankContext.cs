@@ -17,7 +17,7 @@ namespace BankApplication.DAL
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<TransactionType> TransactionTypes { get; set; }
-        public DbSet<Transaction> Transaction { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
