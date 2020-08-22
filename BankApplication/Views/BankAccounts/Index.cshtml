@@ -51,7 +51,7 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.First().BankAccountType.TypeName)
+                @Html.DisplayNameFor(model => model.First().BankAccountType.Type)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.First().Balance)
@@ -74,7 +74,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.BankAccountType.TypeName)
+                    @Html.DisplayFor(modelItem => item.BankAccountType.Type)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Balance)
