@@ -9,6 +9,6 @@ namespace BankApplication.Models
     {
         public int ID { get; set; }
         public decimal Commission { get; set; }
-        public string TypeName { get; set; }
+        public string Type { get; set; }
     }
 }
