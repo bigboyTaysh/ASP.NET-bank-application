@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web;
@@ -15,15 +16,18 @@ namespace BankApplication.Models
         [Required]
         [Display(Name = "Saldo")]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "money")]
         public decimal Balance { get; set; }
 
         [Required]
         [Display(Name = "Available founds")]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "money")]
         public decimal AvailableFounds { get; set; }
 
         [Required]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "money")]
         public decimal Lock { get; set; }
 
         [Required]
