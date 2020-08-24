@@ -31,7 +31,6 @@ namespace BankApplication.Models
         [Display(Name = "Numer konta odbiorcy")]
         public string ToBankAccountNumber { get; set; }
 
-        [Required]
         [Display(Name = "Nazwa nadawcy")]
         public string SenderName { get; set; }
 
