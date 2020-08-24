@@ -43,6 +43,30 @@ namespace BankApplication.DAL
             userManager.Create(worker, workerpass);
             userManager.AddToRole(worker.Id, "Worker");
 
+            var currencies = new List<Currency>
+            {
+                new Currency {
+                    Name = "złoty",
+                    Code = "PLN"
+                },
+                new Currency {
+                    Name = "dolar amerykański",
+                    Code = "USD"
+                },
+                new Currency {
+                    Name = "euro",
+                    Code = "PLN"
+                },
+                new Currency {
+                    Name = "frank szwajcarski",
+                    Code = "PLN"
+                },
+                new Currency {
+                    Name = "funt szterling",
+                    Code = "PLN"
+                },
+            };
+
             var transactionTypes = new List<TransactionType>
             {
                 new TransactionType {Type = "TRANSFER"},

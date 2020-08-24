@@ -115,6 +115,11 @@ namespace BankApplication.Models
             return RedirectToAction("Index");
         }
 
+        public void GetCurrencyExchangeRates()
+        {
+
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
