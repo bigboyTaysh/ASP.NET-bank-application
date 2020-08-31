@@ -4,8 +4,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
+using BankApplication.Controllers;
+using BankApplication.Helper;
 
 namespace BankApplication.DAL
 {
@@ -47,25 +47,43 @@ namespace BankApplication.DAL
             {
                 new Currency {
                     Name = "złoty",
-                    Code = "PLN"
+                    Code = "PLN", 
+                    EffectiveDate = DateTime.Now,
+                    Bid = 0.0000m,
+                    Ask = 0.0000m
                 },
                 new Currency {
                     Name = "dolar amerykański",
-                    Code = "USD"
+                    Code = "USD",
+                    EffectiveDate = DateTime.Now,
+                    Bid = 0.0000m,
+                    Ask = 0.0000m
                 },
                 new Currency {
                     Name = "euro",
-                    Code = "PLN"
+                    Code = "EUR",
+                    EffectiveDate = DateTime.Now,
+                    Bid = 0.0000m,
+                    Ask = 0.0000m
                 },
                 new Currency {
                     Name = "frank szwajcarski",
-                    Code = "PLN"
+                    Code = "CHF", 
+                    EffectiveDate = DateTime.Now,
+                    Bid = 0.0000m,
+                    Ask = 0.0000m
                 },
                 new Currency {
                     Name = "funt szterling",
-                    Code = "PLN"
+                    Code = "GBP",
+                    EffectiveDate = DateTime.Now,
+                    Bid = 0.0000m,
+                    Ask = 0.0000m
                 },
             };
+
+            currencies.ForEach(c => context.Currencies.Add(c));
+            context.SaveChanges();
 
             var transactionTypes = new List<TransactionType>
             {
