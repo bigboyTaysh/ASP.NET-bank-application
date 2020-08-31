@@ -23,6 +23,8 @@ namespace BankApplication.DAL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Currency>().Property(x => x.Ask).HasPrecision(26, 4);
+            modelBuilder.Entity<Currency>().Property(x => x.Bid).HasPrecision(26, 4);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
     }

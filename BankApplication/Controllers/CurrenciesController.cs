@@ -4,19 +4,26 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using BankApplication.DAL;
+using BankApplication.Helper;
+using Newtonsoft.Json;
 
 namespace BankApplication.Models
 {
     public class CurrenciesController : Controller
     {
         private BankContext db = new BankContext();
+        private HttpClient client = new HttpClient();
 
         // GET: Currencies
         public ActionResult Index()
         {
+            RefreshCurrency.RefreshCurrenciesAsync().ConfigureAwait(false);
             return View(db.Currencies.ToList());
         }
 
@@ -115,16 +122,11 @@ namespace BankApplication.Models
             return RedirectToAction("Index");
         }
 
-        public void GetCurrencyExchangeRates()
-        {
-
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                db.Dispose();   
             }
             base.Dispose(disposing);
         }

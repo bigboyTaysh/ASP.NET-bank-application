@@ -21,5 +21,6 @@ namespace BankApplication.Models
         
         [DataType(DataType.Currency)]
         public decimal Ask { get; set; }
+        public decimal Ask2 { get; set; }
     }
 }
