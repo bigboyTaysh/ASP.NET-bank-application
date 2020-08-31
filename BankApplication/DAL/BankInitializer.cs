@@ -49,8 +49,8 @@ namespace BankApplication.DAL
                     Name = "złoty",
                     Code = "PLN", 
                     EffectiveDate = DateTime.Now,
-                    Bid = 0.0000m,
-                    Ask = 0.0000m
+                    Bid = 1.0000m,
+                    Ask = 1.0000m
                 },
                 new Currency {
                     Name = "dolar amerykański",
