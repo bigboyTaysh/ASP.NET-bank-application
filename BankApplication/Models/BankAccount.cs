@@ -44,8 +44,11 @@ namespace BankApplication.Models
         [Required]
         public int BankAccountTypeID { get; set; }
 
-        //public string FileName { get; set; }
+        [Required]
+        public int CurrencyID { get; set; }
 
         public virtual BankAccountType BankAccountType { get; set; }
+        public virtual Currency Currency { get; set; }
+
     }
 }
