@@ -107,8 +107,23 @@ namespace BankApplication.DAL
 
             var bankAccounts = new List<BankAccount>
             {
-                new BankAccount {Balance = 10.50m, AvailableFounds = 0m, Lock = 0m, BankAccountNumber = "12 1234 1234 1234 1234 1234 1230", CreationDate = new DateTime(2020, 06, 04), BankAccountType = bankAccountTypes[0]},
-                new BankAccount {Balance = 0m, AvailableFounds = 0m, Lock = 0m, BankAccountNumber = "12 1234 1234 1234 1234 1234 1231", CreationDate = new DateTime(2020, 06, 03), BankAccountType = bankAccountTypes[1]}
+                new BankAccount {Balance = 10.50m,
+                    AvailableFounds = 0m,
+                    Lock = 0m,
+                    BankAccountNumber = "12 1234 1234 1234 1234 1234 1230",
+                    CreationDate = new DateTime(2020, 06, 04),
+                    BankAccountType = bankAccountTypes[0],
+                    Currency = currencies[0]
+                },
+
+                new BankAccount {Balance = 0m,
+                    AvailableFounds = 0m,
+                    Lock = 0m,
+                    BankAccountNumber = "12 1234 1234 1234 1234 1234 1231",
+                    CreationDate = new DateTime(2020, 06, 03),
+                    BankAccountType = bankAccountTypes[1],
+                    Currency = currencies[0]
+                }
             };
 
             bankAccounts.ForEach(b => context.BankAccounts.Add(b));
@@ -116,15 +131,13 @@ namespace BankApplication.DAL
 
             var profiles = new List<Profile>
             {
-                new Profile { Email = user.Email, Login = user.Email},
-                new Profile { Email = user2.Email, Login = user2.Email},
-                new Profile { Email = user3.Email, Login = user3.Email},
-                new Profile { Email = worker.Email, Login = worker.Email},
+                new Profile { Email = user.UserName, Login = user.UserName, BankAccounts = new List<BankAccount>(){bankAccounts[0]}},
+                new Profile { Email = user2.UserName, Login = user2.UserName, BankAccounts = new List<BankAccount>(){bankAccounts[1]}},
+                new Profile { Email = user3.UserName, Login = user3.UserName},
+                new Profile { Email = worker.UserName, Login = worker.UserName},
             };
 
             profiles.ForEach(p => context.Profiles.Add(p));
-            context.SaveChanges();
-
             context.SaveChanges();
         }
     }

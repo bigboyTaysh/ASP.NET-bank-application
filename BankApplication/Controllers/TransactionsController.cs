@@ -28,16 +28,19 @@ namespace BankApplication.Controllers
 
             if (User.IsInRole("Admin"))
             {
-                transactions = db.Transactions.Include(t => t.TransactionType);
+                transactions = db.Transactions
+                    .Include(t => t.TransactionType)
+                    .Include(t => t.Currency);
             } 
             else
             {
-                user = db.Profiles.Single(p => p.Login == User.Identity.Name);
+                user = db.Profiles.Single(p => p.Email == User.Identity.Name);
                 bankAccounts = user.BankAccounts.Select(b => b.BankAccountNumber);
                 transactions = db.Transactions
                     .Where(t => bankAccounts
                             .Any(b => b == t.FromBankAccountNumber || b == t.ToBankAccountNumber))
-                    .Include(t => t.TransactionType);
+                    .Include(t => t.TransactionType)
+                    .Include(t => t.Currency);
             }
 
             return View(transactions.ToList());
@@ -62,6 +65,8 @@ namespace BankApplication.Controllers
         public ActionResult Transfer()
         {
             ViewBag.TransactionTypeID = new SelectList(db.TransactionTypes, "ID", "Type");
+            ViewBag.CurrencyID = new SelectList(db.Currencies, "ID", "Code");
+            ViewBag.BankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
             return View("Transfer");
         }
 
@@ -70,7 +75,7 @@ namespace BankApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Transfer([Bind(Include = "ID,Value,BalanceAfterTransactionUserFrom,BalanceAfterTransactionUserTo,FromBankAccountNumber,ToBankAccountNumber,Date")] Transaction transaction)
+        public ActionResult Transfer([Bind(Include = "ID,ReceiverName,ToBankAccountNumber,Description,Value,Date,CurrencyID")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
@@ -81,6 +86,9 @@ namespace BankApplication.Controllers
             }
 
             ViewBag.TransactionTypeID = new SelectList(db.TransactionTypes, "ID", "Type", transaction.TransactionTypeID);
+            ViewBag.CurrencyID = new SelectList(db.Currencies, "ID", "Code", transaction.CurrencyID);
+            ViewBag.BankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
+
             return View("Transfer", transaction);
         }
 
@@ -97,6 +105,7 @@ namespace BankApplication.Controllers
                 return HttpNotFound();
             }
             ViewBag.TransactionTypeID = new SelectList(db.TransactionTypes, "ID", "Type", transaction.TransactionTypeID);
+            ViewBag.CurrencyID = new SelectList(db.Currencies, "ID", "Code", transaction.CurrencyID);
             return View(transaction);
         }
 
@@ -114,6 +123,7 @@ namespace BankApplication.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.TransactionTypeID = new SelectList(db.TransactionTypes, "ID", "Type", transaction.TransactionTypeID);
+            ViewBag.CurrencyID = new SelectList(db.Currencies, "ID", "Code", transaction.CurrencyID);
             return View(transaction);
         }
 

@@ -51,8 +51,11 @@ namespace BankApplication.Models
         [Required]
         public int TransactionTypeID { get; set; }
 
-        //public string FileName { get; set; }
+        [Required]
+        public int CurrencyID { get; set; }
+        public int CurrencyID2 { get; set; }
 
         public virtual TransactionType TransactionType { get; set; }
+        public virtual Currency Currency { get; set; }
     }
 }

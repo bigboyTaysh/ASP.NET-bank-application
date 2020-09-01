@@ -25,6 +25,9 @@ namespace BankApplication.DAL
         {
             modelBuilder.Entity<Currency>().Property(x => x.Ask).HasPrecision(26, 4);
             modelBuilder.Entity<Currency>().Property(x => x.Bid).HasPrecision(26, 4);
+            modelBuilder.Entity<BankAccount>().Property(x => x.AvailableFounds).HasPrecision(26, 4);
+            modelBuilder.Entity<BankAccount>().Property(x => x.Balance).HasPrecision(26, 4);
+            modelBuilder.Entity<BankAccount>().Property(x => x.Lock).HasPrecision(26, 4);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
     }

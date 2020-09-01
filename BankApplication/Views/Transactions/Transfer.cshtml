@@ -9,58 +9,122 @@
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <hr />
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ReceiverName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ReceiverName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ReceiverName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+<div class="form-horizontal">
+    <hr />
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ToBankAccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ToBankAccountNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ToBankAccountNumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <div class="form-group">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { type = "number", min = "0", step = "0.01", @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+        <div class="col-md-10">
+            <select class="form-control js-example-basic-single">
+                @foreach (var item in (List<BankApplication.Models.BankAccount>)ViewBag.BankAccounts)
+                {
+                    <option value="@item.ID">
+                        <div>
+                            <span>
+                                @switch (item.BankAccountType.Type)
+                                {
+                                    case "PAY_ACC_FOR_YOUNG":
+                                        <span>
+                                            Konto dla młodych
+                                        </span> 
+                                        break;
+                                    default:
+                                        <span>
+                                            Konto
+                                        </span>
+                                        break;
+                                }
+                                (@decimal.Round(item.AvailableFounds, 2) @item.Currency.Code)
+                            </span>
+                            [br]
+                            <span>
+                                @item.BankAccountNumber
+                            </span>
+                        </div>
+                    </option>
+                }
+            </select>
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ReceiverName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ReceiverName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ReceiverName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ToBankAccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ToBankAccountNumber, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ToBankAccountNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Value, new { htmlAttributes = new { type = "number", min = "0", step = "0.01", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CurrencyID, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("CurrencyID", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CurrencyID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
 }
 
 <div>
     @Html.ActionLink("Powrót", "Index")
 </div>
+
+<script>
+    $(document).ready(function () {
+
+        function templateResult(item, container) {
+            // replace the placeholder with the break-tag and put it into an jquery object
+            return $('<span>' + item.text.replace('[br]', '<br/>') + '</span>');
+        }
+
+        function templateSelection(item, container) {
+            // replace your placeholder with nothing, so your select shows the whole option text
+            return item.text.replace('[br]', '');
+        }
+
+        $('.js-example-basic-single').select2({
+            templateResult: templateResult,
+            templateSelection: templateSelection
+        });
+
+    });
+</script>
