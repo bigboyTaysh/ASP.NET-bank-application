@@ -48,7 +48,6 @@ namespace BankApplication.Models
         [Display(Name = "Data przelewu")]
         public DateTime Date { get; set; }
 
-        [Required]
         public int TransactionTypeID { get; set; }
 
         [Required]

@@ -75,11 +75,42 @@ namespace BankApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Transfer([Bind(Include = "ID,ReceiverName,ToBankAccountNumber,Description,Value,Date,CurrencyID")] Transaction transaction)
+        public ActionResult Transfer([Bind(Include = "ReceiverName,ToBankAccountNumber,Description,Value,Date,CurrencyID")] Transaction transaction, int BankAccountID)
         {
+            var bankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
+
+            if (!bankAccounts.Any(b => b.ID == BankAccountID))
+            {
+                ModelState.AddModelError("FromBankAccountNumber", "Nie znaleziono takiego konta bankowego");
+
+            } else if ((db.BankAccounts.Single(b => b.ID == BankAccountID)).AvailableFounds < transaction.Value ) {
+                ModelState.AddModelError("Value", "Za mało środków");
+            }
+
             if (ModelState.IsValid)
             {
+                var bankAccount = db.BankAccounts.Single(b => b.ID == BankAccountID);
+                var user = db.Profiles.Single(p => p.Email == User.Identity.Name);
+
+                bankAccount.AvailableFounds -= transaction.Value;
+                transaction.BalanceAfterTransactionUserFrom = bankAccount.Balance;
+
+                try
+                {
+                    var toBankAccount = db.BankAccounts.Single(b => b.BankAccountNumber == transaction.ToBankAccountNumber);
+                    toBankAccount.Balance += transaction.Value;
+                    toBankAccount.AvailableFounds += transaction.Value;
+                    transaction.BalanceAfterTransactionUserTo = toBankAccount.Balance;
+                }
+                catch (ArgumentNullException)
+                {
+
+                }
+
+                transaction.FromBankAccountNumber = bankAccount.BankAccountNumber;
+                transaction.SenderName = user.FullName;
                 transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "TRANSFER").ID;
+                
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
                 return RedirectToAction("Index");
