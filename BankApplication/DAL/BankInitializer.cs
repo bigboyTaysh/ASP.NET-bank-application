@@ -108,7 +108,7 @@ namespace BankApplication.DAL
             var bankAccounts = new List<BankAccount>
             {
                 new BankAccount {Balance = 10.50m,
-                    AvailableFounds = 0m,
+                    AvailableFounds = 10.50m,
                     Lock = 0m,
                     BankAccountNumber = "12 1234 1234 1234 1234 1234 1230",
                     CreationDate = new DateTime(2020, 06, 04),
