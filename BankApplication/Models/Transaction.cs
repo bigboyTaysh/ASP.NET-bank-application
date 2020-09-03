@@ -12,7 +12,13 @@ namespace BankApplication.Models
         [Display(Name = "Wartość")]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "money")]
-        public decimal Value { get; set; }
+        public decimal ValueTo { get; set; }
+
+        [Required]
+        [Display(Name = "Wartość")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "money")]
+        public decimal ValueFrom { get; set; }
 
         [Display(Name = "Saldo")]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
@@ -51,8 +57,8 @@ namespace BankApplication.Models
         public int TransactionTypeID { get; set; }
 
         [Required]
-        public int CurrencyID { get; set; }
-        public int CurrencyID2 { get; set; }
+        public int CurrencyToID { get; set; }
+        public int CurrencyFromID { get; set; }
 
         public virtual TransactionType TransactionType { get; set; }
         public virtual Currency Currency { get; set; }

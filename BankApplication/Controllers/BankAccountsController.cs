@@ -191,7 +191,7 @@ namespace BankApplication.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Balance,AvailableFounds,Lock,BankAccountNumber,CreationDate,BankAccountTypeID,CurrencyID")] BankAccount bankAccount)
+        public ActionResult Edit([Bind(Include = "ID,Balance,AvailableFounds,Lock,BankAccountNumber,CreationDate,BankAccountTypeID,CurrencyToID")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
