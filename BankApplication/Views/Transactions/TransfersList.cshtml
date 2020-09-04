@@ -1,0 +1,79 @@
+﻿@model PagedList.IPagedList<BankApplication.Models.Transaction>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        @if (item.ToBankAccountNumber == ViewBag.BankAccountNumber)
+                        {
+                            <span>
+                                @Html.DisplayFor(modelItem => item.SenderName)
+                            </span>
+                        }
+                        else
+                        {
+                        <span>
+                            @Html.DisplayFor(modelItem => item.ReceiverName)
+                        </span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @if (item.TransactionType.Type == "TRANSFER")
+                        {
+                            @Html.DisplayFor(modelItem => item.Description)
+                        }
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @if (item.TransactionType.Type == "TRANSFER")
+            {
+                if (item.ToBankAccountNumber == ViewBag.BankAccountNumber)
+                {
+                    @:Przelew na konto
+                }
+                else
+                {
+                    @:Przelew z konta
+                }
+            }
+        </td>
+        <td>
+            @if (item.ToBankAccountNumber == ViewBag.BankAccountNumber)
+            {
+            <span style="color: green">
+                @Html.DisplayFor(modelItem => item.ValueTo)
+            </span>
+            }
+            else
+            {
+        <span style="color: red">
+            - @Html.DisplayFor(modelItem => item.ValueFrom) 
+            @Html.DisplayFor(modelItem => item.CurrencFrom.Code)
+        </span>
+            }
+        </td>
+        <td>
+            @if (item.ToBankAccountNumber == ViewBag.BankAccountNumber)
+            {
+                @Html.DisplayFor(modelItem => item.BalanceAfterTransactionUserTo)
+            }
+            else
+            {
+            <span>
+                @Html.DisplayFor(modelItem => item.BalanceAfterTransactionUserFrom)
+                @Html.DisplayFor(modelItem => item.CurrencFrom.Code)
+            </span>
+            }
+        </td>
+    </tr>
+}

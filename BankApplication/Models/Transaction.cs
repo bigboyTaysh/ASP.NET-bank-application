@@ -53,7 +53,8 @@ namespace BankApplication.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data przelewu")]
         public DateTime Date { get; set; }
-
+        public DateTime OperationDate { get; set; }
+       
         public int TransactionTypeID { get; set; }
 
         [Required]
@@ -61,6 +62,7 @@ namespace BankApplication.Models
         public int CurrencyFromID { get; set; }
 
         public virtual TransactionType TransactionType { get; set; }
-        public virtual Currency Currency { get; set; }
+        public virtual Currency CurrencTo { get; set; }
+        public virtual Currency CurrencFrom { get; set; }
     }
 }

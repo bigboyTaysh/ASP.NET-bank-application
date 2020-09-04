@@ -22,14 +22,10 @@
                             @switch (item.BankAccountType.Type)
                             {
                                 case "PAY_ACC_FOR_YOUNG":
-                                    <span>
-                                        Konto dla młodych
-                                    </span>
+                                    @:Konto dla młodych
                                     break;
                                 default:
-                                    <span>
-                                        Konto
-                                    </span>
+                                    @:Konto
                                     break;
                             }
                             (@decimal.Round(item.AvailableFounds, 2) @item.Currency.Code)

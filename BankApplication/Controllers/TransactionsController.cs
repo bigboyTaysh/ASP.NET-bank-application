@@ -11,6 +11,7 @@ using System.Web.Security;
 using BankApplication.DAL;
 using BankApplication.Models;
 using Microsoft.AspNet.Identity;
+using PagedList;
 
 namespace BankApplication.Controllers
 {
@@ -22,29 +23,42 @@ namespace BankApplication.Controllers
         // GET: Transactions
         public ActionResult Index()
         {
+            ViewBag.BankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
+            return View();
+        }
+
+        public PartialViewResult Transactions(string bankAccountNumber, int? page)
+        {
             Profile user;
-            IEnumerable<string> bankAccounts;
-            IQueryable<Transaction> transactions;
+            List<Transaction> transactions = new List<Transaction>();
+            ViewBag.BankAccountNumber = bankAccountNumber;
+
 
             if (User.IsInRole("Admin"))
             {
                 transactions = db.Transactions
                     .Include(t => t.TransactionType)
-                    .Include(t => t.Currency);
-            } 
+                    .Include(t => t.CurrencTo).ToList();
+            }
             else
             {
                 user = db.Profiles.Single(p => p.Email == User.Identity.Name);
-                bankAccounts = user.BankAccounts.Select(b => b.BankAccountNumber);
-                transactions = db.Transactions
-                    .Where(t => bankAccounts
-                            .Any(b => b == t.FromBankAccountNumber || b == t.ToBankAccountNumber))
+                if (user.BankAccounts.Any(b => b.BankAccountNumber == bankAccountNumber)) 
+                {
+                    transactions = db.Transactions
+                    .Where(t => bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber)
                     .Include(t => t.TransactionType)
-                    .Include(t => t.Currency);
+                    .Include(t => t.CurrencTo)
+                    .OrderByDescending(t => t.Date).ThenByDescending(t => t.ID).ToList();
+                } 
             }
 
-            return View(transactions.ToList());
+
+            int pageNumber = (page ?? 1);
+
+            return PartialView("TransfersList", transactions.ToPagedList(pageNumber, 10));
         }
+        
 
         // GET: Transactions/Details/5
         public ActionResult Details(int? id)
@@ -80,22 +94,35 @@ namespace BankApplication.Controllers
             var bankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
             var bankAccount = db.BankAccounts.SingleOrDefault(b => b.ID == BankAccountID);
             var toBankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == transaction.ToBankAccountNumber);
-            var currency = db.Currencies.Single(c => c.ID == transaction.CurrencyToID);
+            var currencyTo = db.Currencies.Single(c => c.ID == transaction.CurrencyToID);
+            var user = db.Profiles.Single(p => p.Email == User.Identity.Name);
+            var commision = bankAccount.BankAccountType.Commission / 100;
+            decimal value; 
+
+            if(bankAccount.Currency.Code == currencyTo.Code)
+            {
+                value = transaction.ValueTo + (transaction.ValueTo * commision);
+            } 
+            else
+            {
+                var exchangedCurrency = ExchangeCurrency(bankAccount.Currency, currencyTo, transaction.ValueTo);
+                value = exchangedCurrency + ( exchangedCurrency * commision);
+            }
+            
 
             if (!bankAccounts.Any(b => b.ID == BankAccountID))
             {
                 ModelState.AddModelError("FromBankAccountNumber", "Nie znaleziono takiego konta bankowego");
             } else if (bankAccount != null) 
             {
-                if (bankAccount.AvailableFounds < transaction.ValueTo)
+                if (bankAccount.AvailableFounds < value)
                 {
                     ModelState.AddModelError("ValueTo", "Za mało środków");
                 }
 
-                if (bankAccount.Currency.Code != currency.Code && bankAccount.BankAccountType.Type != "FOR_CUR_ACC")
+                if (bankAccount.Currency.Code != currencyTo.Code && bankAccount.BankAccountType.Type != "FOR_CUR_ACC")
                 {
                     ModelState.AddModelError("CurrencyToID", "Podaj poprawną walutę");
-                    
                 }
 
                 if (bankAccount.BankAccountNumber == transaction.ToBankAccountNumber)
@@ -106,9 +133,9 @@ namespace BankApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = db.Profiles.Single(p => p.Email == User.Identity.Name);
-
-                bankAccount.AvailableFounds -= transaction.ValueTo;
+                bankAccount.Balance -= value;
+                bankAccount.AvailableFounds -= value;
+                transaction.ValueFrom = value;
                 transaction.BalanceAfterTransactionUserFrom = bankAccount.Balance;
 
                 if (toBankAccount != null)
@@ -120,8 +147,11 @@ namespace BankApplication.Controllers
 
                 transaction.FromBankAccountNumber = bankAccount.BankAccountNumber;
                 transaction.SenderName = user.FullName;
+                transaction.CurrencFrom = bankAccount.Currency;
+
                 transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "TRANSFER").ID;
-                
+
+                transaction.OperationDate = DateTime.Now;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -197,7 +227,7 @@ namespace BankApplication.Controllers
 
         private decimal ExchangeCurrency(Currency from, Currency to, decimal value)
         {
-            return value;
+            return to.Ask * value / from.Bid;
         }
 
 
