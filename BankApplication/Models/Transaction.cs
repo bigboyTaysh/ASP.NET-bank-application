@@ -12,7 +12,13 @@ namespace BankApplication.Models
         [Display(Name = "Wartość")]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "money")]
-        public decimal Value { get; set; }
+        public decimal ValueTo { get; set; }
+
+        [Required]
+        [Display(Name = "Wartość")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "money")]
+        public decimal ValueFrom { get; set; }
 
         [Display(Name = "Saldo")]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
@@ -47,12 +53,16 @@ namespace BankApplication.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data przelewu")]
         public DateTime Date { get; set; }
-
-        [Required]
+        public DateTime OperationDate { get; set; }
+       
         public int TransactionTypeID { get; set; }
 
-        //public string FileName { get; set; }
+        [Required]
+        public int CurrencyToID { get; set; }
+        public int CurrencyFromID { get; set; }
 
         public virtual TransactionType TransactionType { get; set; }
+        public virtual Currency CurrencTo { get; set; }
+        public virtual Currency CurrencFrom { get; set; }
     }
 }

@@ -4,8 +4,6 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using BankApplication.Controllers;
-using BankApplication.Helper;
 
 namespace BankApplication.DAL
 {
@@ -47,7 +45,7 @@ namespace BankApplication.DAL
             {
                 new Currency {
                     Name = "złoty",
-                    Code = "PLN", 
+                    Code = "PLN",
                     EffectiveDate = DateTime.Now,
                     Bid = 1.0000m,
                     Ask = 1.0000m
@@ -68,7 +66,7 @@ namespace BankApplication.DAL
                 },
                 new Currency {
                     Name = "frank szwajcarski",
-                    Code = "CHF", 
+                    Code = "CHF",
                     EffectiveDate = DateTime.Now,
                     Bid = 0.0000m,
                     Ask = 0.0000m
@@ -107,8 +105,23 @@ namespace BankApplication.DAL
 
             var bankAccounts = new List<BankAccount>
             {
-                new BankAccount {Balance = 10.50m, AvailableFounds = 0m, Lock = 0m, BankAccountNumber = "12 1234 1234 1234 1234 1234 1230", CreationDate = new DateTime(2020, 06, 04), BankAccountType = bankAccountTypes[0]},
-                new BankAccount {Balance = 0m, AvailableFounds = 0m, Lock = 0m, BankAccountNumber = "12 1234 1234 1234 1234 1234 1231", CreationDate = new DateTime(2020, 06, 03), BankAccountType = bankAccountTypes[1]}
+                new BankAccount {Balance = 10.50m,
+                    AvailableFounds = 10.50m,
+                    Lock = 0m,
+                    BankAccountNumber = "12 1234 1234 1234 1234 1234 1230",
+                    CreationDate = new DateTime(2020, 06, 04),
+                    BankAccountType = bankAccountTypes[0],
+                    Currency = currencies[0]
+                },
+
+                new BankAccount {Balance = 0m,
+                    AvailableFounds = 0m,
+                    Lock = 0m,
+                    BankAccountNumber = "12 1234 1234 1234 1234 1234 1231",
+                    CreationDate = new DateTime(2020, 06, 03),
+                    BankAccountType = bankAccountTypes[1],
+                    Currency = currencies[0]
+                }
             };
 
             bankAccounts.ForEach(b => context.BankAccounts.Add(b));
@@ -116,15 +129,27 @@ namespace BankApplication.DAL
 
             var profiles = new List<Profile>
             {
-                new Profile { Email = user.Email, Login = user.Email},
-                new Profile { Email = user2.Email, Login = user2.Email},
-                new Profile { Email = user3.Email, Login = user3.Email},
-                new Profile { Email = worker.Email, Login = worker.Email},
+                new Profile
+                    {
+                    FirstName = "John",
+                    LastName="Travolta",
+                    Email = user.UserName,
+                    Login = user.UserName,
+                    BankAccounts = new List<BankAccount>(){bankAccounts[0]}
+                },
+                new Profile
+                {
+                    FirstName = "John",
+                    LastName="Travolta",
+                    Email = user2.UserName,
+                    Login = user2.UserName,
+                    BankAccounts = new List<BankAccount>(){bankAccounts[1]}
+                },
+                new Profile { Email = user3.UserName, Login = user3.UserName},
+                new Profile { Email = worker.UserName, Login = worker.UserName},
             };
 
             profiles.ForEach(p => context.Profiles.Add(p));
-            context.SaveChanges();
-
             context.SaveChanges();
         }
     }

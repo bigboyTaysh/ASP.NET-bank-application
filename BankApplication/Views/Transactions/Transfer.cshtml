@@ -6,12 +6,37 @@
 
 <h2>Przelew</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <hr />
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <select class="form-control js-example-basic-single" name="BankAccountID">
+                    @foreach (var item in (List<BankApplication.Models.BankAccount>)ViewBag.BankAccounts)
+                    {
+                        <option value="@item.ID">
+                            @switch (item.BankAccountType.Type)
+                            {
+                                case "PAY_ACC_FOR_YOUNG":
+                                    @:Konto dla młodych
+                                    break;
+                                default:
+                                    @:Konto
+                                    break;
+                            }
+                            (@decimal.Round(item.AvailableFounds, 2) @item.Currency.Code)
+                            [br]
+                            @item.BankAccountNumber
+                        </option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.FromBankAccountNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.ReceiverName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -24,7 +49,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ToBankAccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ToBankAccountNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.ToBankAccountNumber, new { htmlAttributes = new { @class = "form-control bankAccountNumber" } })
                 @Html.ValidationMessageFor(model => model.ToBankAccountNumber, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -38,10 +63,18 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ValueTo, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { type = "number", min = "0", step = "0.01", @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ValueTo, new { htmlAttributes = new { type = "number", min = "0", step = "0.01", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ValueTo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CurrencyToID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CurrencyToID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CurrencyToID, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -64,3 +97,24 @@
 <div>
     @Html.ActionLink("Powrót", "Index")
 </div>
+
+<script>
+    $(document).ready(function () {
+
+        function templateResult(item, container) {
+            // replace the placeholder with the break-tag and put it into an jquery object
+            return $('<span>' + item.text.replace('[br]', '<br />') + '</span>');
+        }
+
+        function templateSelection(item, container) {
+            // replace your placeholder with nothing, so your select shows the whole option text
+            return item.text.replace('[br]', '');
+        }
+
+        $('.js-example-basic-single').select2({
+            templateResult: templateResult,
+            templateSelection: templateSelection
+        });
+
+    });
+</script>
