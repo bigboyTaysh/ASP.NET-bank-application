@@ -4,8 +4,6 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using BankApplication.Controllers;
-using BankApplication.Helper;
 
 namespace BankApplication.DAL
 {
@@ -47,7 +45,7 @@ namespace BankApplication.DAL
             {
                 new Currency {
                     Name = "złoty",
-                    Code = "PLN", 
+                    Code = "PLN",
                     EffectiveDate = DateTime.Now,
                     Bid = 1.0000m,
                     Ask = 1.0000m
@@ -68,7 +66,7 @@ namespace BankApplication.DAL
                 },
                 new Currency {
                     Name = "frank szwajcarski",
-                    Code = "CHF", 
+                    Code = "CHF",
                     EffectiveDate = DateTime.Now,
                     Bid = 0.0000m,
                     Ask = 0.0000m
@@ -131,8 +129,22 @@ namespace BankApplication.DAL
 
             var profiles = new List<Profile>
             {
-                new Profile { Email = user.UserName, Login = user.UserName, BankAccounts = new List<BankAccount>(){bankAccounts[0]}},
-                new Profile { Email = user2.UserName, Login = user2.UserName, BankAccounts = new List<BankAccount>(){bankAccounts[1]}},
+                new Profile
+                    {
+                    FirstName = "John",
+                    LastName="Travolta",
+                    Email = user.UserName,
+                    Login = user.UserName,
+                    BankAccounts = new List<BankAccount>(){bankAccounts[0]}
+                },
+                new Profile
+                {
+                    FirstName = "John",
+                    LastName="Travolta",
+                    Email = user2.UserName,
+                    Login = user2.UserName,
+                    BankAccounts = new List<BankAccount>(){bankAccounts[1]}
+                },
                 new Profile { Email = user3.UserName, Login = user3.UserName},
                 new Profile { Email = worker.UserName, Login = worker.UserName},
             };
