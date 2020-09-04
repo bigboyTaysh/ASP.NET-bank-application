@@ -137,7 +137,7 @@ namespace BankApplication.Controllers
         // GET: BankAccounts/Create
         public ActionResult Create()
         {
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "TypeName");
+            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
             ViewData["Message"] = "";
             return View();
         }
@@ -163,7 +163,7 @@ namespace BankApplication.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "TypeName", bankAccount.BankAccountTypeID);
+            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type", bankAccount.BankAccountTypeID);
             return View(bankAccount);
         }
 
@@ -180,7 +180,8 @@ namespace BankApplication.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "TypeName", bankAccount.BankAccountTypeID);
+            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type", bankAccount.BankAccountTypeID);
+            ViewBag.CurrencyID = new SelectList(db.Currencies, "ID", "Code");
             return View(bankAccount);
         }
 
@@ -190,7 +191,7 @@ namespace BankApplication.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Balance,AvailableFounds,Lock,BankAccountNumber,CreationDate,BankAccountTypeID")] BankAccount bankAccount)
+        public ActionResult Edit([Bind(Include = "ID,Balance,AvailableFounds,Lock,BankAccountNumber,CreationDate,BankAccountTypeID,CurrencyToID")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
@@ -199,7 +200,8 @@ namespace BankApplication.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "TypeName", bankAccount.BankAccountTypeID);
+            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type", bankAccount.BankAccountTypeID);
+            ViewBag.CurrencyID = new SelectList(db.Currencies, "ID", "Code");
             return View(bankAccount);
         }
 
