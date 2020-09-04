@@ -1,6 +1,4 @@
-﻿@model IEnumerable<BankApplication.Models.Transaction>
-
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -9,51 +7,95 @@
 <p>
     @Html.ActionLink("Przelew", "Transfer")
 </p>
+
+<div class="form-group">
+    <div class="col-md-10">
+        <select class="form-control bankAccountSelect" name="BankAccountID">
+            @foreach (var item in (List<BankApplication.Models.BankAccount>)ViewBag.BankAccounts)
+            {
+                <option value="@item.BankAccountNumber">
+                    @switch (item.BankAccountType.Type)
+                    {
+                        case "PAY_ACC_FOR_YOUNG":
+                            @:Konto dla młodych
+                            break;
+                        default:
+                            @:Konto
+                            break;
+                    }
+                    (@decimal.Round(item.AvailableFounds, 2) @item.Currency.Code)
+                    [br]
+                    @item.BankAccountNumber
+                </option>
+            }
+        </select>
+    </div>
+</div>
+
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TransactionType.Type)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Value)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BalanceAfterTransactionUserTo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FromBankAccountNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model)
-{
-<tr>
-    @if (item.TransactionType.Type == "TRANSFER")
-    {
-        <td>
-            Przelew
-        </td>
-    }
-    <td>
-        @Html.DisplayFor(modelItem => item.Value)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.BalanceAfterTransactionUserTo)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.FromBankAccountNumber)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Date)
-    </td>
-    <td>
-        @Html.ActionLink("Details", "Details", new { id = item.ID })
-    </td>
-</tr>
-}
-
+    <thead>
+        <tr>
+            <th>
+                Odbiorca / Nadawca / Tytuł
+            </th>
+            <th>
+                Data
+            </th>
+            <th>
+                Operacja
+            </th>
+            <th>
+                Kwota
+            </th>
+            <th>
+                Saldo
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-transactions-result">
+    </tbody>
 </table>
+
+<script>
+    var page = 1;
+    var active = false;
+
+    function searchTransactions(page, type) {
+        active = true;
+        var bankAccountNumber = $(".bankAccountSelect").val();
+
+        $.post("@Url.Action("Transactions", "Transactions")",
+            {
+                bankAccountNumber: bankAccountNumber,
+                page: page,
+            },
+            function (data) {
+                if (type == "append") {
+                    $(".table-transactions-result").append(data);
+                } else {
+                    $(".table-transactions-result").html(data);
+                }
+                active = false;
+            });
+    }
+
+    $(document).ready(function () {
+
+        function templateResult(item, container) {
+            // replace the placeholder with the break-tag and put it into an jquery object
+            return $('<span>' + item.text.replace('[br]', '<br />') + '</span>');
+        }
+
+        function templateSelection(item, container) {
+            // replace your placeholder with nothing, so your select shows the whole option text
+            return item.text.replace('[br]', '');
+        }
+
+        $('.bankAccountSelect').select2({
+            templateResult: templateResult,
+            templateSelection: templateSelection
+        });
+
+        searchTransactions(1);
+    });
+</script>

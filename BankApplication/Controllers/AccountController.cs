@@ -189,7 +189,8 @@ namespace BankApplication.Controllers
                         Lock = 0.0m,
                         BankAccountNumber = NewBankAcocuntNumber(),
                         CreationDate = DateTime.Today,
-                        BankAccountTypeID = model.BankAccountTypeID
+                        BankAccountTypeID = model.BankAccountTypeID,
+                        CurrencyID = db.Currencies.Single(c => c.Code == "PLN").ID
                     };
 
                     db.BankAccounts.Add(bankAccount);

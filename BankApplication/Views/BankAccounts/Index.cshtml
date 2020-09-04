@@ -78,12 +78,15 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Balance)
+                    @Html.DisplayFor(modelItem => item.Currency.Code)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.AvailableFounds)
+                    @Html.DisplayFor(modelItem => item.Currency.Code)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Lock)
+                    @Html.DisplayFor(modelItem => item.Currency.Code)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.BankAccountNumber)
