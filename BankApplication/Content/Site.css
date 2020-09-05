@@ -1,4 +1,7 @@
-﻿body {
+﻿@import "tables.css";
+
+body {
+    min-height: 101vh;
     padding-top: 50px;
     padding-bottom: 20px;
 }
