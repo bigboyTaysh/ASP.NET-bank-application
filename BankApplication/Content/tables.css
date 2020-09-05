@@ -1,0 +1,14 @@
+﻿body {
+}
+
+.clickable-tr:hover {
+    cursor: pointer;
+}
+
+.clickable-tr[clicked="true"] {
+    border-left: 1px solid black;
+}
+
+.table-inside {
+    border-color: none !important;
+}
