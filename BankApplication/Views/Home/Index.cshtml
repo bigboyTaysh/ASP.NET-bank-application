@@ -43,9 +43,9 @@
             <br />
             <br />
             <div class="pull-right buttons">
-                <button class="btn btn-default">Szczegóły</button>
-                <button class="btn btn-default">Historia</button>
-                <button class="btn btn-primary">Przelew</button>
+                @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID}, new { @class="btn btn-default" })
+                @Html.ActionLink("Historia", "Index", "Transactions", null, new { @class="btn btn-default" })
+                @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class="btn btn-primary" })
             </div>
         </div>
     }
