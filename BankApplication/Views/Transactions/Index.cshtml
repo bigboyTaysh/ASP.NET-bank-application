@@ -81,7 +81,14 @@
                     $(".table-transactions-result").append(data);
                 } else {
                     $(".loading-container").hide();
-                    $(".table-transactions-result").html(data);
+
+                    if (data != "") {
+                        $(".table-transactions-result").html(data);
+                    } else {
+                        $(".table-transactions-result").html(
+                            "<tr><td colspan='5'>Brak operacji</td></tr>"
+                        );
+                    }
                 }
                 active = false;
             });
@@ -105,16 +112,5 @@
         });
 
         searchTransactions(1);
-    });
-
-    $(document).on("click", ".clickable-tr", function (e) {
-        var target = $(e.target);
-        if (target.closest('.clickable-tr').attr("clicked") === "false") {
-            $(target).closest('.clickable-tr').next('.openable-tr').show();
-            $(target).closest('.clickable-tr').attr("clicked", "true");
-        } else if (target.closest('.clickable-tr').attr("clicked") === "true") {
-            $(target).closest('.clickable-tr').next('.openable-tr').hide();
-            $(target).closest('.clickable-tr').attr("clicked", "false");
-        }
     });
 </script>

@@ -4,26 +4,68 @@
     ViewBag.Title = "Home Page";
 }
 
-    <div class="jumbotron">
-        <div class="bank-account-div active noselect">
+<div class="jumbotron">
+    <div class="bank-account-div active noselect">
+        <div class="details-type">
+            <div>@Model[0].BankAccountType.Type</div>
+            <div class="bankAccountSelect">@Model[0].BankAccountNumber</div>
+        </div>
+        <div class="pull-right">
+            <div class="pull-right text-align-right details-menas">
+                <span>Dostępne środki</span>
+                <br />
+                <span>@decimal.Round(Model[0].AvailableFounds, 2) @Model[0].Currency.Code</span>
+            </div>
+            <div class="pull-right">
+                <div class="pull-right text-align-right details">
+                    <span>
+                        @decimal.Round(Model[0].Balance, 2)
+                    </span>
+                    <br />
+                    <span>
+                        @decimal.Round(Model[0].Lock, 2)
+                    </span>
+                </div>
+                <div class="pull-right text-align-left details">
+                    <span>
+                        Sadlo
+                    </span>
+                    <br />
+                    <span>
+                        Blokady
+                    </span>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="pull-right buttons">
+            @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model[0].BankAccountTypeID }, new { @class = "btn btn-default" })
+            @Html.ActionLink("Historia", "Index", "Transactions", null, new { @class = "btn btn-default" })
+            @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+    @foreach (var item in Model.Skip(1))
+    {
+        <div class="bank-account-div noselect">
             <div class="details-type">
-                <div>@Model[0].BankAccountType.Type</div>
-                <div>@Model[0].BankAccountNumber</div>
+                <div>@item.BankAccountType.Type</div>
+                <div class="bankAccountSelect">@item.BankAccountNumber</div>
             </div>
             <div class="pull-right">
                 <div class="pull-right text-align-right details-menas">
                     <span>Dostępne środki</span>
                     <br />
-                    <span>@decimal.Round(Model[0].AvailableFounds, 2) @Model[0].Currency.Code</span>
+                    <span>@decimal.Round(item.AvailableFounds, 2) @item.Currency.Code</span>
                 </div>
                 <div class="pull-right">
                     <div class="pull-right text-align-right details">
                         <span>
-                            @decimal.Round(Model[0].Balance, 2)
+                            @decimal.Round(item.Balance, 2)
                         </span>
                         <br />
                         <span>
-                            @decimal.Round(Model[0].Lock, 2)
+                            @decimal.Round(item.Lock, 2)
                         </span>
                     </div>
                     <div class="pull-right text-align-left details">
@@ -40,83 +82,76 @@
             <br />
             <br />
             <div class="pull-right buttons">
-                @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model[0].BankAccountTypeID }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default" })
                 @Html.ActionLink("Historia", "Index", "Transactions", null, new { @class = "btn btn-default" })
                 @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
             </div>
         </div>
-        @foreach (var item in Model.Skip(1))
-        {
-            <div class="bank-account-div noselect">
-                <div class="details-type">
-                    <div>@item.BankAccountType.Type</div>
-                    <div>@item.BankAccountNumber</div>
-                </div>
-                <div class="pull-right">
-                    <div class="pull-right text-align-right details-menas">
-                        <span>Dostępne środki</span>
-                        <br />
-                        <span>@decimal.Round(item.AvailableFounds, 2) @item.Currency.Code</span>
-                    </div>
-                    <div class="pull-right">
-                        <div class="pull-right text-align-right details">
-                            <span>
-                                @decimal.Round(item.Balance, 2)
-                            </span>
-                            <br />
-                            <span>
-                                @decimal.Round(item.Lock, 2)
-                            </span>
-                        </div>
-                        <div class="pull-right text-align-left details">
-                            <span>
-                                Sadlo
-                            </span>
-                            <br />
-                            <span>
-                                Blokady
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <br />
-                <div class="pull-right buttons">
-                    @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default" })
-                    @Html.ActionLink("Historia", "Index", "Transactions", null, new { @class = "btn btn-default" })
-                    @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
-                </div>
-            </div>
-        }
-    </div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
+    }
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Odbiorca / Nadawca / Tytuł
+            </th>
+            <th>
+                Data
+            </th>
+            <th>
+                Operacja
+            </th>
+            <th>
+                Kwota
+            </th>
+            <th>
+                Saldo
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-transactions-result">
+        <tr class="loading-container">
+            <td colspan="5">
+                <div>
+                    <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 <script>
+    function searchTransactions() {
+        var bankAccountNumber = $(".active > .details-type > div.bankAccountSelect").text();
+        console.log(bankAccountNumber);
+        $.post("@Url.Action("Transactions", "Transactions")",
+            {
+                bankAccountNumber: bankAccountNumber,
+                page: 1,
+                size: 5
+            },
+            function (data) {
+                if (data != "") {
+                    $(".table-transactions-result").html(data);
+                } else {
+                    $(".table-transactions-result").html(
+                        "<tr><td colspan='5'>Brak operacji</td></tr>"
+                    );
+                }
+                active = false;
+            });
+    }
+
+    $(document).ready(function () {
+       searchTransactions();
+    });
+
     $(".bank-account-div").click(function () {
         if (!$(this).hasClass("active")) {
             $(".active").removeClass("active");
             $(this).addClass("active");
+
+            searchTransactions();
         }
     });
 </script>
