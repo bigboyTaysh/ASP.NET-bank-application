@@ -45,6 +45,10 @@ textarea {
     max-width: 540px;
     min-width: 340px;
     cursor: pointer;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
     .bank-account-div .details-type {

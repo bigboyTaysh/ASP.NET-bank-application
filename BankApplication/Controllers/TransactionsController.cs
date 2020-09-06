@@ -27,7 +27,8 @@ namespace BankApplication.Controllers
             return View();
         }
 
-        public PartialViewResult Transactions(string bankAccountNumber, int? page)
+        [HttpPost]
+        public PartialViewResult Transactions(string bankAccountNumber, int? page, int? size)
         {
             Profile user;
             List<Transaction> transactions = new List<Transaction>();
@@ -54,9 +55,12 @@ namespace BankApplication.Controllers
             }
 
 
+            int pageSize = (size ?? 10);
             int pageNumber = (page ?? 1);
 
-            return PartialView("TransfersList", transactions.ToPagedList(pageNumber, 10));
+            ViewBag.Count = transactions.Count;
+
+            return PartialView("TransfersList", transactions.ToPagedList(pageNumber, pageSize));
         }
         
 
