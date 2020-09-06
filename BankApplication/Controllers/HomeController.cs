@@ -16,9 +16,17 @@ namespace BankApplication.Controllers
     {
         private BankContext db = new BankContext();
 
+        
         public ActionResult Index()
         {
-            return View();
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "BankAccounts");
+            } else
+            {
+
+                return View(db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts);
+            }
         }
 
         [AllowAnonymous]

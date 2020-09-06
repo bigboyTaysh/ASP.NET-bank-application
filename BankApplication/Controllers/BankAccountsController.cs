@@ -19,7 +19,7 @@ namespace BankApplication.Controllers
 
         [HttpGet]
         // GET: BankAccounts
-        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page, int? size)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NumberSortParm = String.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
@@ -61,7 +61,7 @@ namespace BankApplication.Controllers
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = (size ?? 5);
             int pageNumber = (page ?? 1);
 
             return View(bankAccounts.Include(b => b.BankAccountType).ToPagedList(pageNumber, pageSize));
