@@ -57,7 +57,7 @@
             else
             {
                 <span style="color: red">
-                    - @Html.DisplayFor(modelItem => item.ValueFrom) 
+                    -@Html.DisplayFor(modelItem => item.ValueFrom) 
                     @Html.DisplayFor(modelItem => item.CurrencFrom.Code)
                 </span>
             }
@@ -115,7 +115,7 @@
                     }
                     else
                     {
-                        <span style="color: red">
+                        <span>
                             @Html.DisplayFor(modelItem => item.ToBankAccountNumber)
                         </span>
                     }
@@ -145,7 +145,7 @@
                     else
                     {
                         <span style="color: red">
-                            - @Html.DisplayFor(modelItem => item.ValueFrom)
+                            -@Html.DisplayFor(modelItem => item.ValueFrom)
                             @Html.DisplayFor(modelItem => item.CurrencFrom.Code)
                         </span>
                     }
