@@ -33,6 +33,7 @@ textarea {
 .bank-account-div {
     background-color: white;
     border-radius: 5px;
+    border: 1px solid #808080;
     box-shadow: 2px 2px #808080;
     margin: 0 auto;
     max-width: 500px;
@@ -49,7 +50,7 @@ textarea {
     margin-right: 30px
 }
 
-    .bank-account-div .buttons > button {
+    .bank-account-div .buttons > a {
         min-width: 100px;
         margin-right: 10px
     }

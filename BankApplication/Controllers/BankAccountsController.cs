@@ -117,7 +117,6 @@ namespace BankApplication.Controllers
             return PartialView("SearchResults", bankAccounts.Include(b => b.BankAccountType).ToPagedList(pageNumber, pageSize));
         }
 
-        [Authorize(Roles = "Admin")]
         // GET: BankAccounts/Details/5
         public ActionResult Details(int? id)
         {
