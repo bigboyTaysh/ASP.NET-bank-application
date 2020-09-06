@@ -25,3 +25,39 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.jumbotron {
+    min-height: 400px;
+}
+
+.bank-account-div {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px #808080;
+    margin: 0 auto;
+    max-width: 500px;
+    min-width: 300px;
+    overflow: hidden;
+}
+
+.bank-account-div .details {
+    margin-right: 40px;
+}
+
+.bank-account-div .buttons {
+    margin: 10px;
+    margin-right: 30px
+}
+
+    .bank-account-div .buttons > button {
+        min-width: 100px;
+        margin-right: 10px
+    }
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-left {
+    text-align: left;
+}
