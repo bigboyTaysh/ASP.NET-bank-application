@@ -121,6 +121,15 @@ namespace BankApplication.DAL
                     CreationDate = new DateTime(2020, 06, 03),
                     BankAccountType = bankAccountTypes[1],
                     Currency = currencies[0]
+                },
+
+                new BankAccount {Balance = 0m,
+                    AvailableFounds = 0m,
+                    Lock = 0m,
+                    BankAccountNumber = "12 1234 1234 1234 1234 1234 1232",
+                    CreationDate = new DateTime(2020, 09, 06),
+                    BankAccountType = bankAccountTypes[2],
+                    Currency = currencies[0]
                 }
             };
 
@@ -135,7 +144,7 @@ namespace BankApplication.DAL
                     LastName="Travolta",
                     Email = user.UserName,
                     Login = user.UserName,
-                    BankAccounts = new List<BankAccount>(){bankAccounts[0]}
+                    BankAccounts = new List<BankAccount>(){bankAccounts[0], bankAccounts[2]}
                 },
                 new Profile
                 {

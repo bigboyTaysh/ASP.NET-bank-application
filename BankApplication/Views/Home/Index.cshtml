@@ -4,29 +4,26 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    @foreach (var item in Model)
-    {
-        <div class="bank-account-div">
-            <div>
-                <p>@item.BankAccountType.Type</p>
-                <p>@item.BankAccountNumber</p>
+    <div class="jumbotron">
+        <div class="bank-account-div active noselect">
+            <div class="details-type">
+                <div>@Model[0].BankAccountType.Type</div>
+                <div>@Model[0].BankAccountNumber</div>
             </div>
-            <br />
             <div class="pull-right">
-                <div class="pull-right text-align-right details">
+                <div class="pull-right text-align-right details-menas">
                     <span>Dostępne środki</span>
                     <br />
-                    <span>@decimal.Round(item.AvailableFounds, 2) @item.Currency.Code</span>
+                    <span>@decimal.Round(Model[0].AvailableFounds, 2) @Model[0].Currency.Code</span>
                 </div>
                 <div class="pull-right">
                     <div class="pull-right text-align-right details">
                         <span>
-                            @decimal.Round(item.Balance, 2)
+                            @decimal.Round(Model[0].Balance, 2)
                         </span>
                         <br />
                         <span>
-                            @decimal.Round(item.Lock, 2)
+                            @decimal.Round(Model[0].Lock, 2)
                         </span>
                     </div>
                     <div class="pull-right text-align-left details">
@@ -43,13 +40,55 @@
             <br />
             <br />
             <div class="pull-right buttons">
-                @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID}, new { @class="btn btn-default" })
-                @Html.ActionLink("Historia", "Index", "Transactions", null, new { @class="btn btn-default" })
-                @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class="btn btn-primary" })
+                @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model[0].BankAccountTypeID }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Historia", "Index", "Transactions", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
             </div>
         </div>
-    }
-</div>
+        @foreach (var item in Model.Skip(1))
+        {
+            <div class="bank-account-div noselect">
+                <div class="details-type">
+                    <div>@item.BankAccountType.Type</div>
+                    <div>@item.BankAccountNumber</div>
+                </div>
+                <div class="pull-right">
+                    <div class="pull-right text-align-right details-menas">
+                        <span>Dostępne środki</span>
+                        <br />
+                        <span>@decimal.Round(item.AvailableFounds, 2) @item.Currency.Code</span>
+                    </div>
+                    <div class="pull-right">
+                        <div class="pull-right text-align-right details">
+                            <span>
+                                @decimal.Round(item.Balance, 2)
+                            </span>
+                            <br />
+                            <span>
+                                @decimal.Round(item.Lock, 2)
+                            </span>
+                        </div>
+                        <div class="pull-right text-align-left details">
+                            <span>
+                                Sadlo
+                            </span>
+                            <br />
+                            <span>
+                                Blokady
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="pull-right buttons">
+                    @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Historia", "Index", "Transactions", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        }
+    </div>
 
 <div class="row">
     <div class="col-md-4">
@@ -72,3 +111,12 @@
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
+
+<script>
+    $(".bank-account-div").click(function () {
+        if (!$(this).hasClass("active")) {
+            $(".active").removeClass("active");
+            $(this).addClass("active");
+        }
+    });
+</script>
