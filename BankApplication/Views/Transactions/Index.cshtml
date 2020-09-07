@@ -1,4 +1,6 @@
-﻿@{
+﻿@model BankApplication.Models.BankAccount
+
+@{
     ViewBag.Title = "Index";
 }
 
@@ -9,26 +11,44 @@
 </p>
 
 <div class="form-group">
-    <div class="col-md-10">
-        <select class="form-control bankAccountSelect" name="BankAccountID">
-            @foreach (var item in (List<BankApplication.Models.BankAccount>)ViewBag.BankAccounts)
-            {
-                <option value="@item.BankAccountNumber">
-                    @switch (item.BankAccountType.Type)
-                    {
-                        case "PAY_ACC_FOR_YOUNG":
-                            @:Konto dla młodych
-                            break;
-                        default:
-                            @:Konto
-                            break;
-                    }
-                    (@decimal.Round(item.AvailableFounds, 2) @item.Currency.Code)
-                    [br]
-                    @item.BankAccountNumber
-                </option>
-            }
-        </select>
+    <div class="bank-account-div history active noselect shadow p-3 mb-5 bg-white rounded row">
+        <div class="details-type pull-left">
+            <div>@Model.BankAccountType.Type</div>
+            <div class="bankAccountSelect">@Model.BankAccountNumber</div>
+        </div>
+        <div class="pull-right">
+            <div class="pull-right text-align-right details-menas">
+                <span>Dostępne środki</span>
+                <br />
+                <span>@decimal.Round(Model.AvailableFounds, 2) @Model.Currency.Code</span>
+            </div>
+            <div class="pull-right">
+                <div class="pull-right text-align-right details">
+                    <span>
+                        @decimal.Round(Model.Balance, 2)
+                    </span>
+                    <br />
+                    <span>
+                        @decimal.Round(Model.Lock, 2)
+                    </span>
+                </div>
+                <div class="pull-right text-align-left details">
+                    <span>
+                        Sadlo
+                    </span>
+                    <br />
+                    <span>
+                        Blokady
+                    </span>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="buttons">
+            @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model.BankAccountTypeID }, new { @class = "btn btn-default" })
+            @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
+        </div>
     </div>
 </div>
 
@@ -69,7 +89,7 @@
 
     function searchTransactions(page, type) {
         active = true;
-        var bankAccountNumber = $(".bankAccountSelect").val();
+        var bankAccountNumber = $(".active > .details-type > div.bankAccountSelect").text();
 
         $.post("@Url.Action("Transactions", "Transactions")",
             {
@@ -95,26 +115,6 @@
     }
 
     $(document).ready(function () {
-
-        function templateResult(item, container) {
-            // replace the placeholder with the break-tag and put it into an jquery object
-            return $('<span>' + item.text.replace('[br]', '<br />') + '</span>');
-        }
-
-        function templateSelection(item, container) {
-            // replace your placeholder with nothing, so your select shows the whole option text
-            return item.text.replace('[br]', '');
-        }
-
-        $('.bankAccountSelect').select2({
-            templateResult: templateResult,
-            templateSelection: templateSelection
-        });
-
-        searchTransactions(1);
-    });
-
-    $(".bankAccountSelect").on("change", function () {
         searchTransactions(1);
     });
 </script>
