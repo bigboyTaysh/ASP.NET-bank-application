@@ -167,3 +167,105 @@ body > div.container.body-content > h2 {
 .text-align-left {
     text-align: left;
 }
+
+.currency-box {
+    height: 150px;
+    width: 100%;
+    border: 1px solid rgba(80, 80, 80, 0.5);
+    box-shadow: 0 0 2px 2px rgba(80, 80, 80, 0.5);
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.currency-code-box {
+    text-align: center;
+    vertical-align: central;
+    font-size: 30px;
+    height: 45px;
+    width: 75px;
+    margin: 10px 10px 10px 10px;
+    border: 1px solid rgba(80, 80, 80, 0.5);
+    box-shadow: 0 0 2px 2px rgba(80, 80, 80, 0.5);
+    border-radius: 5px;
+    float: left;
+}
+
+.currency-name-box {
+    margin: 20px 10px 10px 10px;
+    float:left;
+}
+
+.currency-date-box {
+    margin: 20px 10px 10px 10px;
+    clear: both;
+}
+
+.currency-value-box {
+    width: 60%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.currency-ask-box {
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+    .currency-ask-box:after {
+        content: "";
+        background-color: rgba(80, 80, 80, 0.5);
+        position: absolute;
+        width: 1px;
+        height: 40px;
+        top: 0px;
+        left: 51%;
+        display: block;
+    }
+
+.currency-bid-box {
+    width: 50%;
+    float: right;
+    text-align: center;
+}
+
+
+.currency-content {
+    float: none;
+    margin: 0 auto;
+}
+
+.currency-content .row {
+    float: none;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .navbar-collapse.collapse {
+        display: none !important;
+    }
+
+        .navbar-collapse.collapse.in {
+            display: block !important;
+            overflow: unset;
+        }
+
+        .navbar-collapse.collapsing {
+            overflow: hidden;
+        }
+
+    .navbar-header .collapse, .navbar-toggle {
+        display: block !important;
+    }
+
+    .navbar-header {
+        float: none;
+    }
+}
+
+@media (max-width: 768px){
+    .currency-box {
+        min-width: 250px;
+        width: 70%;
+    }
+}

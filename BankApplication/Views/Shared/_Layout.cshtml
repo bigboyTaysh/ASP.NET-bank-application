@@ -41,8 +41,11 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li>@Html.ActionLink("Przelew", "Transfer", "Transactions", null , new { @class = "dropdown-toggle" })</li>
+                                <li>@Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "dropdown-toggle" })</li>
                             </ul>
+                        </li>
+                        <li>
+                        <li>@Html.ActionLink("Waluty", "Index", "Currencies")</li>
                         </li>
 
                     }

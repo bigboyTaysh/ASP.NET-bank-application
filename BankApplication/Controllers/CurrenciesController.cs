@@ -24,7 +24,7 @@ namespace BankApplication.Models
         public ActionResult Index()
         {
             RefreshCurrency.RefreshCurrenciesAsync().ConfigureAwait(false);
-            return View(db.Currencies.ToList());
+            return View(db.Currencies.Where(c => c.Code != "PLN").ToList());
         }
 
         // GET: Currencies/Details/5
