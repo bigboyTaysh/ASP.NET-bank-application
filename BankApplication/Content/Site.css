@@ -32,6 +32,22 @@ textarea {
     max-width: 280px;
 }
 
+body > div.container.body-content > h2 {
+    padding-top: 20px;
+}
+
+.center-form {
+    margin-left: 20%;
+}
+
+.btn-transfer {
+    margin-right: 20%;
+}
+
+.btn-back{
+    margin-left: -30%;
+}
+
 .footer {
     position: absolute;
     bottom: 0;

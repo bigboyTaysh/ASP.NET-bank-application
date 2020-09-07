@@ -6,7 +6,9 @@
 
 <h2>Przelew</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Transfer", "Transactions",
+            new { ReturnUrl = ViewBag.ReturnUrl },
+            FormMethod.Post, new { @class = "center-form" }))
 {
     @Html.AntiForgeryToken()
 
@@ -14,6 +16,7 @@
         <hr />
 
         <div class="form-group">
+            <label class="control-label col-md-2" for="BankAccountID">Konto</label>
             <div class="col-md-10">
                 <select class="form-control js-example-basic-single" name="BankAccountID">
                     @foreach (var item in (List<BankApplication.Models.BankAccount>)ViewBag.BankAccounts)
@@ -87,16 +90,13 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="col-md-offset-2 ">
+                @Html.ActionLink("Powrót", "Index", null, new { @class = "btn btn-default pull-left btn-back"})
+                <input type="submit" value="Potwierdź" class="btn btn-primary pull-right btn-transfer" />
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Powrót", "Index")
-</div>
 
 <script>
     $(document).ready(function () {
