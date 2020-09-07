@@ -87,7 +87,6 @@ textarea {
         display: none;
     }
 
-
     .bank-account-div.active {
         background-color: white;
         border: 1px solid #808080;
@@ -100,6 +99,7 @@ textarea {
 
     .bank-account-div.active .details-type {
         margin: 5px 0 0 20px;
+        display: block;
     }
 
     .bank-account-div.active .details {
@@ -124,6 +124,25 @@ textarea {
             margin-right: 10px
         }
 
+        .bank-account-div.active.history {
+            min-width: 340px;
+            max-width: 700px;
+        }
+
+            .bank-account-div.active.history .details {
+                margin-top: 5px;
+            }
+
+            .bank-account-div.active.history .details-menas {
+                margin-top: 5px;
+            }
+
+            .bank-account-div.active.history .buttons {
+                display: table;
+                margin: 0 auto;
+                margin-top: 30px;
+                margin-bottom: 5px;
+            }
 
 .text-align-right {
     text-align: right;

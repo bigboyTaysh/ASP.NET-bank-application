@@ -21,10 +21,20 @@ namespace BankApplication.Controllers
         private BankContext db = new BankContext();
 
         // GET: Transactions
-        public ActionResult Index()
+        public ActionResult Index(string bankAccountNumber)
         {
-            ViewBag.BankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
-            return View();
+            var bankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
+            var bankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == bankAccountNumber);
+            
+            if (bankAccount != null && bankAccounts.Any(b => b.BankAccountNumber == bankAccount.BankAccountNumber))
+            {
+                return View(bankAccount);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
         }
 
         [HttpPost]

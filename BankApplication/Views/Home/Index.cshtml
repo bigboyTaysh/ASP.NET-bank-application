@@ -41,7 +41,7 @@
         <br />
         <div class="pull-right buttons">
             @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model[0].BankAccountTypeID }, new { @class = "btn btn-default" })
-            @Html.ActionLink("Historia", "Index", "Transactions", null, new { @class = "btn btn-default" })
+            @Html.ActionLink("Historia", "Index", "Transactions", new { bankAccountNumber = Model[0].BankAccountNumber }, new { @class = "btn btn-default" })
             @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
         </div>
     </div>
@@ -83,7 +83,7 @@
             <br />
             <div class="pull-right buttons">
                 @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Historia", "Index", "Transactions", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Historia", "Index", "Transactions", new { bankAccountNumber = item.BankAccountNumber }, new { @class = "btn btn-default" })
                 @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
             </div>
         </div>
@@ -117,7 +117,6 @@
 <script>
     function searchTransactions() {
         var bankAccountNumber = $(".active > .details-type > div.bankAccountSelect").text();
-        console.log(bankAccountNumber);
         $.post("@Url.Action("IndexTransactions", "Transactions")",
             {
                 bankAccountNumber: bankAccountNumber,
