@@ -1,9 +1,15 @@
 ﻿@import "tables.css";
 
+html {
+    height: 100%;
+}
+
 body {
+    width: 100%;
     min-height: 101vh;
-    padding-top: 50px;
+    padding-top: 30px;
     padding-bottom: 20px;
+    position: relative;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -24,6 +30,17 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
 }
 
 .noselect {
@@ -49,6 +66,7 @@ textarea {
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
+    z-index: 1;
 }
 
     .bank-account-div .details-type {
@@ -73,10 +91,11 @@ textarea {
     .bank-account-div.active {
         background-color: white;
         border: 1px solid #808080;
-        box-shadow: 2px 2px #808080;
+        box-shadow: 0 0 2px 3px rgba(80, 80, 80, 0.5);
         max-width: 550px;
         min-width: 350px;
         overflow: hidden;
+        position: relative;
     }
 
     .bank-account-div.active .details-type {
