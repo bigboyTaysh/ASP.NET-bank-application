@@ -5,7 +5,7 @@
 }
 
 <div class="jumbotron">
-    <div class="bank-account-div active noselect">
+    <div class="bank-account-div active noselect shadow p-3 mb-5 bg-white rounded">
         <div class="details-type">
             <div>@Model[0].BankAccountType.Type</div>
             <div class="bankAccountSelect">@Model[0].BankAccountNumber</div>
@@ -99,13 +99,7 @@
                 Data
             </th>
             <th>
-                Operacja
-            </th>
-            <th>
                 Kwota
-            </th>
-            <th>
-                Saldo
             </th>
         </tr>
     </thead>
@@ -124,7 +118,7 @@
     function searchTransactions() {
         var bankAccountNumber = $(".active > .details-type > div.bankAccountSelect").text();
         console.log(bankAccountNumber);
-        $.post("@Url.Action("Transactions", "Transactions")",
+        $.post("@Url.Action("IndexTransactions", "Transactions")",
             {
                 bankAccountNumber: bankAccountNumber,
                 page: 1,

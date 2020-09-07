@@ -62,7 +62,42 @@ namespace BankApplication.Controllers
 
             return PartialView("TransfersList", transactions.ToPagedList(pageNumber, pageSize));
         }
-        
+
+        [HttpPost]
+        public PartialViewResult IndexTransactions(string bankAccountNumber, int? page, int? size)
+        {
+            Profile user;
+            List<Transaction> transactions = new List<Transaction>();
+            ViewBag.BankAccountNumber = bankAccountNumber;
+
+
+            if (User.IsInRole("Admin"))
+            {
+                transactions = db.Transactions
+                    .Include(t => t.TransactionType)
+                    .Include(t => t.CurrencTo).ToList();
+            }
+            else
+            {
+                user = db.Profiles.Single(p => p.Email == User.Identity.Name);
+                if (user.BankAccounts.Any(b => b.BankAccountNumber == bankAccountNumber))
+                {
+                    transactions = db.Transactions
+                    .Where(t => bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber)
+                    .Include(t => t.TransactionType)
+                    .Include(t => t.CurrencTo)
+                    .OrderByDescending(t => t.Date).ThenByDescending(t => t.ID).ToList();
+                }
+            }
+
+
+            int pageSize = (size ?? 10);
+            int pageNumber = (page ?? 1);
+
+            ViewBag.Count = transactions.Count;
+
+            return PartialView("IndexTransfersList", transactions.ToPagedList(pageNumber, pageSize));
+        }
 
         // GET: Transactions/Details/5
         public ActionResult Details(int? id)
