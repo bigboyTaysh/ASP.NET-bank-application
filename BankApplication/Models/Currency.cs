@@ -16,11 +16,8 @@ namespace BankApplication.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime EffectiveDate { get; set; }
          
-        [DataType(DataType.Currency)]
         public decimal Bid { get; set; }
         
-        [DataType(DataType.Currency)]
         public decimal Ask { get; set; }
-        public decimal Ask2 { get; set; }
     }
 }
