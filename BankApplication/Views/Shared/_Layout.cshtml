@@ -35,7 +35,16 @@
                     <li>@Html.ActionLink("Strona główna", "Index", "Home")</li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Przelewy", "Index", "Transactions")</li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Transakcje
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>@Html.ActionLink("Przelew", "Transfer", "Transactions", null , new { @class = "dropdown-toggle" })</li>
+                            </ul>
+                        </li>
+
                     }
                     @if (User.IsInRole("Admin"))
                     {
@@ -50,8 +59,8 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
         <footer class="footer">
+            <hr />
             <p>&copy; @DateTime.Now.Year - Wolski Worldwide Bank</p>
         </footer>
     </div>
