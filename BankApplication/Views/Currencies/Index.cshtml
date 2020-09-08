@@ -50,5 +50,98 @@
         </div>
     }
 </div>
+<div class="row">
+    <div class="currency-exchange-content">
+        <div class="type">
+            <div class="bid active">
+                Kupuję
+            </div>
+            <div class="ask">
+                Sprzedaję
+            </div>
+        </div>
+        <div class="currency-content">
+            <div class="currency-left">
+                <select class="currency-from col-md-3">
+                    <option value="PLN">
+                        PLN
+                    </option>
+                    <option value="EUR">
+                        EUR
+                    </option>
+                    <option value="GBP">
+                        GBP
+                    </option>
+                    <option value="USD">
+                        USD
+                    </option>
+                    <option value="CHF">
+                        CHF
+                    </option>
+                </select>
+            </div>
+            <div class="currency-right">
+                <select class="currency-to col-md-3">
+                    <option value="PLN">
+                        PLN
+                    </option>
+                    <option value="EUR">
+                        EUR
+                    </option>
+                    <option value="GBP">
+                        GBP
+                    </option>
+                    <option value="USD">
+                        USD
+                    </option>
+                    <option value="CHF">
+                        CHF
+                    </option>
+                </select>
+            </div> 
+        </div>
+        <div class="bid-content">
+            
+        </div>
+        <div class="ask-content" style="display: none">
+            
+        </div>
+    </div>
+</div>
+<script>
+    
+    $(".currency-from, .currency-to").select2({
+        templateResult: function (code) {
+            var baseUrl = "../../Images";
+            var $state = $(
+                '<span><img src="' + baseUrl + '/' + code.id + '.gif" class="img-flag" /> ' + code.text + '</span>'
+            );
+            return $state;
+        },
+        templateSelection: function (code) {
+            var baseUrl = "../../Images";
+            var $state = $(
+                '<span><img src="' + baseUrl + '/' + code.id + '.gif" class="img-flag" /> ' + code.text + '</span>'
+            );
+            return $state;
+        }
+    });
+
+
+    $(".bid, .ask").click(function () {
+        if (!$(this).hasClass("active")) {
+            $(".active").removeClass("active");
+            $(this).addClass("active");
+            if ($(this).hasClass("bid")) {
+                $(".ask-content").hide();
+                $(".bid-content").show();
+            } else if ($(this).hasClass("ask")) {
+                $(".bid-content").hide();
+                $(".ask-content").show();
+            }
+        }
+    });
+</script>
+
 
 

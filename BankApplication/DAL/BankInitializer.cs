@@ -51,15 +51,15 @@ namespace BankApplication.DAL
                     Ask = 1.0000m
                 },
                 new Currency {
-                    Name = "dolar amerykański",
-                    Code = "USD",
+                    Name = "euro",
+                    Code = "EUR",
                     EffectiveDate = DateTime.Now,
                     Bid = 0.0000m,
                     Ask = 0.0000m
                 },
                 new Currency {
-                    Name = "euro",
-                    Code = "EUR",
+                    Name = "dolar amerykański",
+                    Code = "USD",
                     EffectiveDate = DateTime.Now,
                     Bid = 0.0000m,
                     Ask = 0.0000m
@@ -87,7 +87,8 @@ namespace BankApplication.DAL
             {
                 new TransactionType {Type = "TRANSFER"},
                 new TransactionType {Type = "CASH_WITHDRAWAL"},
-                new TransactionType {Type = "CASH_PAYMENT"}
+                new TransactionType {Type = "CASH_PAYMENT"},
+                new TransactionType {Type = "CURR_EXCHANGE"}
             };
 
             transactionTypes.ForEach(t => context.TransactionTypes.Add(t));
