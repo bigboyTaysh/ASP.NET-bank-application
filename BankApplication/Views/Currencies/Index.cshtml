@@ -105,23 +105,10 @@
             <div class="row">
                 <div class="bank-account-left">
                     <select class="bank-account-from">
-                        <option>
-                            12 ... 1230
-                            [br]
-                            1200 PLN
-                        </option>
-                        <option>
-                            12 ... 1230
-                            [br]
-                            1200 PLN
-                        </option>
                     </select>
                 </div>
                 <div class="bank-account-right">
                     <select class="bank-account-to">
-                        <option>
-                            12...1230
-                        </option>
                     </select>
                 </div>
             </div>
@@ -145,14 +132,18 @@
     <span class="clear"></span>
 </div>
 <script>
-    
+    var prevCurrencyFrom;
+    var prevCurrencyTo;
+
     $(".currency-from, .currency-to").select2({
         templateResult: function (code) {
-            var baseUrl = "../../Images";
-            var $state = $(
-                '<span><img src="' + baseUrl + '/' + code.id + '.gif" class="img-flag" /> ' + code.text + '</span>'
-            );
-            return $state;
+            if (code.id != undefined) {
+                var baseUrl = "../../Images";
+                var $state = $(
+                    '<span><img src="' + baseUrl + '/' + code.id + '.gif" class="img-flag" /> ' + code.text + '</span>'
+                );
+                return $state;
+            }
         },
         templateSelection: function (code) {
             var baseUrl = "../../Images";
@@ -174,6 +165,44 @@
         }
     });
 
+    function searchBankAccounts(forType) {
+        var currency = $(".currency-" + forType).val();
+
+        $.post("Currencies/GetBankAccounts", { code: currency }, function (data) {
+            $(".bank-account-" + forType).html(data);
+        });
+    }
+
+    $(document).ready(function () {
+        searchBankAccounts("from");
+        searchBankAccounts("to");
+    });
+
+    
+    $(".currency-from").on("select2:selecting", function (evt) {
+        prevCurrencyFrom = $(this).val();
+    });
+
+    $(".currency-to").on("select2:selecting", function (evt) {
+        prevCurrencyTo= $(this).val();
+    });
+
+    $(".currency-from").on("select2:select", function () {
+        if ($(this).val() == $(".currency-to").val()) {
+            $(".currency-to").val(prevCurrencyFrom).trigger("change");
+            searchBankAccounts("to");
+        }
+        searchBankAccounts("from");
+    });
+
+    $(".currency-to").on("select2:select select2:selecting", function (e) {
+        if ($(this).val() == $(".currency-from").val()) {
+            $(".currency-from").val(prevCurrencyTo).trigger("change");
+            searchBankAccounts("from");
+        }
+        searchBankAccounts("to");
+    });
+
 
     $(".bid, .ask").click(function () {
         if (!$(this).hasClass("active")) {
@@ -181,4 +210,6 @@
             $(this).addClass("active");
         }
     });
+
+
 </script>
