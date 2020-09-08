@@ -52,7 +52,7 @@
 </div>
 <div class="row">
     <div class="currency-exchange-content">
-        <div class="type">
+        <div class="type row">
             <div class="bid active">
                 Kupuję
             </div>
@@ -60,10 +60,10 @@
                 Sprzedaję
             </div>
         </div>
-        <div class="currency-content">
+        <div class="currency-content row">
             <div class="currency-left">
                 <select class="currency-from col-md-3">
-                    <option value="PLN">
+                    <option value="PLN" selected>
                         PLN
                     </option>
                     <option value="EUR">
@@ -85,7 +85,7 @@
                     <option value="PLN">
                         PLN
                     </option>
-                    <option value="EUR">
+                    <option value="EUR" selected>
                         EUR
                     </option>
                     <option value="GBP">
@@ -98,15 +98,51 @@
                         CHF
                     </option>
                 </select>
-            </div> 
+            </div>
         </div>
-        <div class="bid-content">
-            
+        <br />
+        <div class="select-content row">
+            <div class="row">
+                <div class="bank-account-left">
+                    <select class="bank-account-from">
+                        <option>
+                            12 ... 1230
+                            [br]
+                            1200 PLN
+                        </option>
+                        <option>
+                            12 ... 1230
+                            [br]
+                            1200 PLN
+                        </option>
+                    </select>
+                </div>
+                <div class="bank-account-right">
+                    <select class="bank-account-to">
+                        <option>
+                            12...1230
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="value-content">
+                    <div class="value-left">
+                        <input class="form-control value" type="number" />
+                    </div>
+                    <div class="value-right">
+                        <input class="form-control result" type="text" disabled />
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="ask-content" style="display: none">
-            
+        <div class="submit-content row">
+            <div class="submit">
+                <button class="btn btn-primary">Potwierdź</button>
+            </div>
         </div>
     </div>
+    <span class="clear"></span>
 </div>
 <script>
     
@@ -127,21 +163,22 @@
         }
     });
 
+    $('.bank-account-from, .bank-account-to').select2({
+        templateResult: function templateResult(item, container) {
+            // replace the placeholder with the break-tag and put it into an jquery object
+            return $('<span>' + item.text.replace('[br]', '<br />') + '</span>');
+        },
+        templateSelection: function templateSelection(item, container) {
+            // replace your placeholder with nothing, so your select shows the whole option text
+            return item.text.replace('[br]', '');
+        }
+    });
+
 
     $(".bid, .ask").click(function () {
         if (!$(this).hasClass("active")) {
             $(".active").removeClass("active");
             $(this).addClass("active");
-            if ($(this).hasClass("bid")) {
-                $(".ask-content").hide();
-                $(".bid-content").show();
-            } else if ($(this).hasClass("ask")) {
-                $(".bid-content").hide();
-                $(".ask-content").show();
-            }
         }
     });
 </script>
-
-
-

@@ -230,14 +230,14 @@ body > div.container.body-content > h2 {
 }
 
 .currency-exchange-content {
-    height: 300px;
-    min-width: 300px;
+    height: 260px;
+    min-width: 350px;
     max-width: 500px;
     border: 1px solid rgba(80, 80, 80, 0.5);
     box-shadow: 0 0 2px 2px rgba(80, 80, 80, 0.5);
     border-radius: 5px;
     margin: 10px auto;
-    position: relative;
+    overflow: hidden
 }
 
     .currency-exchange-content .type {
@@ -297,6 +297,64 @@ body > div.container.body-content > h2 {
         .currency-exchange-content .currency-content .currency-right {
             float: right;
         }
+
+    .currency-exchange-content .select-content {
+        width: 60%;
+        min-width: 230px;
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+
+    .currency-exchange-content .bank-account-from {
+        width: 120px;
+    }
+
+    .currency-exchange-content .bank-account-to {
+        width: 120px;
+    }
+
+    .currency-exchange-content .bank-account-left {
+        float: left;
+    }
+
+    .currency-exchange-content .bank-account-right {
+        float: right;
+    }
+
+    .currency-exchange-content .value-content {
+        width: 100%;
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+
+    .currency-exchange-content .value-content input{
+        width: 120px;
+    }
+
+    .currency-exchange-content .value-left {
+        float: left;
+    }
+
+    .currency-exchange-content .value-right {
+        float: right;
+    }
+
+    .currency-exchange-content .submit-content {
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+
+        .currency-exchange-content .submit-content .submit {
+            width: 20%;
+            margin: 0 auto;
+            margin-top: 10px;
+            float: none;
+        }
+
+.span.clear {
+    clear: left;
+    display: block;
+}
 
 .img-flag {
     max-height: 20px;
