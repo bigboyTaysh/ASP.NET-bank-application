@@ -27,6 +27,13 @@ namespace BankApplication.Models
             return View(db.Currencies.Where(c => c.Code != "PLN").ToList());
         }
 
+        [HttpPost]
+        public PartialViewResult GetBankAccounts(string code)
+        {
+            var bankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts.Where(b => b.Currency.Code == code).ToList();
+            return PartialView("BankAccountList", bankAccounts);
+        }
+
         // GET: Currencies/Details/5
         public ActionResult Details(int? id)
         {

@@ -1,0 +1,14 @@
+﻿@model List<BankApplication.Models.BankAccount>
+
+@foreach (var item in Model)
+{
+    <option>
+        <span>
+            @item.BankAccountNumber
+        </span>
+        [br]
+        <span>
+            @decimal.Round(item.AvailableFounds, 2) @item.Currency.Code
+        </span>
+    </option>
+}
