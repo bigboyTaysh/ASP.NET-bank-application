@@ -154,7 +154,7 @@ namespace BankApplication.Controllers
             } 
             else
             {
-                var exchangedCurrency = ExchangeCurrency(bankAccount.Currency, currencyTo, transaction.ValueTo);
+                var exchangedCurrency = CurrenciesController.ExchangeCurrencyBid(bankAccount.Currency.Code, currencyTo.Code, transaction.ValueTo);
                 value = exchangedCurrency + ( exchangedCurrency * commision);
             }
             
@@ -273,12 +273,6 @@ namespace BankApplication.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
-        private decimal ExchangeCurrency(Currency from, Currency to, decimal value)
-        {
-            return to.Ask * value / from.Bid;
-        }
-
 
         protected override void Dispose(bool disposing)
         {

@@ -3,12 +3,8 @@
 @foreach (var item in Model)
 {
     <option>
-        <span>
-            @item.BankAccountNumber
-        </span>
+        @item.BankAccountNumber.Substring(0, 2) ... @item.BankAccountNumber.Substring(28, 4)
         [br]
-        <span>
-            @decimal.Round(item.AvailableFounds, 2) @item.Currency.Code
-        </span>
+        @decimal.Round(item.AvailableFounds, 2) @item.Currency.Code
     </option>
 }

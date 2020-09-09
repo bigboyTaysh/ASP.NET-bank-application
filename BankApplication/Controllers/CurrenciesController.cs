@@ -34,6 +34,19 @@ namespace BankApplication.Models
             return PartialView("BankAccountList", bankAccounts);
         }
 
+        [HttpPost]
+        public string GetExchangeResult(string type, decimal value, string from, string to)
+        {
+            if (type == "bid")
+            {
+                return ExchangeCurrencyBid(from, to, value).ToString();
+            } else
+            {
+                return ExchangeCurrencyAsk(from, to, value).ToString();
+            }
+            
+        }
+
         // GET: Currencies/Details/5
         public ActionResult Details(int? id)
         {
@@ -127,6 +140,18 @@ namespace BankApplication.Models
             db.Currencies.Remove(currency);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public static decimal ExchangeCurrencyBid(string from, string to, decimal value)
+        {
+            BankContext db = new BankContext();
+            return db.Currencies.Single( c => c.Code == to).Ask * value / db.Currencies.Single(c => c.Code == from).Bid;
+        }
+
+        public static decimal ExchangeCurrencyAsk(string from, string to, decimal value)
+        {
+            BankContext db = new BankContext();
+            return db.Currencies.Single(c => c.Code == to).Bid * value / db.Currencies.Single(c => c.Code == from).Ask;
         }
 
         protected override void Dispose(bool disposing)

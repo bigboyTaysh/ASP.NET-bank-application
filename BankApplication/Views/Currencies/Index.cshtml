@@ -33,7 +33,7 @@
                         </span>
                         <br />
                         <span>
-                            @item.Ask
+                            @item.Bid
                         </span>
                     </div>
                     <div class="currency-bid-box">
@@ -42,7 +42,7 @@
                         </span>
                         <br />
                         <span>
-                            @item.Bid
+                            @item.Ask
                         </span>
                     </div>
                 </div>
@@ -62,25 +62,6 @@
         </div>
         <div class="currency-content row">
             <div class="currency-left">
-                <select class="currency-from col-md-3">
-                    <option value="PLN" selected>
-                        PLN
-                    </option>
-                    <option value="EUR">
-                        EUR
-                    </option>
-                    <option value="GBP">
-                        GBP
-                    </option>
-                    <option value="USD">
-                        USD
-                    </option>
-                    <option value="CHF">
-                        CHF
-                    </option>
-                </select>
-            </div>
-            <div class="currency-right">
                 <select class="currency-to col-md-3">
                     <option value="PLN">
                         PLN
@@ -99,23 +80,47 @@
                     </option>
                 </select>
             </div>
+            <div class="za-content">
+                <span class="za">
+                    za
+                </span>
+            </div>
+            <div class="currency-right">
+                <select class="currency-from col-md-3">
+                    <option value="PLN" selected>
+                        PLN
+                    </option>
+                    <option value="EUR">
+                        EUR
+                    </option>
+                    <option value="GBP">
+                        GBP
+                    </option>
+                    <option value="USD">
+                        USD
+                    </option>
+                    <option value="CHF">
+                        CHF
+                    </option>
+                </select>
+            </div>
         </div>
         <br />
         <div class="select-content row">
             <div class="row">
                 <div class="bank-account-left">
-                    <select class="bank-account-from">
+                    <select class="bank-account-to">
                     </select>
                 </div>
                 <div class="bank-account-right">
-                    <select class="bank-account-to">
+                    <select class="bank-account-from">
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="value-content">
                     <div class="value-left">
-                        <input class="form-control value" type="number" />
+                        <input class="form-control value currencyTextBox" type="text" placeholder="Wpisz kwotę"/>
                     </div>
                     <div class="value-right">
                         <input class="form-control result" type="text" disabled />
@@ -134,6 +139,46 @@
 <script>
     var prevCurrencyFrom;
     var prevCurrencyTo;
+
+    function searchBankAccounts(forType) {
+        var currency = $(".currency-" + forType).val();
+
+        $.post("Currencies/GetBankAccounts", { code: currency }, function (data) {
+            $(".bank-account-" + forType).html(data);
+        });
+    }
+
+    function getExchangeResult() {
+        var value = $(".value").val();
+        var type = $('.type .active').attr('class').split(' ')[0];
+        var currencyTo = $(".currency-to").val();
+        var currencyFrom = $(".currency-from").val();
+
+        console.log(type, value, currencyFrom, currencyTo);
+
+        $.post("Currencies/GetExchangeResult", { type: type, from: currencyFrom, to: currencyTo, value: value.replace(",", ".") }, function (data) {
+            $(".result").val(data);
+        });
+
+        /*
+        if (type == "bid") {
+            $.post("Currencies/GetExchangeResult", { from: currencyFrom, to: currencyTo, value: value.replace(",", ".") }, function (data) {
+                $(".result").val(data);
+            });
+        } else if (type == "ask") {
+            $.post("Currencies/GetExchangeResult", { from: currencyFrom, to: currencyTo, value: value.replace(",", ".") }, function (data) {
+                $(".result").val(data);
+            });
+        }*/
+    }
+
+    $(".value, .currency-to, .currency-from").on("change keyup paste", function () {
+        if ($(".value").val() != "") {
+            getExchangeResult();
+        } else {
+            $(".result").val("");
+        }
+    });
 
     $(".currency-from, .currency-to").select2({
         templateResult: function (code) {
@@ -156,22 +201,12 @@
 
     $('.bank-account-from, .bank-account-to').select2({
         templateResult: function templateResult(item, container) {
-            // replace the placeholder with the break-tag and put it into an jquery object
             return $('<span>' + item.text.replace('[br]', '<br />') + '</span>');
         },
         templateSelection: function templateSelection(item, container) {
-            // replace your placeholder with nothing, so your select shows the whole option text
             return item.text.replace('[br]', '');
         }
     });
-
-    function searchBankAccounts(forType) {
-        var currency = $(".currency-" + forType).val();
-
-        $.post("Currencies/GetBankAccounts", { code: currency }, function (data) {
-            $(".bank-account-" + forType).html(data);
-        });
-    }
 
     $(document).ready(function () {
         searchBankAccounts("from");
@@ -208,6 +243,10 @@
         if (!$(this).hasClass("active")) {
             $(".active").removeClass("active");
             $(this).addClass("active");
+
+            if ($(".value").val() != "") {
+                getExchangeResult();
+            }
         }
     });
 
