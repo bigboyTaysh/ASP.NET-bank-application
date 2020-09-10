@@ -10,6 +10,8 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
+<div class="toast-container"></div>
+
 <div class="row currency-content">
     @foreach (var item in Model)
     {
@@ -139,6 +141,7 @@
 <script>
     var prevCurrencyFrom;
     var prevCurrencyTo;
+    var toastCount = 0;
 
     function searchBankAccounts(forType) {
         var currency = $(".currency-" + forType).val();
@@ -154,22 +157,16 @@
         var currencyTo = $(".currency-to").val();
         var currencyFrom = $(".currency-from").val();
 
-        console.log(type, value, currencyFrom, currencyTo);
-
-        $.post("Currencies/GetExchangeResult", { type: type, from: currencyFrom, to: currencyTo, value: value.replace(",", ".") }, function (data) {
-            $(".result").val(data);
-        });
-
-        /*
         if (type == "bid") {
-            $.post("Currencies/GetExchangeResult", { from: currencyFrom, to: currencyTo, value: value.replace(",", ".") }, function (data) {
+            $.post("Currencies/GetExchangeResult", { type: type, value: value, from: currencyFrom, to: currencyTo }, function (data) {
                 $(".result").val(data);
             });
-        } else if (type == "ask") {
-            $.post("Currencies/GetExchangeResult", { from: currencyFrom, to: currencyTo, value: value.replace(",", ".") }, function (data) {
+        } else {
+            $.post("Currencies/GetExchangeResult", { type: type, value: value, from: currencyTo, to: currencyFrom }, function (data) {
                 $(".result").val(data);
             });
-        }*/
+        }
+        
     }
 
     $(".value, .currency-to, .currency-from").on("change keyup paste", function () {
@@ -246,9 +243,79 @@
 
             if ($(".value").val() != "") {
                 getExchangeResult();
-            }
+            } 
         }
     });
 
+    $(".submit > button").on("click", function () {
+        var bankAccountFrom = $(".bank-account-from").val();
+        var bankAccountTo = $(".bank-account-to").val();
+        var type = $('.type .active').attr('class').split(' ')[0];
+        var value = $(".value").val();
+        var available = $('option:selected', '.bank-account-from').data("available");
+
+        if (bankAccountFrom === null) {
+            bankAccountFromElem = $(".bank-account-right .select2-container");
+            bankAccountFromElem.css('border', '1px solid red');
+            bankAccountFromElem.css('border-radius', '5px');
+            bankAccountFromElem.addClass('exchange-error');
+        } else {
+            bankAccountFromElem = $(".bank-account-right .select2-container");
+            bankAccountFromElem.css('border', 'none');
+            bankAccountFromElem.css('border-radius', 'none');
+            bankAccountFromElem.removeClass('exchange-error');
+
+            if (parseFloat(available) < parseFloat(value)) {
+                $(".value").addClass('exchange-error');
+            } else {
+                $(".value").removeClass('exchange-error');
+            }
+        }
+
+        if (bankAccountTo === null) {
+            bankAccountToElem = $(".bank-account-left .select2-container");
+            bankAccountToElem.css('border', '1px solid red');
+            bankAccountToElem.css('border-radius', '5px');
+            bankAccountToElem.addClass('exchange-error');
+        } else {
+            bankAccountToElem = $(".bank-account-left .select2-container");
+            bankAccountToElem.css('border', 'none');
+            bankAccountToElem.css('border-radius', 'none');
+            bankAccountToElem.removeClass('exchange-error');
+        }
+
+        if ($('.currency-exchange-content').find('.exchange-error').length == 0) {
+            $(".result").val("");
+            $(".value").val("");
+
+            if (type == "bid") {
+                $.post("Currencies/ExchangeCurrency", { type: type, value: value, fromBankAccountNumber: bankAccountFrom, toBankAccountNumber: bankAccountTo }, function (data) {
+                    if (data == "true") {
+                        searchBankAccounts("from");
+                        searchBankAccounts("to");
+
+                        toast("Udało się wymienić walutę", "green");
+                    } else {
+                        toast("Nie udało się wymienić waluty", "red");
+                    }
+                });
+            } else {
+                $.post("Currencies/ExchangeCurrency", { type: type, value: value, fromBankAccountNumber: bankAccountTo, toBankAccountNumber: bankAccountFrom }, function (data) {
+                    if (data == "true") {
+                        searchBankAccounts("from");
+                        searchBankAccounts("to");
+
+                        toast("Udało się wymienić walutę", "green");
+                    } else {
+                        toast("Nie udało się wymienić waluty", "red");
+                    }
+                });
+            }
+            
+            
+        } else {
+            toast("Niepoprawne dane </br> Brak konta o podanej walucie lub środków", "red");
+        }
+    });
 
 </script>

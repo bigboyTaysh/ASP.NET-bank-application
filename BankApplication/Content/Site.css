@@ -69,6 +69,10 @@ body > div.container.body-content > h2 {
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
+.col-md-6, .col-sm-6 {
+    position: unset !important;
+}
+
 .bank-account-div {
     background-color: #d3d3d3;
     border-radius: 5px;
@@ -82,7 +86,6 @@ body > div.container.body-content > h2 {
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
-    z-index: 1;
 }
 
     .bank-account-div .details-type {
@@ -373,6 +376,38 @@ body > div.container.body-content > h2 {
     max-height: 20px;
     max-width: 20px
 }
+
+.exchange-error {
+    border: 1px solid red;
+    border-radius: 5px;
+}
+
+.toast {
+    z-index: 1;
+    background: #F2F2F2;
+    background-color: #F2F2F2;
+    padding: 1%;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    border-radius: 5px;
+    display: none;
+    font-size: 130%;
+    margin-bottom: 5px;
+}
+
+
+.toast-container {
+    position: fixed;
+    min-width: 20%;
+    max-width: 40%;
+    max-width: 40%;
+    text-align: center;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 
 @media (min-width: 768px) and (max-width: 991px) {
     .navbar-collapse.collapse {

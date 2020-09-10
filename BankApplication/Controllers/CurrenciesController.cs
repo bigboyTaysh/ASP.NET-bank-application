@@ -39,12 +39,74 @@ namespace BankApplication.Models
         {
             if (type == "bid")
             {
-                return ExchangeCurrencyBid(from, to, value).ToString();
+                return decimal.Round(ExchangeCurrencyBid(from, to, value), 2).ToString();
             } else
             {
-                return ExchangeCurrencyAsk(from, to, value).ToString();
+                return decimal.Round(ExchangeCurrencyAsk(from, to, value), 2).ToString();
             }
             
+        }
+
+        [HttpPost]
+        public string ExchangeCurrency(string type, decimal value, string fromBankAccountNumber, string toBankAccountNumber)
+        {
+            Transaction transaction = new Transaction();
+            var fromBankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber== fromBankAccountNumber);
+            var toBankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == toBankAccountNumber);
+            decimal valueFrom;
+
+            if (type == "bid")
+            {
+                valueFrom = decimal.Round(ExchangeCurrencyBid(fromBankAccount.Currency.Code, toBankAccount.Currency.Code, value), 2);
+                fromBankAccount.Balance -= valueFrom;
+                fromBankAccount.AvailableFounds -= valueFrom;
+                transaction.ValueFrom = valueFrom;
+                transaction.ValueTo = value;
+                toBankAccount.Balance += value;
+                toBankAccount.AvailableFounds += value;
+                transaction.BalanceAfterTransactionUserFrom = fromBankAccount.Balance;
+                transaction.BalanceAfterTransactionUserTo = toBankAccount.Balance;
+            }
+            else
+            {
+                valueFrom = decimal.Round(ExchangeCurrencyAsk(fromBankAccount.Currency.Code, toBankAccount.Currency.Code, value), 2);
+
+                fromBankAccount.Balance -= value;
+                fromBankAccount.AvailableFounds -= value;
+                transaction.ValueFrom = value;
+
+                transaction.ValueTo = valueFrom;
+                toBankAccount.Balance += valueFrom;
+                toBankAccount.AvailableFounds += valueFrom;
+                transaction.BalanceAfterTransactionUserFrom = fromBankAccount.Balance;
+                transaction.BalanceAfterTransactionUserTo = toBankAccount.Balance;
+            }
+
+            try
+            {
+
+                
+                transaction.CurrencyTo = toBankAccount.Currency;
+                transaction.ToBankAccountNumber = toBankAccount.BankAccountNumber;
+
+                transaction.FromBankAccountNumber = fromBankAccount.BankAccountNumber;
+                transaction.CurrencyFrom = fromBankAccount.Currency;
+
+                transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CURR_EXCHANGE").ID;
+                transaction.Description = "Wymiana waluty";
+                transaction.ReceiverName = db.Profiles.Single(p => p.Login == User.Identity.Name).FullName;
+
+                transaction.OperationDate = DateTime.Now;
+                transaction.Date = DateTime.Now;
+                db.Transactions.Add(transaction);
+                db.SaveChanges();
+
+                return "true";
+            }
+            catch (Exception e)
+            {
+                return "false";
+            } 
         }
 
         // GET: Currencies/Details/5
@@ -151,7 +213,7 @@ namespace BankApplication.Models
         public static decimal ExchangeCurrencyAsk(string from, string to, decimal value)
         {
             BankContext db = new BankContext();
-            return db.Currencies.Single(c => c.Code == to).Bid * value / db.Currencies.Single(c => c.Code == from).Ask;
+            return db.Currencies.Single(c => c.Code == from).Bid * value / db.Currencies.Single(c => c.Code == to).Ask;
         }
 
         protected override void Dispose(bool disposing)

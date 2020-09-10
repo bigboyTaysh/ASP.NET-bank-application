@@ -49,7 +49,7 @@ namespace BankApplication.Controllers
             {
                 transactions = db.Transactions
                     .Include(t => t.TransactionType)
-                    .Include(t => t.CurrencTo).ToList();
+                    .Include(t => t.CurrencyTo).ToList();
             }
             else
             {
@@ -59,7 +59,7 @@ namespace BankApplication.Controllers
                     transactions = db.Transactions
                     .Where(t => bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber)
                     .Include(t => t.TransactionType)
-                    .Include(t => t.CurrencTo)
+                    .Include(t => t.CurrencyTo)
                     .OrderByDescending(t => t.Date).ThenByDescending(t => t.ID).ToList();
                 } 
             }
@@ -85,7 +85,7 @@ namespace BankApplication.Controllers
             {
                 transactions = db.Transactions
                     .Include(t => t.TransactionType)
-                    .Include(t => t.CurrencTo).ToList();
+                    .Include(t => t.CurrencyTo).ToList();
             }
             else
             {
@@ -95,7 +95,7 @@ namespace BankApplication.Controllers
                     transactions = db.Transactions
                     .Where(t => bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber)
                     .Include(t => t.TransactionType)
-                    .Include(t => t.CurrencTo)
+                    .Include(t => t.CurrencyTo)
                     .OrderByDescending(t => t.Date).ThenByDescending(t => t.ID).ToList();
                 }
             }
@@ -196,7 +196,7 @@ namespace BankApplication.Controllers
 
                 transaction.FromBankAccountNumber = bankAccount.BankAccountNumber;
                 transaction.SenderName = user.FullName;
-                transaction.CurrencFrom = bankAccount.Currency;
+                transaction.CurrencyFrom = bankAccount.Currency;
 
                 transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "TRANSFER").ID;
 

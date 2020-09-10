@@ -56,13 +56,11 @@ namespace BankApplication.Models
         public DateTime OperationDate { get; set; }
        
         public int TransactionTypeID { get; set; }
-
-        [Required]
-        public int CurrencyToID { get; set; }
-        public int CurrencyFromID { get; set; }
+        public int? CurrencyToID { get; set; }
+        public int? CurrencyFromID { get; set; }
 
         public virtual TransactionType TransactionType { get; set; }
-        public virtual Currency CurrencTo { get; set; }
-        public virtual Currency CurrencFrom { get; set; }
+        public virtual Currency CurrencyTo { get; set; }
+        public virtual Currency CurrencyFrom { get; set; }
     }
 }

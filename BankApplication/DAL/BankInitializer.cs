@@ -130,7 +130,7 @@ namespace BankApplication.DAL
                     BankAccountNumber = "12 1234 1234 1234 1234 1234 1232",
                     CreationDate = new DateTime(2020, 09, 06),
                     BankAccountType = bankAccountTypes[2],
-                    Currency = currencies[0]
+                    Currency = currencies[1]
                 }
             };
 
