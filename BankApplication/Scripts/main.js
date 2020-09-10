@@ -37,3 +37,18 @@ $(document).ready(function () {
         return /^-?\d*[.,]?\d{0,2}$/.test(value);
     });
 });
+
+function toast(text, color) {
+    var div = "<div id='" + toastCount + "' class='toast' style='color: " + color + "'>" + text + "</div>";
+    var divCount = toastCount;
+    toastCount++;
+
+    $(div).appendTo($(".toast-container"))
+        .fadeIn("fast")
+        .delay(1000)
+        .fadeOut("fast");
+
+    setTimeout(function () {
+        $("div#" + divCount + ".toast").remove();
+    }, 1000);
+}
