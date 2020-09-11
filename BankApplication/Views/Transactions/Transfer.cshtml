@@ -100,21 +100,13 @@
 
 <script>
     $(document).ready(function () {
-
-        function templateResult(item, container) {
-            // replace the placeholder with the break-tag and put it into an jquery object
-            return $('<span>' + item.text.replace('[br]', '<br />') + '</span>');
-        }
-
-        function templateSelection(item, container) {
-            // replace your placeholder with nothing, so your select shows the whole option text
-            return item.text.replace('[br]', '');
-        }
-
         $('.js-example-basic-single').select2({
-            templateResult: templateResult,
-            templateSelection: templateSelection
+            templateResult: function(item, container) {
+                return $('<span>' + item.text.replace('[br]', '<br />') + '</span>');
+            },
+            templateSelection: function(item, container) {
+                return item.text.replace('[br]', '');
+            }
         });
-
     });
 </script>

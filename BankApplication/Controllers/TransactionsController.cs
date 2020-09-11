@@ -169,6 +169,11 @@ namespace BankApplication.Controllers
                     ModelState.AddModelError("ValueTo", "Za mało środków");
                 }
 
+                if (value == 0)
+                {
+                    ModelState.AddModelError("ValueTo", "Kwota jest zbyt niska");
+                }
+
                 if (bankAccount.Currency.Code != currencyTo.Code && bankAccount.BankAccountType.Type != "FOR_CUR_ACC")
                 {
                     ModelState.AddModelError("CurrencyToID", "Podaj poprawną walutę");
