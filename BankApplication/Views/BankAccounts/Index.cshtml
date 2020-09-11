@@ -42,7 +42,7 @@
 
 @using (Html.BeginForm())
 {
-    <p>
+    <p class="pull-right">
         Find by number: @Html.TextBox("SearchString", null, new { @class = "searchString" })
     </p>
 }
@@ -52,15 +52,6 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.First().BankAccountType.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Balance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().AvailableFounds)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Lock)
             </th>
             <th>
                 @Html.ActionLink("Bank account number", "Index", new { sortOrder = ViewBag.NumberSortParm, currentFilter = ViewBag.CurrentFilter })
@@ -77,27 +68,15 @@
                     @Html.DisplayFor(modelItem => item.BankAccountType.Type)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Balance)
-                    @Html.DisplayFor(modelItem => item.Currency.Code)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AvailableFounds)
-                    @Html.DisplayFor(modelItem => item.Currency.Code)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Lock)
-                    @Html.DisplayFor(modelItem => item.Currency.Code)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.BankAccountNumber)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreationDate)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                    @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default", target = "_blank" } )
+                    @Html.ActionLink("Historia", "Index", "Transactions", new { bankAccountNumber = item.BankAccountNumber }, new { @class = "btn btn-default", target = "_blank" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-default" })
                 </td>
             </tr>
         }
