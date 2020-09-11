@@ -87,7 +87,7 @@ namespace BankApplication.DAL
             {
                 new TransactionType {Type = "TRANSFER"},
                 new TransactionType {Type = "CASH_WITHDRAWAL"},
-                new TransactionType {Type = "CASH_PAYMENT"},
+                new TransactionType {Type = "CASH_DEPOSIT"},
                 new TransactionType {Type = "CURR_EXCHANGE"}
             };
 

@@ -53,6 +53,8 @@ namespace BankApplication.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data przelewu")]
         public DateTime Date { get; set; }
+
+        [DataType(DataType.Date)]
         public DateTime OperationDate { get; set; }
        
         public int TransactionTypeID { get; set; }

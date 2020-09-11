@@ -122,7 +122,7 @@
             <div class="row">
                 <div class="value-content">
                     <div class="value-left">
-                        <input class="form-control value currencyTextBox" type="text" placeholder="Wpisz kwotę"/>
+                        <input class="form-control value valueTextBox" type="text" placeholder="Wpisz kwotę"/>
                     </div>
                     <div class="value-right">
                         <input class="form-control result" type="text" disabled />
@@ -265,7 +265,7 @@
             bankAccountFromElem.css('border-radius', 'none');
             bankAccountFromElem.removeClass('exchange-error');
 
-            if (parseFloat(available) < parseFloat(value) || parseFloat(value) == 0) {
+            if (parseFloat(available) < parseFloat(value) || parseFloat(value) < 0) {
                 $(".value").addClass('exchange-error');
             } else {
                 $(".value").removeClass('exchange-error');
@@ -314,7 +314,7 @@
             
             
         } else {
-            toast("Niepoprawne dane </br> Brak środków lub konta o podanej walucie", "red");
+            toast("Niepoprawne dane </br> Brak konta o podanej walucie, środków lub zbyt niska kwota", "red");
         }
     });
 

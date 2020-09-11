@@ -59,7 +59,8 @@ body > div.container.body-content > h2 {
     text-align: center;
 }
 
-.noselect {
+.noselect *:not(.bankAccountSelect) {
+
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
@@ -382,6 +383,11 @@ body > div.container.body-content > h2 {
     border-radius: 5px;
 }
 
+.value-error {
+    border: 1px solid red;
+    border-radius: 5px;
+}
+
 .toast {
     z-index: 1;
     background: #F2F2F2;
@@ -408,6 +414,27 @@ body > div.container.body-content > h2 {
     transform: translateX(-50%);
 }
 
+.form-deposit-withdrawal {
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+    min-width: 236px;
+}
+
+    .form-deposit-withdrawal .form-control {
+        width: 30%;
+        margin: 0 auto;
+        display: unset;
+        min-width: 115px;
+    }
+
+    .form-deposit-withdrawal .submit {
+        margin-top: 10px;
+    }
+
+.value-deposit-withdrawal {
+    text-align: center;
+}
 
 @media (min-width: 768px) and (max-width: 991px) {
     .navbar-collapse.collapse {
