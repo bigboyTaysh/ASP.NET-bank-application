@@ -5,25 +5,27 @@
 }
 
 <div class="jumbotron">
-    <div class="bank-account-div active noselect shadow p-3 mb-5 bg-white rounded">
+    <div class="bank-account-div active shadow p-3 mb-5 bg-white rounded">
         <div class="details-type">
             <div>@Model[0].BankAccountType.Type</div>
             <div class="bankAccountSelect">@Model[0].BankAccountNumber</div>
         </div>
-        <div class="pull-right">
+        <div class="pull-right noselect">
             <div class="pull-right text-align-right details-menas">
                 <span>Dostępne środki</span>
                 <br />
                 <span>@decimal.Round(Model[0].AvailableFounds, 2) @Model[0].Currency.Code</span>
             </div>
-            <div class="pull-right">
+            <div class="pull-right noselect">
                 <div class="pull-right text-align-right details">
                     <span>
                         @decimal.Round(Model[0].Balance, 2)
+                        @Model[0].Currency.Code
                     </span>
                     <br />
                     <span>
                         @decimal.Round(Model[0].Lock, 2)
+                        @Model[0].Currency.Code
                     </span>
                 </div>
                 <div class="pull-right text-align-left details">
@@ -37,9 +39,11 @@
                 </div>
             </div>
         </div>
-        <br />
-        <br />
-        <div class="pull-right buttons">
+        <div class="noselect">
+            <br />
+            <br />
+        </div>
+        <div class="pull-right buttons noselect">
             @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model[0].BankAccountTypeID }, new { @class = "btn btn-default" })
             @Html.ActionLink("Historia", "Index", "Transactions", new { bankAccountNumber = Model[0].BankAccountNumber }, new { @class = "btn btn-default" })
             @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
@@ -47,12 +51,12 @@
     </div>
     @foreach (var item in Model.Skip(1))
     {
-        <div class="bank-account-div noselect">
+        <div class="bank-account-div">
             <div class="details-type">
                 <div>@item.BankAccountType.Type</div>
                 <div class="bankAccountSelect">@item.BankAccountNumber</div>
             </div>
-            <div class="pull-right">
+            <div class="pull-right noselect">
                 <div class="pull-right text-align-right details-menas">
                     <span>Dostępne środki</span>
                     <br />
@@ -62,13 +66,15 @@
                     <div class="pull-right text-align-right details">
                         <span>
                             @decimal.Round(item.Balance, 2)
+                            @item.Currency.Code
                         </span>
                         <br />
                         <span>
                             @decimal.Round(item.Lock, 2)
+                            @item.Currency.Code
                         </span>
                     </div>
-                    <div class="pull-right text-align-left details">
+                    <div class="pull-right text-align-left details noselect">
                         <span>
                             Sadlo
                         </span>
@@ -79,9 +85,11 @@
                     </div>
                 </div>
             </div>
-            <br />
-            <br />
-            <div class="pull-right buttons">
+            <div class="noselect">
+                <br />
+                <br />
+            </div>
+            <div class="pull-right buttons noselect">
                 @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default" })
                 @Html.ActionLink("Historia", "Index", "Transactions", new { bankAccountNumber = item.BankAccountNumber }, new { @class = "btn btn-default" })
                 @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })

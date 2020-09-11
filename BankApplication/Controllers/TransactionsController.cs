@@ -23,18 +23,32 @@ namespace BankApplication.Controllers
         // GET: Transactions
         public ActionResult Index(string bankAccountNumber)
         {
-            var bankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
-            var bankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == bankAccountNumber);
-            
-            if (bankAccount != null && bankAccounts.Any(b => b.BankAccountNumber == bankAccount.BankAccountNumber))
+            if (User.IsInRole("Admin") || User.IsInRole("Worker"))
             {
-                return View(bankAccount);
+                var bankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == bankAccountNumber);
+                if (bankAccount != null)
+                {
+                    return View(bankAccount);
+                }
+                else
+                {
+                    return View(bankAccount);
+                }
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                var bankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
+                var bankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == bankAccountNumber);
+
+                if (bankAccount != null && bankAccounts.Any(b => b.BankAccountNumber == bankAccount.BankAccountNumber))
+                {
+                    return View(bankAccount);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            
         }
 
         [HttpPost]
@@ -48,8 +62,10 @@ namespace BankApplication.Controllers
             if (User.IsInRole("Admin"))
             {
                 transactions = db.Transactions
+                    .Where(t => bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber)
                     .Include(t => t.TransactionType)
-                    .Include(t => t.CurrencyTo).ToList();
+                    .Include(t => t.CurrencyTo)
+                    .OrderByDescending(t => t.Date).ThenByDescending(t => t.ID).ToList();
             }
             else
             {
@@ -85,7 +101,8 @@ namespace BankApplication.Controllers
             {
                 transactions = db.Transactions
                     .Include(t => t.TransactionType)
-                    .Include(t => t.CurrencyTo).ToList();
+                    .Include(t => t.CurrencyTo)
+                    .OrderByDescending(t => t.Date).ThenByDescending(t => t.ID).ToList();
             }
             else
             {
@@ -107,21 +124,6 @@ namespace BankApplication.Controllers
             ViewBag.Count = transactions.Count;
 
             return PartialView("IndexTransfersList", transactions.ToPagedList(pageNumber, pageSize));
-        }
-
-        // GET: Transactions/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
-            return View(transaction);
         }
 
         // GET: Transactions/Transfer
@@ -216,6 +218,90 @@ namespace BankApplication.Controllers
             ViewBag.BankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
 
             return View("Transfer", transaction);
+        }
+
+        [Authorize(Roles = "Admin,Worker")]
+        [HttpPost]
+        public string CashDeposit(string bankAccountNumber, string value)
+        {
+            var bankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == bankAccountNumber);
+            decimal.TryParse(value, out decimal deciamlValue);
+
+            bankAccount.AvailableFounds += deciamlValue;
+            bankAccount.Balance += deciamlValue;
+
+            Transaction transaction = new Transaction();
+
+            transaction.ValueFrom = deciamlValue;
+            transaction.BalanceAfterTransactionUserFrom = bankAccount.Balance;
+
+            transaction.FromBankAccountNumber = bankAccount.BankAccountNumber;
+            transaction.ToBankAccountNumber = bankAccount.BankAccountNumber;
+            transaction.ReceiverName = db.Profiles.Single(p => p.BankAccounts.Any(b => b.BankAccountNumber == bankAccountNumber)).FullName;
+            transaction.Description = "Wpłana na konto";
+            transaction.CurrencyFrom = bankAccount.Currency;
+
+            transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CASH_DEPOSIT").ID;
+
+            transaction.OperationDate = DateTime.Now;
+            transaction.Date = DateTime.Now;
+            db.Transactions.Add(transaction);
+
+           
+            db.SaveChanges();
+            return "true";
+        }
+
+        [Authorize(Roles = "Admin,Worker")]
+        [HttpPost]
+        public string CashWithdrawal(string bankAccountNumber, string value)
+        {
+            var bankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == bankAccountNumber);
+            decimal.TryParse(value, out decimal deciamlValue);
+            if (bankAccount.AvailableFounds >= deciamlValue)
+            {
+                bankAccount.AvailableFounds -= deciamlValue;
+                bankAccount.Balance -= deciamlValue;
+
+                Transaction transaction = new Transaction();
+
+                transaction.ValueFrom = deciamlValue;
+                transaction.BalanceAfterTransactionUserFrom = bankAccount.Balance;
+
+                transaction.FromBankAccountNumber = bankAccount.BankAccountNumber;
+                transaction.ToBankAccountNumber = bankAccount.BankAccountNumber;
+                transaction.ReceiverName = db.Profiles.Single(p => p.BankAccounts.Any(b => b.BankAccountNumber == bankAccountNumber)).FullName;
+                transaction.Description = "Wypłata z konta";
+                transaction.CurrencyFrom = bankAccount.Currency;
+
+                transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CASH_WITHDRAWAL").ID;
+
+                transaction.OperationDate = DateTime.Now;
+                transaction.Date = DateTime.Now;
+                db.Transactions.Add(transaction);
+
+                db.SaveChanges();
+                return "true";
+            } 
+            else
+            {
+                return "false";
+            }  
+        }
+
+        // GET: Transactions/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Transaction transaction = db.Transactions.Find(id);
+            if (transaction == null)
+            {
+                return HttpNotFound();
+            }
+            return View(transaction);
         }
 
         // GET: Transactions/Edit/5

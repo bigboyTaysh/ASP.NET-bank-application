@@ -61,9 +61,11 @@ namespace BankApplication.Models
                 fromBankAccount.Balance -= valueFrom;
                 fromBankAccount.AvailableFounds -= valueFrom;
                 transaction.ValueFrom = valueFrom;
+
                 transaction.ValueTo = value;
                 toBankAccount.Balance += value;
                 toBankAccount.AvailableFounds += value;
+
                 transaction.BalanceAfterTransactionUserFrom = fromBankAccount.Balance;
                 transaction.BalanceAfterTransactionUserTo = toBankAccount.Balance;
             }
@@ -78,6 +80,7 @@ namespace BankApplication.Models
                 transaction.ValueTo = valueFrom;
                 toBankAccount.Balance += valueFrom;
                 toBankAccount.AvailableFounds += valueFrom;
+
                 transaction.BalanceAfterTransactionUserFrom = fromBankAccount.Balance;
                 transaction.BalanceAfterTransactionUserTo = toBankAccount.Balance;
             }
@@ -85,7 +88,8 @@ namespace BankApplication.Models
             try
             {
 
-                
+
+                transaction.CurrencyFrom = fromBankAccount.Currency;
                 transaction.CurrencyTo = toBankAccount.Currency;
                 transaction.ToBankAccountNumber = toBankAccount.BankAccountNumber;
 
