@@ -1,0 +1,176 @@
+﻿@model BankApplication.Models.BankAccount
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Przelew", "Transfer")
+</p>
+
+<div class="form-group">
+    <div class="bank-account-div history active shadow p-3 mb-5 bg-white rounded row">
+        <div class="details-type pull-left">
+            <div>@Model.BankAccountType.Type</div>
+            <div class="bankAccountSelect">@Model.BankAccountNumber</div>
+        </div>
+        <div class="pull-right noselect">
+            <div class="pull-right text-align-right details-menas">
+                <span>Dostępne środki</span>
+                <br />
+                <span>@decimal.Round(Model.AvailableFounds, 2) @Model.Currency.Code</span>
+            </div>
+            <div class="pull-right">
+                <div class="pull-right text-align-right details">
+                    <span>
+                        @decimal.Round(Model.Balance, 2)
+                        @Model.Currency.Code
+                    </span>
+                    <br />
+                    <span>
+                        @decimal.Round(Model.Lock, 2)
+                        @Model.Currency.Code
+                    </span>
+                </div>
+                <div class="pull-right text-align-left details">
+                    <span>
+                        Sadlo
+                    </span>
+                    <br />
+                    <span>
+                        Blokady
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="noselect">
+            <br />
+            <br />
+        </div>
+        <div class="buttons noselect ">
+            @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model.BankAccountTypeID }, new { @class = "btn btn-default" })
+            @if (User.IsInRole("User"))
+            {
+                @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
+            }
+        </div>
+    </div>
+</div>
+
+@if (User.IsInRole("Admin") || User.IsInRole("Worker"))
+{
+    <div class="form-deposit-withdrawal">
+        <div class="value">
+            <input type="text" class="form-control valueTextBox value-deposit-withdrawal" />
+            @Model.Currency.Code
+        </div>
+
+        <div class="submit">
+            <button class="form-control btn-primary submit-cash-deposit">
+                Wpłać
+            </button>
+            <button class="form-control btn-default submit-cash-withdrawal">
+                Wypłać
+            </button>
+        </div>
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Odbiorca / Nadawca / Tytuł
+            </th>
+            <th>
+                Data
+            </th>
+            <th>
+                Operacja
+            </th>
+            <th>
+                Kwota
+            </th>
+            <th>
+                Saldo
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-transactions-result">
+        <tr class="loading-container">
+            <td colspan="5">
+                <div>
+                    <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    var page = 1;
+    var active = false;
+
+    function searchTransactions(page, type) {
+        active = true;
+        var bankAccountNumber = $(".active > .details-type > div.bankAccountSelect").text();
+
+        $.post("@Url.Action("Transactions", "Transactions")",
+            {
+                bankAccountNumber: bankAccountNumber,
+                page: page,
+            },
+            function (data) {
+                if (type == "append") {
+                    $(".table-transactions-result").append(data);
+                } else {
+                    $(".loading-container").hide();
+
+                    if (data != "") {
+                        $(".table-transactions-result").html(data);
+                    } else {
+                        $(".table-transactions-result").html(
+                            "<tr><td colspan='5'>Brak operacji</td></tr>"
+                        );
+                    }
+                }
+                active = false;
+            });
+    }
+
+    $(document).ready(function () {
+        searchTransactions(1);
+    });
+
+    $(".submit-cash-deposit").on("click", function () {
+        var value = $(".value-deposit-withdrawal").val();
+        var bankAccountNumber = $(".bankAccountSelect").text();
+
+        if (parseFloat(value) > 0) {
+            $.post("Transactions/CashDeposit", { bankAccountNumber: bankAccountNumber, value: value }, function (data) {
+                if (data == "true") {
+                    location.reload();
+                } else {
+                    $(".value-deposit-deposit").addClass("value-error");
+                }
+            });
+        }
+    });
+
+    $(".submit-cash-withdrawal").on("click", function () {
+        var value = $(".value-deposit-withdrawal").val();
+        var bankAccountNumber = $(".bankAccountSelect").text();
+
+        if (parseFloat(value) > 0) {
+            $.post("Transactions/CashWithdrawal", { bankAccountNumber: bankAccountNumber, value: value }, function (data) {
+                if (data == "true") {
+                    location.reload();
+                } else {
+                    $(".value-deposit-withdrawal").addClass("value-error");
+                }
+            });
+        }
+    });
+</script>

@@ -16,9 +16,18 @@ namespace BankApplication.DAL
         public DbSet<BankAccountType> BankAccountTypes { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+        public DbSet<TransactionType> TransactionTypes { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Currency>().Property(x => x.Ask).HasPrecision(26, 4);
+            modelBuilder.Entity<Currency>().Property(x => x.Bid).HasPrecision(26, 4);
+            modelBuilder.Entity<BankAccount>().Property(x => x.AvailableFounds).HasPrecision(26, 4);
+            modelBuilder.Entity<BankAccount>().Property(x => x.Balance).HasPrecision(26, 4);
+            modelBuilder.Entity<BankAccount>().Property(x => x.Lock).HasPrecision(26, 4);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
     }

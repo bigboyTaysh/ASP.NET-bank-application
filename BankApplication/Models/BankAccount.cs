@@ -20,31 +20,35 @@ namespace BankApplication.Models
         public decimal Balance { get; set; }
 
         [Required]
-        [Display(Name = "Available founds")]
+        [Display(Name = "Dostępne środki")]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "money")]
         public decimal AvailableFounds { get; set; }
 
         [Required]
+        [Display(Name = "Blokady")]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "money")]
         public decimal Lock { get; set; }
 
         [Required]
-        [Display(Name = "Bank account number")]
+        [Display(Name = "Numer konta")]
         public string BankAccountNumber { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Creation Date")]
+        [Display(Name = "Data utworzenia")]
         public DateTime CreationDate { get; set; }
 
         [Required]
         public int BankAccountTypeID { get; set; }
 
-        //public string FileName { get; set; }
+        [Required]
+        public int CurrencyID { get; set; }
 
         public virtual BankAccountType BankAccountType { get; set; }
+        public virtual Currency Currency { get; set; }
+
     }
 }

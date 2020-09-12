@@ -1,54 +1,21 @@
 ﻿@model PagedList.IPagedList<BankApplication.Models.BankAccount>
 @using PagedList.Mvc;
 
-<table class="table">
+@foreach (var item in Model)
+{
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.First().BankAccountType.TypeName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().Balance)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().AvailableFounds)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().Lock)
-        </th>
-        <th>
-            @Html.ActionLink("Bank account number", "Index", new { sortOrder = ViewBag.NumberSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            @Html.ActionLink("Creation Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
+        <td>
+            @Html.DisplayFor(modelItem => item.BankAccountType.Type)
+        </td>
+        <td>
+            @Html.ActionLink(item.BankAccountNumber, "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default", target = "_blank" })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationDate)
+        </td>
+        <td>
+            @Html.ActionLink("Stan", "Index", "Transactions", new { bankAccountNumber = item.BankAccountNumber }, new { @class = "btn btn-default", target = "_blank" })
+            @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-default" })
+        </td>
     </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.BankAccountType.TypeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Balance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AvailableFounds)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Lock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BankAccountNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
-        </tr>
-    }
-</table>
+}

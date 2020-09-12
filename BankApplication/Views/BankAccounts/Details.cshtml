@@ -11,11 +11,11 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.BankAccountType.TypeName)
+            @Html.DisplayNameFor(model => model.BankAccountType.Type)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.BankAccountType.TypeName)
+            @Html.DisplayFor(model => model.BankAccountType.Type)
         </dd>
 
         <dt>
@@ -57,15 +57,6 @@
         <dd>
             @Html.DisplayFor(model => model.CreationDate)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FileName)
-        </dt>
-
-        <dd>
-            <img src="~/Images/@Html.DisplayFor(model => model.FileName)" alt="" height="50" width="50"/>
-        </dd>
-
     </dl>
 </div>
 <p>

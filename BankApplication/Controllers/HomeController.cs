@@ -11,14 +11,25 @@ using Microsoft.Extensions.Configuration.Binder;
 
 namespace BankApplication.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private BankContext db = new BankContext();
+
+        
         public ActionResult Index()
         {
-            return View();
+            if (User.IsInRole("Admin") || User.IsInRole("Worker"))
+            {
+                return RedirectToAction("Index", "BankAccounts");
+            } else
+            {
+
+                return View(db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts);
+            }
         }
 
+        [AllowAnonymous]
         public ActionResult About()
         {
             IQueryable<CreationDateGroup> data = from bankAccount in db.BankAccounts
@@ -33,6 +44,7 @@ namespace BankApplication.Controllers
             return View(data.ToList());
         }
 
+        [AllowAnonymous]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

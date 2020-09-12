@@ -8,16 +8,19 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.4-beta.33/jquery.inputmask.min.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/main")
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     @RenderSection("scripts", required: false)
+
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -30,7 +33,30 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Strona główna", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Bank Accounts", "Index", "BankAccounts")</li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Konta bankowe", "Index", "BankAccounts")</li>
+                        <li>@Html.ActionLink("Pracownicy", "Workers", "Account")</li>
+                    }
+                    @if (User.IsInRole("Worker"))
+                    {
+                        <li>@Html.ActionLink("Konta bankowe", "Index", "BankAccounts")</li>
+                        <li>@Html.ActionLink("Użytkownicy", "Users", "Account")</li>
+                    }
+                    @if (User.IsInRole("User"))
+                    {
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Transakcje
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>@Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "dropdown-toggle" })</li>
+                            </ul>
+                        </li>
+                        <li>@Html.ActionLink("Kantor", "Index", "Currencies")</li>
+
+                    }
                     <li>@Html.ActionLink("Informacje", "About", "Home")</li>
                     <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
                 </ul>
@@ -40,9 +66,9 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Moja aplikacja ASP.NET</p>
+        <footer class="footer">
+            <hr />
+            <p>&copy; @DateTime.Now.Year - Wolski Worldwide Bank</p>
         </footer>
     </div>
 </body>

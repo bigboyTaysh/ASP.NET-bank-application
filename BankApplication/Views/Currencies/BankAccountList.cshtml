@@ -1,0 +1,10 @@
+﻿@model List<BankApplication.Models.BankAccount>
+
+@foreach (var item in Model)
+{
+    <option data-available="@decimal.Round(item.AvailableFounds, 2)" value="@item.BankAccountNumber">
+        @item.BankAccountNumber.Substring(0, 2) ... @item.BankAccountNumber.Substring(28, 4)
+        [br]
+        @decimal.Round(item.AvailableFounds, 2) @item.Currency.Code
+    </option>
+}
