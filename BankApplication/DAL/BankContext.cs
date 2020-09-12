@@ -31,7 +31,7 @@ namespace BankApplication.DAL
             modelBuilder.Entity<BankAccount>().Property(x => x.AvailableFounds).HasPrecision(26, 4);
             modelBuilder.Entity<BankAccount>().Property(x => x.Balance).HasPrecision(26, 4);
             modelBuilder.Entity<BankAccount>().Property(x => x.Lock).HasPrecision(26, 4);
-            modelBuilder.Entity<CreditType>().Property(x => x.CreditRates).HasPrecision(26, 4);
+            modelBuilder.Entity<CreditType>().Property(x => x.Rates).HasPrecision(26, 4);
             modelBuilder.Entity<CreditType>().Property(x => x.Commission).HasPrecision(26, 4);
             modelBuilder.Entity<CreditApplication>().Property(x => x.CreditAmount).HasPrecision(26, 4);
             modelBuilder.Entity<CreditApplication>().Property(x => x.TotalRepayment).HasPrecision(26, 4);

@@ -57,6 +57,10 @@
                         <li>@Html.ActionLink("Kantor", "Index", "Currencies")</li>
 
                     }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Wnioski", "Index", "CreditApplications")</li>
+                    }
                     <li>@Html.ActionLink("Informacje", "About", "Home")</li>
                     <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
                 </ul>

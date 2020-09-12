@@ -18,7 +18,14 @@ namespace BankApplication.Controllers
         // GET: CreditApplications
         public ActionResult Index()
         {
-            return View(db.CreditApplications.ToList());
+            if (User.IsInRole("Admin") || User.IsInRole("Worker"))
+            {
+                return View(db.CreditApplications.ToList());
+            }
+            else
+            {
+                return View(db.Profiles.Single(p => p.Login == User.Identity.Name).CreditApplications);
+            }
         }
 
         // GET: CreditApplications/Details/5
@@ -39,6 +46,7 @@ namespace BankApplication.Controllers
         // GET: CreditApplications/Create
         public ActionResult Create()
         {
+            ViewBag.Types = db.CreditTypes.ToList();
             return View();
         }
 
@@ -47,16 +55,20 @@ namespace BankApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,CreditAmount,TotalRepayment,MonthRepayment,NumberOfMonths,DateOfSubmission,State")] CreditApplication creditApplication)
+        public ActionResult Create([Bind(Include = "ID,CreditAmount,NumberOfMonths,TypeID")] CreditApplication creditApplication)
         {
             if (ModelState.IsValid)
             {
+                creditApplication.TotalRepayment = GetMonthRepayment(creditApplication.CreditAmount, creditApplication.NumberOfMonths, creditApplication.TypeID) * creditApplication.NumberOfMonths;
+                creditApplication.MonthRepayment = GetMonthRepayment(creditApplication.CreditAmount, creditApplication.NumberOfMonths, creditApplication.TypeID);
+                creditApplication.DateOfSubmission = DateTime.Now;
+                creditApplication.State = null;
                 db.CreditApplications.Add(creditApplication);
                 db.Profiles.Single(p => p.Email == User.Identity.Name).CreditApplications.Add(creditApplication);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.Types = db.CreditTypes.ToList();
             return View(creditApplication);
         }
 
@@ -115,6 +127,22 @@ namespace BankApplication.Controllers
             db.CreditApplications.Remove(creditApplication);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        private decimal GetMonthRepayment(decimal value, int months, int typeID)
+        {
+            var sum = 0.0m;
+            var numberOfInstallmentsPaidDuringTheYear = 12m;
+            var type = db.CreditTypes.Single(t => t.ID == typeID);
+
+            var creditAmount = value + (value * (0.01m * type.Commission));
+
+            for (int i = 1; i <= months; i++)
+            {
+                sum = sum + (decimal)Math.Pow((double)(1m + ((0.01m * type.Rates) / numberOfInstallmentsPaidDuringTheYear)), 0 - i);
+            }
+
+            return creditAmount / sum;
         }
 
         protected override void Dispose(bool disposing)

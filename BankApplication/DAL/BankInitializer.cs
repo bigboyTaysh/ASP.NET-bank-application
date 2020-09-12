@@ -105,7 +105,7 @@ namespace BankApplication.DAL
             context.SaveChanges();
 
 
-            var creditType = new CreditType { Name = "kredyt gotówkowy", Commission = 8.99m, CreditRates = 0m };
+            var creditType = new CreditType { Name = "kredyt gotówkowy", Commission = 8.99m, Rates = 0m };
             context.CreditTypes.Add(creditType);
             context.SaveChanges();
 

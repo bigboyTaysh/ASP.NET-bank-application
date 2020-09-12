@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,7 +10,11 @@ namespace BankApplication.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public decimal CreditRates { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal Rates { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Commission { get; set; }
     }
 }
