@@ -337,5 +337,3 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
-
-BankApplication/ExternalAppSetting.config
