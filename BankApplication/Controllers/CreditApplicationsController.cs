@@ -92,11 +92,13 @@ namespace BankApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,CreditAmount,TotalRepayment,MonthRepayment,NumberOfMonths,DateOfSubmission,State")] CreditApplication creditApplication)
+        public ActionResult Edit([Bind(Include = "ID,CreditAmount,State")] CreditApplication creditApplication)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(creditApplication).State = EntityState.Modified;
+                var creditApplicationEdit = db.CreditApplications.Single(c => c.ID == creditApplication.ID);
+                creditApplicationEdit.State = creditApplication.State;
+                db.Entry(creditApplicationEdit).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

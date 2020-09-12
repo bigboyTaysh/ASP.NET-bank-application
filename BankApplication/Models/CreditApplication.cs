@@ -20,9 +20,10 @@ namespace BankApplication.Models
         [Display(Name = "Miesięczna rata")]
         public decimal MonthRepayment { get; set; }
 
-        [Display(Name = "Długość kredytu")]
+        [Display(Name = "Ilość rat")]
         public int NumberOfMonths { get; set; }
 
+        [Display(Name = "Data złożenia wniosku")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateOfSubmission { get; set; }
@@ -30,7 +31,6 @@ namespace BankApplication.Models
         [Display(Name = "Stan")]
         public bool? State { get; set; }
 
-        [Required]
         [Display(Name = "Typ kredytu")]
         public int TypeID { get; set; }
 

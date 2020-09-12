@@ -56,6 +56,7 @@ namespace BankApplication.Models
 
         [DataType(DataType.Date)]
         public DateTime OperationDate { get; set; }
+        public DateTime OperationD22ate { get; set; }
         public int TransactionTypeID { get; set; }
         public int? CurrencyToID { get; set; }
         public int? CurrencyFromID { get; set; }

@@ -55,12 +55,56 @@
                 @Html.DisplayFor(modelItem => item.DateOfSubmission)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @if (User.IsInRole("User"))
+                {
+                    if (item.State == true)
+                    {
+                        <span style="color: green">Zatwierdzono</span>
+                    }
+                    else if (item.State == false)
+                    {
+                        <span style="color: red">Odrzucono</span>
+                    }
+                    else
+                    {
+                        <span style="color: gray">Brak decyzji</span>
+                    }
+                }
+                else
+                {
+                    if (item.State == true)
+                    {
+                        <span style="color: green">Zatwierdzono</span>
+                    }
+                    else if (item.State == false)
+                    {
+                        <span style="color: Red">Odrzucono</span>
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("Edit", "CreditApplications", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="ID" value="@item.ID" />
+                            <input type="hidden" name="CreditAmount" value="@item.CreditAmount" />
+                            <input type="hidden" name="State" value="true" />
+
+                            <input type="submit" value="Zatwierdź" class="btn btn-primary" style="float: left" />
+                        }
+
+                        using (Html.BeginForm("Edit", "CreditApplications", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="ID" value="@item.ID" />
+                            <input type="hidden" name="CreditAmount" value="@item.CreditAmount" />
+                            <input type="hidden" name="State" value="false" />
+
+                            <input type="submit" value="Odrzuć" class="btn btn-danger" style="margin-left: 10px; float: right" />
+                        }
+                    }
+
+                }
             </td>
         </tr>
     }
-
 </table>
