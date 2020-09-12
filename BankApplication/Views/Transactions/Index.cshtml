@@ -59,7 +59,7 @@
     </div>
 </div>
 
-@if (User.IsInRole("Admin"))
+@if (User.IsInRole("Admin") || User.IsInRole("Worker"))
 {
     <div class="form-deposit-withdrawal">
         <div class="value">
