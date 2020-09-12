@@ -303,6 +303,8 @@
     <Compile Include="Helper\RefreshCurrency.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Controllers\CurrenciesController.cs" />
+    <Compile Include="Models\Credit.cs" />
+    <Compile Include="Models\CreditType.cs" />
     <Compile Include="Models\CreditApplication.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\ExchangeRatesSeries.cs" />

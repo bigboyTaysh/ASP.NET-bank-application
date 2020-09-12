@@ -19,7 +19,9 @@ namespace BankApplication.DAL
         public DbSet<TransactionType> TransactionTypes { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Currency> Currencies { get; set; }
+        public DbSet<CreditType> CreditTypes { get; set; }
         public DbSet<CreditApplication> CreditApplications { get; set; }
+        public DbSet<Credit> Credits { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -29,6 +31,11 @@ namespace BankApplication.DAL
             modelBuilder.Entity<BankAccount>().Property(x => x.AvailableFounds).HasPrecision(26, 4);
             modelBuilder.Entity<BankAccount>().Property(x => x.Balance).HasPrecision(26, 4);
             modelBuilder.Entity<BankAccount>().Property(x => x.Lock).HasPrecision(26, 4);
+            modelBuilder.Entity<CreditType>().Property(x => x.CreditRates).HasPrecision(26, 4);
+            modelBuilder.Entity<CreditType>().Property(x => x.Commission).HasPrecision(26, 4);
+            modelBuilder.Entity<CreditApplication>().Property(x => x.CreditAmount).HasPrecision(26, 4);
+            modelBuilder.Entity<CreditApplication>().Property(x => x.TotalRepayment).HasPrecision(26, 4);
+            modelBuilder.Entity<CreditApplication>().Property(x => x.MonthRepayment).HasPrecision(26, 4);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
     }

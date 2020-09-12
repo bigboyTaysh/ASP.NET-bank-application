@@ -104,6 +104,11 @@ namespace BankApplication.DAL
             bankAccountTypes.ForEach(b => context.BankAccountTypes.Add(b));
             context.SaveChanges();
 
+
+            var creditType = new CreditType { Name = "kredyt gotówkowy", Commission = 8.99m, CreditRates = 0m }
+            context.CreditTypes.Add(creditType);
+            context.SaveChanges();
+
             var bankAccounts = new List<BankAccount>
             {
                 new BankAccount {Balance = 10.50m,
