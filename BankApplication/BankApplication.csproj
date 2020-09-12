@@ -292,6 +292,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BankAccountsController.cs" />
+    <Compile Include="Controllers\CreditApplicationsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
@@ -463,6 +464,11 @@
     <Content Include="Views\Account\Users.cshtml" />
     <Content Include="Views\Account\Create.cshtml" />
     <Content Include="Views\Account\View.cshtml" />
+    <Content Include="Views\CreditApplications\Create.cshtml" />
+    <Content Include="Views\CreditApplications\Delete.cshtml" />
+    <Content Include="Views\CreditApplications\Details.cshtml" />
+    <Content Include="Views\CreditApplications\Edit.cshtml" />
+    <Content Include="Views\CreditApplications\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

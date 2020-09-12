@@ -1,0 +1,63 @@
+﻿@model IEnumerable<BankApplication.Models.CreditApplication>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CreditAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalRepayment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MonthRepayment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfMonths)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfSubmission)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.State)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreditAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalRepayment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MonthRepayment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfMonths)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateOfSubmission)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.State)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>
