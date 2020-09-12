@@ -20,14 +20,13 @@
                 },
                 datatype: "text",
                 success: function (data) {
-                    $('.resultsTable').html(data);
+                    $('.bankAccountsResult').html(data);
                     console.log(data);
                 }
             });
 
         });
     });
-
 </script>
 
 @{
@@ -61,29 +60,28 @@
             </th>
         </tr>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BankAccountType.Type)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BankAccountNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreationDate)
-                </td>
-                <td>
-                    @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default", target = "_blank" } )
-                    @Html.ActionLink("Historia", "Index", "Transactions", new { bankAccountNumber = item.BankAccountNumber }, new { @class = "btn btn-default", target = "_blank" })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-default" })
-                </td>
-            </tr>
-        }
-
+        <tbody class="bankAccountsResult">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BankAccountType.Type)
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.BankAccountNumber, "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default", target = "_blank" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreationDate)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Stan", "Index", "Transactions", new { bankAccountNumber = item.BankAccountNumber }, new { @class = "btn btn-default", target = "_blank" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-default" })
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
-
 
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount

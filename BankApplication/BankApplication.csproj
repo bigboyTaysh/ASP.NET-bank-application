@@ -457,6 +457,9 @@
     <Content Include="Views\Transactions\TransfersList.cshtml" />
     <Content Include="Views\Transactions\IndexTransfersList.cshtml" />
     <Content Include="Views\Currencies\BankAccountList.cshtml" />
+    <Content Include="Views\Account\Users.cshtml" />
+    <Content Include="Views\Account\Create.cshtml" />
+    <Content Include="Views\Account\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
