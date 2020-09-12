@@ -33,7 +33,17 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Strona główna", "Index", "Home")</li>
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Konta bankowe", "Index", "BankAccounts")</li>
+                        <li>@Html.ActionLink("Pracownicy", "Workers", "Account")</li>
+                    }
+                    @if (User.IsInRole("Worker"))
+                    {
+                        <li>@Html.ActionLink("Konta bankowe", "Index", "BankAccounts")</li>
+                        <li>@Html.ActionLink("Użytkownicy", "Users", "Account")</li>
+                    }
+                    @if (User.IsInRole("User"))
                     {
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -44,14 +54,8 @@
                                 <li>@Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "dropdown-toggle" })</li>
                             </ul>
                         </li>
-                        <li>
                         <li>@Html.ActionLink("Kantor", "Index", "Currencies")</li>
-                        </li>
 
-                    }
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li>@Html.ActionLink("Konta bankowe", "Index", "BankAccounts")</li>
                     }
                     <li>@Html.ActionLink("Informacje", "About", "Home")</li>
                     <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>

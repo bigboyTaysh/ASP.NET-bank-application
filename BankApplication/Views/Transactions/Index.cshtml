@@ -11,12 +11,12 @@
 </p>
 
 <div class="form-group">
-    <div class="bank-account-div history active noselect shadow p-3 mb-5 bg-white rounded row">
+    <div class="bank-account-div history active shadow p-3 mb-5 bg-white rounded row">
         <div class="details-type pull-left">
             <div>@Model.BankAccountType.Type</div>
             <div class="bankAccountSelect">@Model.BankAccountNumber</div>
         </div>
-        <div class="pull-right">
+        <div class="pull-right noselect">
             <div class="pull-right text-align-right details-menas">
                 <span>Dostępne środki</span>
                 <br />
@@ -26,10 +26,12 @@
                 <div class="pull-right text-align-right details">
                     <span>
                         @decimal.Round(Model.Balance, 2)
+                        @Model.Currency.Code
                     </span>
                     <br />
                     <span>
                         @decimal.Round(Model.Lock, 2)
+                        @Model.Currency.Code
                     </span>
                 </div>
                 <div class="pull-right text-align-left details">
@@ -43,14 +45,38 @@
                 </div>
             </div>
         </div>
-        <br />
-        <br />
-        <div class="buttons">
+        <div class="noselect">
+            <br />
+            <br />
+        </div>
+        <div class="buttons noselect ">
             @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model.BankAccountTypeID }, new { @class = "btn btn-default" })
-            @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
+            @if (User.IsInRole("User"))
+            {
+                @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
+            }
         </div>
     </div>
 </div>
+
+@if (User.IsInRole("Admin") || User.IsInRole("Worker"))
+{
+    <div class="form-deposit-withdrawal">
+        <div class="value">
+            <input type="text" class="form-control valueTextBox value-deposit-withdrawal" />
+            @Model.Currency.Code
+        </div>
+
+        <div class="submit">
+            <button class="form-control btn-primary submit-cash-deposit">
+                Wpłać
+            </button>
+            <button class="form-control btn-default submit-cash-withdrawal">
+                Wypłać
+            </button>
+        </div>
+    </div>
+}
 
 <table class="table">
     <thead>
@@ -116,5 +142,35 @@
 
     $(document).ready(function () {
         searchTransactions(1);
+    });
+
+    $(".submit-cash-deposit").on("click", function () {
+        var value = $(".value-deposit-withdrawal").val();
+        var bankAccountNumber = $(".bankAccountSelect").text();
+
+        if (parseFloat(value) > 0) {
+            $.post("Transactions/CashDeposit", { bankAccountNumber: bankAccountNumber, value: value }, function (data) {
+                if (data == "true") {
+                    location.reload();
+                } else {
+                    $(".value-deposit-deposit").addClass("value-error");
+                }
+            });
+        }
+    });
+
+    $(".submit-cash-withdrawal").on("click", function () {
+        var value = $(".value-deposit-withdrawal").val();
+        var bankAccountNumber = $(".bankAccountSelect").text();
+
+        if (parseFloat(value) > 0) {
+            $.post("Transactions/CashWithdrawal", { bankAccountNumber: bankAccountNumber, value: value }, function (data) {
+                if (data == "true") {
+                    location.reload();
+                } else {
+                    $(".value-deposit-withdrawal").addClass("value-error");
+                }
+            });
+        }
     });
 </script>

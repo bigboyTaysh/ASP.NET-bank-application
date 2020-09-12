@@ -33,7 +33,7 @@ $(document).on("click", ".clickable-tr", function (e) {
 }(jQuery));
 
 $(document).ready(function () {
-    $(".currencyTextBox").inputFilter(function (value) {
+    $(".valueTextBox").inputFilter(function (value) {
         return /^-?\d*[.,]?\d{0,2}$/.test(value);
     });
 });
@@ -45,10 +45,10 @@ function toast(text, color) {
 
     $(div).appendTo($(".toast-container"))
         .fadeIn("fast")
-        .delay(1000)
+        .delay(2000)
         .fadeOut("fast");
 
     setTimeout(function () {
         $("div#" + divCount + ".toast").remove();
-    }, 1000);
+    }, 2000);
 }

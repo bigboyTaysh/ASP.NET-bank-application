@@ -39,6 +39,7 @@
             {
                 <span style="color: green">
                     @Html.DisplayFor(modelItem => item.ValueTo)
+                    @Html.DisplayFor(modelItem => item.CurrencyTo.Code)
                 </span>
             }
             else
@@ -135,6 +136,7 @@
                     {
                         <span style="color: green">
                             @Html.DisplayFor(modelItem => item.ValueTo)
+                            @Html.DisplayFor(modelItem => item.CurrencyTo.Code)
                         </span>
                     }
                     else

@@ -12,6 +12,7 @@ using BankApplication.Models;
 using BankApplication.DAL;
 using System.Configuration;
 using System.Collections.Generic;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BankApplication.Controllers
 {
@@ -21,6 +22,13 @@ namespace BankApplication.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private BankContext db = new BankContext();
+
+        RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(
+                new RoleStore<IdentityRole>(new ApplicationDbContext()));
+
+        UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(
+                new UserStore<ApplicationUser>(new ApplicationDbContext()));
+
 
         public AccountController()
         {
@@ -208,6 +216,160 @@ namespace BankApplication.Controllers
             // Dotarcie do tego miejsca wskazuje, że wystąpił błąd, wyświetl ponownie formularz
             ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
             return View(model);
+        }
+
+        //
+        // GET: /Account/Workers
+        [AllowAnonymous]
+        public ActionResult Workers()
+        {
+            return View("Users", GetUsersByRole(db, "Worker"));
+        }
+
+        //
+        // GET: /Account/Workers
+        [AllowAnonymous]
+        public ActionResult Users()
+        {
+            return View(GetUsersByRole(db, "User"));
+        }
+
+
+        public ActionResult Create()
+        {
+            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
+            return View();
+        }
+
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                if (User.IsInRole("Admin"))
+                {
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        UserManager.AddToRole(user.Id, "Worker");
+
+                        // Aby uzyskać więcej informacji o sposobie włączania potwierdzania konta i resetowaniu hasła, odwiedź stronę https://go.microsoft.com/fwlink/?LinkID=320771
+                        // Wyślij wiadomość e-mail z tym łączem
+                        // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        // await UserManager.SendEmailAsync(user.Id, "Potwierdź konto", "Potwierdź konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
+                        Profile profile = new Profile
+                        {
+                            Login = model.Email,
+                            Email = model.Email,
+                            FirstName = model.FirstName,
+                            LastName = model.LastName,
+                            PESEL = model.PESEL,
+                        };
+
+                        db.Profiles.Add(profile);
+                        db.SaveChanges();
+
+                        SendMail("wolskiworldwidebank@gmail.com", "Rejestracja", "Witamy na pokładzie " + profile.Email);
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    AddErrors(result);
+                } 
+                else if (User.IsInRole("Worker"))
+                {
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        UserManager.AddToRole(user.Id, "User");
+
+                        // Aby uzyskać więcej informacji o sposobie włączania potwierdzania konta i resetowaniu hasła, odwiedź stronę https://go.microsoft.com/fwlink/?LinkID=320771
+                        // Wyślij wiadomość e-mail z tym łączem
+                        // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        // await UserManager.SendEmailAsync(user.Id, "Potwierdź konto", "Potwierdź konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
+                        Profile profile = new Profile
+                        {
+                            Login = model.Email,
+                            Email = model.Email,
+                            FirstName = model.FirstName,
+                            LastName = model.LastName,
+                            PESEL = model.PESEL,
+                            BankAccounts = new List<BankAccount>()
+                        };
+
+                        BankAccount bankAccount = new BankAccount()
+                        {
+                            Balance = 0.0m,
+                            AvailableFounds = 0.0m,
+                            Lock = 0.0m,
+                            BankAccountNumber = NewBankAcocuntNumber(),
+                            CreationDate = DateTime.Today,
+                            BankAccountTypeID = model.BankAccountTypeID,
+                            CurrencyID = db.Currencies.Single(c => c.Code == "PLN").ID
+                        };
+
+                        db.BankAccounts.Add(bankAccount);
+                        profile.BankAccounts.Add(bankAccount);
+                        db.Profiles.Add(profile);
+                        db.SaveChanges();
+
+                        SendMail("wolskiworldwidebank@gmail.com", "Rejestracja", "Witamy w naszym banku " + profile.Email);
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    AddErrors(result);
+                }
+
+            }
+
+            // Dotarcie do tego miejsca wskazuje, że wystąpił błąd, wyświetl ponownie formularz
+            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin,Worker")]
+        // GET: Account/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+            }
+            Profile profile = db.Profiles.Find(id);
+            if (profile == null)
+            {
+                return HttpNotFound();
+            }
+            return View(profile);
+        }
+
+        [Authorize(Roles = "Admin,Worker")]
+        // POST: BankAccounts/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Profile profile = db.Profiles.Find(id);
+            db.Profiles.Remove(profile);
+            db.SaveChanges();
+
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Workers");
+            } 
+            else
+            {
+                return RedirectToAction("Users");
+            }
+            
         }
 
         //
@@ -439,6 +601,30 @@ namespace BankApplication.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        public static IdentityRole GetRole(string role)
+        {
+            var roleManager = new RoleManager<IdentityRole>(
+                new RoleStore<IdentityRole>(new ApplicationDbContext()));
+
+            return roleManager.Roles.Single(r => r.Name == role);
+        }
+
+        public static List<Profile> GetUsersByRole(BankContext db, string roleName)
+        {
+            RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(
+                new RoleStore<IdentityRole>(new ApplicationDbContext()));
+
+            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(
+                    new UserStore<ApplicationUser>(new ApplicationDbContext())); 
+
+            var role = roleManager.Roles.Single(r => r.Name == roleName);
+            var users = userManager.Users.Where(u => u.Roles.Any(r => r.RoleId == role.Id)).Select(u => u.UserName).ToList();
+
+            var profiles = db.Profiles.Where(p => users.Any(u => u == p.Email)).ToList();
+
+            return profiles;
         }
 
         protected override void Dispose(bool disposing)

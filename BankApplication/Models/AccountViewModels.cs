@@ -98,7 +98,6 @@ namespace BankApplication.Models
         [Display(Name = "PESEL")]
         public string PESEL { get; set; }
 
-        [Required]
         [Display(Name = "Typ konta")]
         public int BankAccountTypeID { get; set; }
         public virtual BankAccountType BankAccountType { get; set; }
