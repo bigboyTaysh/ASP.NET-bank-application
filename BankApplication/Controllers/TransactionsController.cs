@@ -230,24 +230,24 @@ namespace BankApplication.Controllers
             bankAccount.AvailableFounds += deciamlValue;
             bankAccount.Balance += deciamlValue;
 
-            Transaction transaction = new Transaction();
+            Transaction transaction = new Transaction
+            {
+                ValueFrom = deciamlValue,
+                BalanceAfterTransactionUserFrom = bankAccount.Balance,
 
-            transaction.ValueFrom = deciamlValue;
-            transaction.BalanceAfterTransactionUserFrom = bankAccount.Balance;
+                FromBankAccountNumber = bankAccount.BankAccountNumber,
+                ToBankAccountNumber = bankAccount.BankAccountNumber,
+                ReceiverName = db.Profiles.Single(p => p.BankAccounts.Any(b => b.BankAccountNumber == bankAccountNumber)).FullName,
+                Description = "Wpłana na konto",
+                CurrencyFrom = bankAccount.Currency,
 
-            transaction.FromBankAccountNumber = bankAccount.BankAccountNumber;
-            transaction.ToBankAccountNumber = bankAccount.BankAccountNumber;
-            transaction.ReceiverName = db.Profiles.Single(p => p.BankAccounts.Any(b => b.BankAccountNumber == bankAccountNumber)).FullName;
-            transaction.Description = "Wpłana na konto";
-            transaction.CurrencyFrom = bankAccount.Currency;
+                TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CASH_DEPOSIT").ID,
 
-            transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CASH_DEPOSIT").ID;
+                OperationDate = DateTime.Now,
+                Date = DateTime.Now
+            };
 
-            transaction.OperationDate = DateTime.Now;
-            transaction.Date = DateTime.Now;
             db.Transactions.Add(transaction);
-
-           
             db.SaveChanges();
             return "true";
         }
@@ -263,21 +263,23 @@ namespace BankApplication.Controllers
                 bankAccount.AvailableFounds -= deciamlValue;
                 bankAccount.Balance -= deciamlValue;
 
-                Transaction transaction = new Transaction();
+                Transaction transaction = new Transaction
+                {
+                    ValueFrom = deciamlValue,
+                    BalanceAfterTransactionUserFrom = bankAccount.Balance,
 
-                transaction.ValueFrom = deciamlValue;
-                transaction.BalanceAfterTransactionUserFrom = bankAccount.Balance;
+                    FromBankAccountNumber = bankAccount.BankAccountNumber,
+                    ToBankAccountNumber = bankAccount.BankAccountNumber,
+                    ReceiverName = db.Profiles.Single(p => p.BankAccounts.Any(b => b.BankAccountNumber == bankAccountNumber)).FullName,
+                    Description = "Wypłata z konta",
+                    CurrencyFrom = bankAccount.Currency,
 
-                transaction.FromBankAccountNumber = bankAccount.BankAccountNumber;
-                transaction.ToBankAccountNumber = bankAccount.BankAccountNumber;
-                transaction.ReceiverName = db.Profiles.Single(p => p.BankAccounts.Any(b => b.BankAccountNumber == bankAccountNumber)).FullName;
-                transaction.Description = "Wypłata z konta";
-                transaction.CurrencyFrom = bankAccount.Currency;
+                    TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CASH_WITHDRAWAL").ID,
 
-                transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CASH_WITHDRAWAL").ID;
+                    OperationDate = DateTime.Now,
+                    Date = DateTime.Now
+                };
 
-                transaction.OperationDate = DateTime.Now;
-                transaction.Date = DateTime.Now;
                 db.Transactions.Add(transaction);
 
                 db.SaveChanges();
