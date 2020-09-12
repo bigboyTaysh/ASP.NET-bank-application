@@ -276,9 +276,9 @@ namespace BankApplication.Controllers
                         db.Profiles.Add(profile);
                         db.SaveChanges();
 
-                        SendMail("wolskiworldwidebank@gmail.com", "Rejestracja", "Witamy na pokładzie " + profile.Email);
+                        SendMail(profile.Email, "Rejestracja", "Witamy na pokładzie ");
 
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "BankAccoutns");
                     }
                     AddErrors(result);
                 } 
@@ -321,9 +321,9 @@ namespace BankApplication.Controllers
                         db.Profiles.Add(profile);
                         db.SaveChanges();
 
-                        SendMail("wolskiworldwidebank@gmail.com", "Rejestracja", "Witamy w naszym banku " + profile.Email);
+                        SendMail(profile.Email, "Rejestracja", "Witamy w naszym banku ");
 
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "BankAccoutns");
                     }
                     AddErrors(result);
                 }
@@ -649,22 +649,26 @@ namespace BankApplication.Controllers
 
         public static void SendMail(string to, string subject, string body)
         {
-            var message = new System.Net.Mail.MailMessage(ConfigurationManager.AppSettings["sender"], to)
+            try
             {
-                Subject = subject,
-                Body = body
-            };
+                var message = new System.Net.Mail.MailMessage(ConfigurationManager.AppSettings["sender"], to)
+                {
+                    Subject = subject,
+                    Body = body
+                };
 
-            var smtpClient = new System.Net.Mail.SmtpClient
-            {
-                EnableSsl = true,
-                Host = ConfigurationManager.AppSettings["smtpHost"],
-                Port = 587,
-                Credentials = new System.Net.NetworkCredential(
-                    ConfigurationManager.AppSettings["sender"],
-                    ConfigurationManager.AppSettings["passwd"]),
-            };
-            smtpClient.Send(message);
+                var smtpClient = new System.Net.Mail.SmtpClient
+                {
+                    EnableSsl = true,
+                    Host = ConfigurationManager.AppSettings["smtpHost"],
+                    Port = 587,
+                    Credentials = new System.Net.NetworkCredential(
+                        ConfigurationManager.AppSettings["sender"],
+                        ConfigurationManager.AppSettings["passwd"]),
+                };
+                smtpClient.Send(message);
+            }
+            catch { }
         }
 
         #region Pomocnicy
