@@ -19,6 +19,7 @@ namespace BankApplication.DAL
         public DbSet<TransactionType> TransactionTypes { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Currency> Currencies { get; set; }
+        public DbSet<CreditApplication> CreditApplications { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

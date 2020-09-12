@@ -14,7 +14,7 @@ namespace BankApplication.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private BankContext db = new BankContext();
+        private readonly BankContext db = new BankContext();
 
         
         public ActionResult Index()

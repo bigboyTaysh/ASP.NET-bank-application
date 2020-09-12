@@ -15,7 +15,7 @@ namespace BankApplication.Controllers
     [Authorize]
     public class BankAccountsController : Controller
     {
-        private BankContext db = new BankContext();
+        private readonly BankContext db = new BankContext();
 
         [HttpGet]
         // GET: BankAccounts

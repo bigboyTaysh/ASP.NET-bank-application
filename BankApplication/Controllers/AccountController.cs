@@ -21,12 +21,10 @@ namespace BankApplication.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private BankContext db = new BankContext();
-
-        RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(
+        private readonly BankContext db = new BankContext();
+        readonly RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(
                 new RoleStore<IdentityRole>(new ApplicationDbContext()));
-
-        UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(
+        readonly UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(new ApplicationDbContext()));
 
 
@@ -95,7 +93,7 @@ namespace BankApplication.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Nieprawidłowa próba logowania.");
@@ -514,7 +512,7 @@ namespace BankApplication.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
         }
 
         //
