@@ -18,7 +18,6 @@ namespace BankApplication.Models
     public class CurrenciesController : Controller
     {
         private BankContext db = new BankContext();
-        private HttpClient client = new HttpClient();
 
         // GET: Currencies
         public ActionResult Index()

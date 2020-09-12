@@ -19,7 +19,7 @@ namespace BankApplication.Controllers
         
         public ActionResult Index()
         {
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin") || User.IsInRole("Worker"))
             {
                 return RedirectToAction("Index", "BankAccounts");
             } else

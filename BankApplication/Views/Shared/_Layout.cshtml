@@ -36,6 +36,12 @@
                     @if (User.IsInRole("Admin"))
                     {
                         <li>@Html.ActionLink("Konta bankowe", "Index", "BankAccounts")</li>
+                        <li>@Html.ActionLink("Pracownicy", "Workers", "Account")</li>
+                    }
+                    @if (User.IsInRole("Worker"))
+                    {
+                        <li>@Html.ActionLink("Konta bankowe", "Index", "BankAccounts")</li>
+                        <li>@Html.ActionLink("Użytkownicy", "Users", "Account")</li>
                     }
                     @if (User.IsInRole("User"))
                     {
