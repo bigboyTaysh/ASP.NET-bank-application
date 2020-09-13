@@ -20,11 +20,15 @@ namespace BankApplication.Controllers
         {
             if (User.IsInRole("Admin") || User.IsInRole("Worker"))
             {
-                return View(db.CreditApplications.ToList());
+                return View(db.CreditApplications
+                    .OrderByDescending(c => c.DateOfSubmission)
+                    .ThenByDescending(c => c.ID).ToList());
             }
             else
             {
-                return View(db.Profiles.Single(p => p.Login == User.Identity.Name).CreditApplications);
+                return View(db.Profiles.Single(p => p.Login == User.Identity.Name).CreditApplications
+                    .OrderByDescending(c => c.DateOfSubmission)
+                    .ThenByDescending(c => c.ID).ToList());
             }
         }
 
@@ -99,6 +103,12 @@ namespace BankApplication.Controllers
                 var creditApplicationEdit = db.CreditApplications.Single(c => c.ID == creditApplication.ID);
                 creditApplicationEdit.State = creditApplication.State;
                 db.Entry(creditApplicationEdit).State = EntityState.Modified;
+
+                if (creditApplicationEdit.State == true)
+                {
+
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
