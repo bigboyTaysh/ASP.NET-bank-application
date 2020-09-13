@@ -59,6 +59,7 @@ namespace BankApplication.Models
         public int TransactionTypeID { get; set; }
         public int? CurrencyToID { get; set; }
         public int? CurrencyFromID { get; set; }
+        public int? CurrencyFromID2 { get; set; }
 
         public virtual TransactionType TransactionType { get; set; }
         public virtual Currency CurrencyTo { get; set; }

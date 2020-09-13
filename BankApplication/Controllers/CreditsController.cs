@@ -48,10 +48,13 @@ namespace BankApplication.Controllers
 
             if (bankAccount.AvailableFounds >= credit.MonthRepayment)
             {
+                bankAccount.Balance -= credit.MonthRepayment;
+                bankAccount.AvailableFounds -= credit.MonthRepayment;
+
                 Transaction transaction = new Transaction
                 {
-                    ValueTo = credit.TotalRepayment,
-                    ValueFrom = credit.TotalRepayment,
+                    ValueTo = credit.MonthRepayment,
+                    ValueFrom = credit.MonthRepayment,
                     BalanceAfterTransactionUserTo = bankAccount.Balance,
                     CurrencyTo = bankAccount.Currency,
                     ToBankAccountNumber = bankAccount.BankAccountNumber,
@@ -73,15 +76,76 @@ namespace BankApplication.Controllers
                 if (credit.NumberOfMonthsToEnd == 0)
                 {
                     credit.IsPaidOff = true;
+                    credit.EndDate = DateTime.Now;
                 }
 
                 db.SaveChanges();
 
-                ViewBag.Message = "Pomyślnie spłacono ratę";
+                TempData["Message"] = "Pomyślnie spłacono ratę";
             } 
             else
             {
-                ViewBag.Message = "Brak wystarczających środków";
+                TempData["Message"] = "Brak wystarczających środków";
+            }
+
+            return RedirectToAction("Details", new { id = ID });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PayOffCountOfNumberInstallments(int ID, int numberOfMonths)
+        {
+            var profile = db.Profiles
+                        .Single(p => p.Credits
+                        .Any(c => c.ID == ID));
+
+            var bankAccount = profile.BankAccounts
+                .First(b => b.BankAccountType.Type == "PAY_ACC_FOR_YOUNG" || b.BankAccountType.Type == "PAY_ACC_FOR_ADULT");
+
+            var credit = profile.Credits.Single(c => c.ID == ID);
+
+            var value = credit.MonthRepayment * numberOfMonths;
+
+            if (bankAccount.AvailableFounds >= value)
+            {
+                bankAccount.Balance -= value;
+                bankAccount.AvailableFounds -= value;
+
+                Transaction transaction = new Transaction
+                {
+                    ValueTo = value,
+                    ValueFrom = value,
+                    BalanceAfterTransactionUserTo = bankAccount.Balance,
+                    CurrencyTo = bankAccount.Currency,
+                    ToBankAccountNumber = bankAccount.BankAccountNumber,
+                    FromBankAccountNumber = bankAccount.BankAccountNumber,
+
+                    TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
+                    Description = $"Spłata kredytu {credit.ID}, rat: {numberOfMonths} w wysokości {value}",
+                    ReceiverName = profile.FullName,
+
+                    OperationDate = DateTime.Now,
+                    Date = DateTime.Now
+                };
+                db.Transactions.Add(transaction);
+
+                credit.CurrentRepayment += value;
+                credit.NumberOfMonthsToEnd -= numberOfMonths;
+                credit.LastPayment = DateTime.Now;
+
+                if (credit.NumberOfMonthsToEnd == 0)
+                {
+                    credit.IsPaidOff = true;
+                    credit.EndDate = DateTime.Now;
+                }
+
+                db.SaveChanges();
+
+                TempData["Message"] = "Pomyślnie spłacono ratę";
+            }
+            else
+            {
+                TempData["Message"] = "Brak wystarczających środków";
             }
 
             return RedirectToAction("Details", new { id = ID });
@@ -98,6 +162,15 @@ namespace BankApplication.Controllers
             if (credit == null)
             {
                 return HttpNotFound();
+            }
+
+            if (TempData["Message"] != null)
+            {
+                ViewBag.Message = TempData["Message"].ToString();
+            }
+            else
+            {
+                ViewBag.Message = "";
             }
             return View(credit);
         }

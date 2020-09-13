@@ -10,6 +10,11 @@
     <h4>Credit</h4>
     <hr />
     <dl class="dl-horizontal">
+        @if(ViewBag.Message != null)
+        {
+            <span>@ViewBag.Message</span>
+        }
+
         <dt>
             @Html.DisplayNameFor(model => model.ID)
         </dt>

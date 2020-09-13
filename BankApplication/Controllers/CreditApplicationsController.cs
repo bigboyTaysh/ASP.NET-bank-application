@@ -113,15 +113,15 @@ namespace BankApplication.Controllers
                     var toBankAccount = profile.BankAccounts
                         .First(b => b.BankAccountType.Type == "PAY_ACC_FOR_YOUNG" || b.BankAccountType.Type == "PAY_ACC_FOR_ADULT");
 
-                    var valueFrom = creditApplicationEdit.TotalRepayment;
+                    var value = creditApplicationEdit.CreditAmount;
 
-                    toBankAccount.Balance += creditApplicationEdit.TotalRepayment;
-                    toBankAccount.AvailableFounds += creditApplicationEdit.TotalRepayment;
+                    toBankAccount.Balance += value;
+                    toBankAccount.AvailableFounds += value;
 
                     Transaction transaction = new Transaction
                     {
-                        ValueTo = creditApplicationEdit.TotalRepayment,
-                        ValueFrom = creditApplicationEdit.TotalRepayment,
+                        ValueTo = value,
+                        ValueFrom = value,
                         BalanceAfterTransactionUserTo = toBankAccount.Balance,
                         CurrencyTo = toBankAccount.Currency,
                         ToBankAccountNumber = toBankAccount.BankAccountNumber,
