@@ -97,7 +97,6 @@ namespace BankApplication.Models
                 transaction.Description = "Wymiana waluty";
                 transaction.ReceiverName = db.Profiles.Single(p => p.Login == User.Identity.Name).FullName;
 
-                transaction.OperationDate = DateTime.Now;
                 transaction.Date = DateTime.Now;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();

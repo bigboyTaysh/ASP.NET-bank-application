@@ -254,6 +254,12 @@
         var value = $(".value").val();
         var available = $('option:selected', '.bank-account-from').data("available");
 
+        if (type == "bid") {
+            available = $('option:selected', '.bank-account-from').data("available");
+        } else {
+            available = $('option:selected', '.bank-account-to').data("available");
+        }
+
         if (bankAccountFrom === null) {
             bankAccountFromElem = $(".bank-account-right .select2-container");
             bankAccountFromElem.css('border', '1px solid red');

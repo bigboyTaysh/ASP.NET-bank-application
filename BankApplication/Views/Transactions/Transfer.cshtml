@@ -68,13 +68,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ValueTo, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ValueTo, new { htmlAttributes = new { type = "number", min = "0", step = "0.01", @class = "form-control" } })
+                @Html.EditorFor(model => model.ValueTo, new { htmlAttributes = new { type = "text", @class = "form-control valueTextBox" } })
                 @Html.ValidationMessageFor(model => model.ValueTo, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CurrencyToID, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.CurrencyToID, "Waluta", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("CurrencyToID", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CurrencyToID, "", new { @class = "text-danger" })
@@ -82,17 +82,9 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @Value = DateTime.Today.ToString("yyyy-MM-dd") } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
             <div class="col-md-offset-2 ">
                 @Html.ActionLink("Powrót", "Index", null, new { @class = "btn btn-default pull-left btn-back"})
-                <input type="submit" value="Potwierdź" class="btn btn-primary pull-right btn-transfer" />
+                <input type="submit" value="Potwierdź" class="btn btn-primary pull-right btn-transfer" disabled/>
             </div>
         </div>
     </div>
@@ -108,5 +100,16 @@
                 return item.text.replace('[br]', '');
             }
         });
+    });
+
+    $(".valueTextBox, .bankAccountNumber").on("change keyup", function () {
+        let value = parseFloat($("input[name=ValueTo]").val());
+        let toBankAccountNumber = $("input[name=ToBankAccountNumber]").val();
+
+        if (!isNaN(value) && !toBankAccountNumber.includes("_")) {
+            $("input[type=submit]").prop('disabled', false);
+        } else {
+            $("input[type=submit]").prop('disabled', true);
+        }
     });
 </script>

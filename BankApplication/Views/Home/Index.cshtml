@@ -7,7 +7,20 @@
 <div class="jumbotron">
     <div class="bank-account-div active shadow p-3 mb-5 bg-white rounded">
         <div class="details-type">
-            <div>@Model[0].BankAccountType.Type</div>
+            <div>
+                @if (@Model[0].BankAccountType.Type == "PAY_ACC_FOR_YOUNG")
+                {
+                    @:Konto dla młodych
+                }
+                else if (@Model[0].BankAccountType.Type == "PAY_ACC_FOR_ADULT")
+                {
+                    @:Superkonto
+                }
+                else if (@Model[0].BankAccountType.Type == "FOR_CUR_ACC")
+                {
+                    @:Konto walutowe
+                }
+            </div>
             <div class="bankAccountSelect gray-text">@Model[0].BankAccountNumber</div>
         </div>
         <div class="pull-right noselect">
@@ -57,7 +70,20 @@
     {
         <div class="bank-account-div">
             <div class="details-type">
-                <div>@item.BankAccountType.Type</div>
+                <div>
+                    @if (@item.BankAccountType.Type == "PAY_ACC_FOR_YOUNG")
+                    {
+                        @:Konto dla młodych
+                    }
+                    else if (@item.BankAccountType.Type == "PAY_ACC_FOR_ADULT")
+                    {
+                        @:Superkonto
+                    }
+                    else if (@item.BankAccountType.Type == "FOR_CUR_ACC")
+                    {
+                        @:Konto walutowe
+                    }
+                </div>
                 <div class="bankAccountSelect gray-text">@item.BankAccountNumber</div>
             </div>
             <div class="pull-right noselect">

@@ -48,14 +48,11 @@ namespace BankApplication.Models
         [Display(Name = "Opis")]
         public string Description { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data przelewu")]
         public DateTime Date { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime OperationDate { get; set; }
         public int TransactionTypeID { get; set; }
         public int? CurrencyToID { get; set; }
         public int? CurrencyFromID { get; set; }
