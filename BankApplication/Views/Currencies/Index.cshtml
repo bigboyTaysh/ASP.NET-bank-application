@@ -4,15 +4,9 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
 <div class="toast-container"></div>
 
-<div class="row currency-content">
+<div class="row currency-content-box">
     @foreach (var item in Model)
     {
         <div class="col-md-6 col-sm-6">

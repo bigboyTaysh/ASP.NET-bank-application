@@ -233,6 +233,10 @@ body > div.container.body-content > h2 {
     text-align: center;
 }
 
+.currency-content-box {
+    padding-top: 50px;
+}
+
 .currency-exchange-content {
     height: 260px;
     min-width: 350px;
