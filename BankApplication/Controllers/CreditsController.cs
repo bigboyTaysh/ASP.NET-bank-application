@@ -18,7 +18,18 @@ namespace BankApplication.Controllers
         // GET: Credits
         public ActionResult Index()
         {
-            return View(db.Credits.ToList());
+            if (User.IsInRole("Admin") || User.IsInRole("Worker"))
+            {
+                return View(db.Credits
+                    .OrderByDescending(c => c.StartDate)
+                    .ThenByDescending(c => c.ID).ToList());
+            }
+            else
+            {
+                return View(db.Profiles.Single(p => p.Login == User.Identity.Name).Credits
+                    .OrderByDescending(c => c.StartDate)
+                    .ThenByDescending(c => c.ID).ToList());
+            }
         }
 
         // GET: Credits/Details/5

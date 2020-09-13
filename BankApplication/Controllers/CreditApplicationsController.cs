@@ -106,7 +106,49 @@ namespace BankApplication.Controllers
 
                 if (creditApplicationEdit.State == true)
                 {
+                    var profile = db.Profiles
+                        .Single(p => p.CreditApplications
+                        .Any(c => c.ID == creditApplicationEdit.ID));
 
+                    var toBankAccount = profile.BankAccounts
+                        .First(b => b.BankAccountType.Type == "PAY_ACC_FOR_YOUNG" || b.BankAccountType.Type == "PAY_ACC_FOR_ADULT");
+
+                    var valueFrom = creditApplicationEdit.TotalRepayment;
+
+                    toBankAccount.Balance += creditApplicationEdit.TotalRepayment;
+                    toBankAccount.AvailableFounds += creditApplicationEdit.TotalRepayment;
+
+                    Transaction transaction = new Transaction
+                    {
+                        ValueTo = creditApplicationEdit.TotalRepayment,
+                        ValueFrom = creditApplicationEdit.TotalRepayment,
+                        BalanceAfterTransactionUserTo = toBankAccount.Balance,
+                        CurrencyTo = toBankAccount.Currency,
+                        ToBankAccountNumber = toBankAccount.BankAccountNumber,
+
+                        TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
+                        Description = "Kredyt",
+                        ReceiverName = profile.FullName,
+
+                        OperationDate = DateTime.Now,
+                        Date = DateTime.Now
+                    };
+                    db.Transactions.Add(transaction);
+
+                    Credit credit = new Credit
+                    {
+                        CreditAmount = creditApplicationEdit.CreditAmount,
+                        TotalRepayment = creditApplicationEdit.TotalRepayment,
+                        CurrentRepayment = 0m,
+                        MonthRepayment = creditApplicationEdit.MonthRepayment,
+                        NumberOfMonths = creditApplicationEdit.NumberOfMonths,
+                        NumberOfMonthsToEnd = creditApplicationEdit.NumberOfMonths,
+                        StartDate = DateTime.Now,
+                        IsPaidOff = false,
+                        Type = creditApplicationEdit.Type
+                    };
+                    db.Credits.Add(credit);
+                    profile.Credits.Add(credit);
                 }
 
                 db.SaveChanges();

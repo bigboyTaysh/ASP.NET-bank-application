@@ -20,10 +20,10 @@ namespace BankApplication.Models
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime LastPayment { get; set; }
+        public DateTime? LastPayment { get; set; }
         public bool IsPaidOff { get; set; }
         public CreditType TypeID { get; set; }
         public virtual CreditType Type { get; set; }

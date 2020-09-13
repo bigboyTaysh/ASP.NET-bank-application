@@ -59,6 +59,7 @@
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
+                        <li>@Html.ActionLink("Kredyty", "Index", "Credits")</li>
                         <li>@Html.ActionLink("Wnioski", "Index", "CreditApplications")</li>
                     }
                     <li>@Html.ActionLink("Informacje", "About", "Home")</li>
