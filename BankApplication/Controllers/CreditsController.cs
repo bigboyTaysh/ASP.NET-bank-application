@@ -18,6 +18,7 @@ namespace BankApplication.Controllers
         // GET: Credits
         public ActionResult Index()
         {
+            ViewBag.Message = "";
             if (User.IsInRole("Admin") || User.IsInRole("Worker"))
             {
                 return View(db.Credits
@@ -30,6 +31,60 @@ namespace BankApplication.Controllers
                     .OrderByDescending(c => c.StartDate)
                     .ThenByDescending(c => c.ID).ToList());
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PayOffOneInstallment(int ID)
+        {
+            var profile = db.Profiles
+                        .Single(p => p.Credits
+                        .Any(c => c.ID == ID));
+
+            var bankAccount = profile.BankAccounts
+                .First(b => b.BankAccountType.Type == "PAY_ACC_FOR_YOUNG" || b.BankAccountType.Type == "PAY_ACC_FOR_ADULT");
+
+            var credit = profile.Credits.Single(c => c.ID == ID);
+
+            if (bankAccount.AvailableFounds >= credit.MonthRepayment)
+            {
+                Transaction transaction = new Transaction
+                {
+                    ValueTo = credit.TotalRepayment,
+                    ValueFrom = credit.TotalRepayment,
+                    BalanceAfterTransactionUserTo = bankAccount.Balance,
+                    CurrencyTo = bankAccount.Currency,
+                    ToBankAccountNumber = bankAccount.BankAccountNumber,
+                    FromBankAccountNumber = bankAccount.BankAccountNumber,
+
+                    TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
+                    Description = $"Spłata raty kredytu {credit.ID} w wysokości {credit.MonthRepayment}",
+                    ReceiverName = profile.FullName,
+
+                    OperationDate = DateTime.Now,
+                    Date = DateTime.Now
+                };
+                db.Transactions.Add(transaction);
+
+                credit.CurrentRepayment += credit.MonthRepayment;
+                credit.NumberOfMonthsToEnd--;
+                credit.LastPayment = DateTime.Now;
+
+                if (credit.NumberOfMonthsToEnd == 0)
+                {
+                    credit.IsPaidOff = true;
+                }
+
+                db.SaveChanges();
+
+                ViewBag.Message = "Pomyślnie spłacono ratę";
+            } 
+            else
+            {
+                ViewBag.Message = "Brak wystarczających środków";
+            }
+
+            return RedirectToAction("Details", new { id = ID });
         }
 
         // GET: Credits/Details/5
