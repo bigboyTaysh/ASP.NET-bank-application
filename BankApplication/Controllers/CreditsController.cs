@@ -61,7 +61,7 @@ namespace BankApplication.Controllers
                     FromBankAccountNumber = bankAccount.BankAccountNumber,
 
                     TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
-                    Description = $"Spłata raty kredytu {credit.ID} w wysokości {credit.MonthRepayment}",
+                    Description = $"Spłata raty {credit.NumberOfMonths - credit.NumberOfMonthsToEnd} kredytu {credit.ID}",
                     ReceiverName = profile.FullName,
 
                     OperationDate = DateTime.Now,
@@ -121,7 +121,7 @@ namespace BankApplication.Controllers
                     FromBankAccountNumber = bankAccount.BankAccountNumber,
 
                     TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
-                    Description = $"Spłata kredytu {credit.ID}, rat: {numberOfMonths} w wysokości {value}",
+                    Description = $"Spłata kredytu {credit.ID}, rat: {numberOfMonths}",
                     ReceiverName = profile.FullName,
 
                     OperationDate = DateTime.Now,
@@ -142,6 +142,63 @@ namespace BankApplication.Controllers
                 db.SaveChanges();
 
                 TempData["Message"] = "Pomyślnie spłacono ratę";
+            }
+            else
+            {
+                TempData["Message"] = "Brak wystarczających środków";
+            }
+
+            return RedirectToAction("Details", new { id = ID });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PayOffAll(int ID)
+        {
+            var profile = db.Profiles
+                        .Single(p => p.Credits
+                        .Any(c => c.ID == ID));
+
+            var bankAccount = profile.BankAccounts
+                .First(b => b.BankAccountType.Type == "PAY_ACC_FOR_YOUNG" || b.BankAccountType.Type == "PAY_ACC_FOR_ADULT");
+
+            var credit = profile.Credits.Single(c => c.ID == ID);
+
+            var value = credit.TotalRepayment - credit.CurrentRepayment;
+
+            if (bankAccount.AvailableFounds >= value)
+            {
+                bankAccount.Balance -= value;
+                bankAccount.AvailableFounds -= value;
+
+                Transaction transaction = new Transaction
+                {
+                    ValueTo = value,
+                    ValueFrom = value,
+                    BalanceAfterTransactionUserTo = bankAccount.Balance,
+                    CurrencyTo = bankAccount.Currency,
+                    ToBankAccountNumber = bankAccount.BankAccountNumber,
+                    FromBankAccountNumber = bankAccount.BankAccountNumber,
+
+                    TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
+                    Description = $"Całkowita spłata kredytu {credit.ID}",
+                    ReceiverName = profile.FullName,
+
+                    OperationDate = DateTime.Now,
+                    Date = DateTime.Now
+                };
+                db.Transactions.Add(transaction);
+
+                credit.CurrentRepayment += value;
+                credit.NumberOfMonthsToEnd = 0;
+                credit.LastPayment = DateTime.Now;
+                credit.EndDate = DateTime.Now;
+                credit.IsPaidOff = true;
+
+                db.SaveChanges();
+
+                TempData["Message"] = "Pomyślnie spłacono kredyt";
             }
             else
             {

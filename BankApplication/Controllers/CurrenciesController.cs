@@ -86,8 +86,6 @@ namespace BankApplication.Models
 
             try
             {
-
-
                 transaction.CurrencyFrom = fromBankAccount.Currency;
                 transaction.CurrencyTo = toBankAccount.Currency;
                 transaction.ToBankAccountNumber = toBankAccount.BankAccountNumber;

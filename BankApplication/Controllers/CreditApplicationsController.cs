@@ -118,23 +118,6 @@ namespace BankApplication.Controllers
                     toBankAccount.Balance += value;
                     toBankAccount.AvailableFounds += value;
 
-                    Transaction transaction = new Transaction
-                    {
-                        ValueTo = value,
-                        ValueFrom = value,
-                        BalanceAfterTransactionUserTo = toBankAccount.Balance,
-                        CurrencyTo = toBankAccount.Currency,
-                        ToBankAccountNumber = toBankAccount.BankAccountNumber,
-
-                        TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
-                        Description = "Kredyt",
-                        ReceiverName = profile.FullName,
-
-                        OperationDate = DateTime.Now,
-                        Date = DateTime.Now
-                    };
-                    db.Transactions.Add(transaction);
-
                     Credit credit = new Credit
                     {
                         CreditAmount = creditApplicationEdit.CreditAmount,
@@ -149,6 +132,23 @@ namespace BankApplication.Controllers
                     };
                     db.Credits.Add(credit);
                     profile.Credits.Add(credit);
+
+                    Transaction transaction = new Transaction
+                    {
+                        ValueTo = value,
+                        ValueFrom = value,
+                        BalanceAfterTransactionUserTo = toBankAccount.Balance,
+                        CurrencyTo = toBankAccount.Currency,
+                        ToBankAccountNumber = toBankAccount.BankAccountNumber,
+
+                        TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
+                        Description = $"Kredyt {credit.ID}",
+                        ReceiverName = profile.FullName,
+
+                        OperationDate = DateTime.Now,
+                        Date = DateTime.Now
+                    };
+                    db.Transactions.Add(transaction);
                 }
 
                 db.SaveChanges();
