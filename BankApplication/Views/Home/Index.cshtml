@@ -8,32 +8,36 @@
     <div class="bank-account-div active shadow p-3 mb-5 bg-white rounded">
         <div class="details-type">
             <div>@Model[0].BankAccountType.Type</div>
-            <div class="bankAccountSelect">@Model[0].BankAccountNumber</div>
+            <div class="bankAccountSelect gray-text">@Model[0].BankAccountNumber</div>
         </div>
         <div class="pull-right noselect">
             <div class="pull-right text-align-right details-menas">
                 <span>Dostępne środki</span>
                 <br />
-                <span>@decimal.Round(Model[0].AvailableFounds, 2) @Model[0].Currency.Code</span>
+                <span>
+                    <b>
+                        @decimal.Round(Model[0].AvailableFounds, 2) @Model[0].Currency.Code
+                    </b>
+                </span>
             </div>
             <div class="pull-right noselect">
                 <div class="pull-right text-align-right details">
-                    <span>
+                    <span class="gray-text">
                         @decimal.Round(Model[0].Balance, 2)
                         @Model[0].Currency.Code
                     </span>
                     <br />
-                    <span>
+                    <span class=" gray-text">
                         @decimal.Round(Model[0].Lock, 2)
                         @Model[0].Currency.Code
                     </span>
                 </div>
                 <div class="pull-right text-align-left details">
-                    <span>
+                    <span class="gray-text">
                         Sadlo
                     </span>
                     <br />
-                    <span>
+                    <span class="gray-text">
                         Blokady
                     </span>
                 </div>
@@ -54,32 +58,36 @@
         <div class="bank-account-div">
             <div class="details-type">
                 <div>@item.BankAccountType.Type</div>
-                <div class="bankAccountSelect">@item.BankAccountNumber</div>
+                <div class="bankAccountSelect gray-text">@item.BankAccountNumber</div>
             </div>
             <div class="pull-right noselect">
                 <div class="pull-right text-align-right details-menas">
                     <span>Dostępne środki</span>
                     <br />
-                    <span>@decimal.Round(item.AvailableFounds, 2) @item.Currency.Code</span>
+                    <span>
+                        <b>
+                            @decimal.Round(item.AvailableFounds, 2) @item.Currency.Code
+                        </b>
+                    </span>
                 </div>
-                <div class="pull-right">
+                <div class="pull-right noselect">
                     <div class="pull-right text-align-right details">
-                        <span>
+                        <span class="gray-text">
                             @decimal.Round(item.Balance, 2)
                             @item.Currency.Code
                         </span>
                         <br />
-                        <span>
+                        <span class="gray-text">
                             @decimal.Round(item.Lock, 2)
                             @item.Currency.Code
                         </span>
                     </div>
-                    <div class="pull-right text-align-left details noselect">
-                        <span>
+                    <div class="pull-right text-align-left details">
+                        <span class="gray-text">
                             Sadlo
                         </span>
                         <br />
-                        <span>
+                        <span class="gray-text">
                             Blokady
                         </span>
                     </div>

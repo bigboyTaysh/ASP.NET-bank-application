@@ -436,6 +436,15 @@ body > div.container.body-content > h2 {
     text-align: center;
 }
 
+.gray-text {
+    margin: 0;
+    margin-top: 3px;
+    color: #000;
+    font-size: 13px;
+    line-height: 16px;
+    color: #636363;
+}
+
 @media (min-width: 768px) and (max-width: 991px) {
     .navbar-collapse.collapse {
         display: none !important;
