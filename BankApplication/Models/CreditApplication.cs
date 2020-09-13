@@ -31,6 +31,9 @@ namespace BankApplication.Models
         [Display(Name = "Stan")]
         public bool? State { get; set; }
 
+        [Display(Name = "Skan umowy o pracę")]
+        public byte[] ScannedDocument { get; set; }
+
         [Display(Name = "Typ kredytu")]
         public int TypeID { get; set; }
 

@@ -58,6 +58,11 @@
             @Html.DisplayFor(model => model.State)
         </dd>
 
+        @if (Model.ScannedDocument != null)
+        {
+            <img src="@String.Format($"data:image/jpg;base64,{Convert.ToBase64String(Model.ScannedDocument)}")" class="img-fluid" alt="Responsive image">
+        }
+
     </dl>
 </div>
 <p>

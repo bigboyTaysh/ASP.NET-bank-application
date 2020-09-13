@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -63,6 +65,15 @@ namespace BankApplication.Controllers
         {
             if (ModelState.IsValid)
             {
+                HttpPostedFileBase file = Request.Files["ScannedDocument"];
+
+                if(file.ContentLength != 0)
+                {
+                    Image image = Image.FromStream(file.InputStream, true, true);
+                    creditApplication.ScannedDocument = imageToByteArray(image);
+                }
+                
+
                 creditApplication.TotalRepayment = GetMonthRepayment(creditApplication.CreditAmount, creditApplication.NumberOfMonths, creditApplication.TypeID) * creditApplication.NumberOfMonths;
                 creditApplication.MonthRepayment = GetMonthRepayment(creditApplication.CreditAmount, creditApplication.NumberOfMonths, creditApplication.TypeID);
                 creditApplication.DateOfSubmission = DateTime.Now;
@@ -198,6 +209,14 @@ namespace BankApplication.Controllers
 
             return creditAmount / sum;
         }
+
+        public byte[] imageToByteArray(Image imageIn)
+        {
+            MemoryStream ms = new MemoryStream();
+            imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+            return ms.ToArray();
+        }
+
 
         protected override void Dispose(bool disposing)
         {
