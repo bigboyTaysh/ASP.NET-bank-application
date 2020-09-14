@@ -36,6 +36,18 @@ body > div.container.body-content > h2 {
     padding-top: 20px;
 }
 
+a:link {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+a:visited {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
 .center-form {
     margin-left: 20%;
 }

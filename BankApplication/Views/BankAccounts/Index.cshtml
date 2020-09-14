@@ -42,7 +42,7 @@
 @using (Html.BeginForm())
 {
     <p class="pull-right">
-        Find by number: @Html.TextBox("SearchString", null, new { @class = "searchString" })
+        Znajdź: @Html.TextBox("SearchString", null, new { @class = "searchString" })
     </p>
 }
 
@@ -53,10 +53,10 @@
                 @Html.DisplayNameFor(model => model.First().BankAccountType.Type)
             </th>
             <th>
-                @Html.ActionLink("Bank account number", "Index", new { sortOrder = ViewBag.NumberSortParm, currentFilter = ViewBag.CurrentFilter })
+                @Html.ActionLink("Numer konta bankowego", "Index", new { sortOrder = ViewBag.NumberSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.ActionLink("Creation Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+                @Html.ActionLink("Data utworzenia", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
         </tr>
 
@@ -65,17 +65,28 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.BankAccountType.Type)
+                        @if (item.BankAccountType.Type == "PAY_ACC_FOR_YOUNG")
+                        {
+                            @:Konto dla młodych
+                        }
+                        else if (item.BankAccountType.Type == "PAY_ACC_FOR_ADULT")
+                        {
+                            @:Superkonto
+                        }
+                        else if (item.BankAccountType.Type == "FOR_CUR_ACC")
+                        {
+                            @:Konto walutowe
+                        }
                     </td>
                     <td>
-                        @Html.ActionLink(item.BankAccountNumber, "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default", target = "_blank" })
+                        @Html.DisplayFor(modelItem => item.BankAccountNumber)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CreationDate)
                     </td>
                     <td>
                         @Html.ActionLink("Stan", "Index", "Transactions", new { bankAccountNumber = item.BankAccountNumber }, new { @class = "btn btn-default", target = "_blank" })
-                        @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Usuń", "Delete", new { id = item.ID }, new { @class = "btn btn-default" })
                     </td>
                 </tr>
             }
