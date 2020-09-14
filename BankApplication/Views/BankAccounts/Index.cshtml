@@ -33,11 +33,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<h2></h2>
 
 @using (Html.BeginForm())
 {
@@ -79,7 +75,7 @@
                         }
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.BankAccountNumber)
+                        @Html.ActionLink(item.BankAccountNumber, "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default", target = "_blank" })
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CreationDate)

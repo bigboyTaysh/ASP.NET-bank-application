@@ -81,7 +81,7 @@ namespace BankApplication.Controllers
             }
 
 
-            int pageSize = (size ?? 2);
+            int pageSize = (size ?? 10);
             int pageNumber = (page ?? 1);
 
             ViewBag.Count = transactions.Count;

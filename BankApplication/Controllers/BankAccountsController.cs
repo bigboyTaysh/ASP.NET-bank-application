@@ -132,37 +132,44 @@ namespace BankApplication.Controllers
             return View(bankAccount);
         }
 
-        [Authorize(Roles = "Admin")]
         // GET: BankAccounts/Create
         public ActionResult Create()
         {
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
+            ViewBag.BankAccountTypes = db.BankAccountTypes.ToList();
+            ViewBag.Currencies = db.Currencies.ToList();
             ViewData["Message"] = "";
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
         // POST: BankAccounts/Create
         // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Balance,AvailableFounds,Lock,BankAccountNumber,CreationDate,BankAccountTypeID")] BankAccount bankAccount)
+        public ActionResult Create([Bind(Include = "BankAccountTypeID")] BankAccount bankAccount, string CurrencyCode)
         {
             //HttpPostedFileBase file = Request.Files["FileName"];
 
             //if (ModelState.IsValid && file != null && file.ContentLength > 0)
             if (ModelState.IsValid)
             {
-                //bankAccount.FileName = file.FileName;
-                //file.SaveAs(HttpContext.Server.MapPath("~/Images/") + bankAccount.FileName);
+                bankAccount.Balance = 0.0m;
+                bankAccount.AvailableFounds = 0.0m;
+                bankAccount.Lock = 0.0m;
+                bankAccount.BankAccountNumber = NewBankAcocuntNumber();
+                bankAccount.CreationDate = DateTime.Today;
+                bankAccount.Currency = db.Currencies.Single(c => c.Code == CurrencyCode);
 
                 db.BankAccounts.Add(bankAccount);
+
+                db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts.Add(bankAccount);
+
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type", bankAccount.BankAccountTypeID);
+            ViewBag.BankAccountTypes = db.BankAccountTypes.ToList();
+            ViewBag.Currencies = db.Currencies.ToList();
             return View(bankAccount);
         }
 
@@ -230,6 +237,18 @@ namespace BankApplication.Controllers
             db.BankAccounts.Remove(bankAccount);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public static string NewBankAcocuntNumber()
+        {
+            BankContext db = new BankContext();
+            string last = db.BankAccounts.OrderByDescending(b => b.BankAccountNumber).First().BankAccountNumber;
+            int parts = int.Parse(last.Split(' ')[5] + last.Split(' ')[6]) + 1;
+            string newNumber = last;
+            newNumber = newNumber.Replace(newNumber.Split(' ')[5], parts.ToString().Substring(0, 4));
+            newNumber = newNumber.Replace(newNumber.Split(' ')[6], parts.ToString().Substring(4, 4));
+
+            return newNumber;
         }
 
         protected override void Dispose(bool disposing)

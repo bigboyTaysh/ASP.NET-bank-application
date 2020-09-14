@@ -193,7 +193,7 @@ namespace BankApplication.Controllers
                         Balance = 0.0m,
                         AvailableFounds = 0.0m,
                         Lock = 0.0m,
-                        BankAccountNumber = NewBankAcocuntNumber(),
+                        BankAccountNumber = BankAccountsController.NewBankAcocuntNumber(),
                         CreationDate = DateTime.Today,
                         BankAccountTypeID = model.BankAccountTypeID,
                         CurrencyID = db.Currencies.Single(c => c.Code == "PLN").ID
@@ -308,7 +308,7 @@ namespace BankApplication.Controllers
                             Balance = 0.0m,
                             AvailableFounds = 0.0m,
                             Lock = 0.0m,
-                            BankAccountNumber = NewBankAcocuntNumber(),
+                            BankAccountNumber = BankAccountsController.NewBankAcocuntNumber(),
                             CreationDate = DateTime.Today,
                             BankAccountTypeID = model.BankAccountTypeID,
                             CurrencyID = db.Currencies.Single(c => c.Code == "PLN").ID
@@ -672,19 +672,6 @@ namespace BankApplication.Controllers
         #region Pomocnicy
         // Używane w przypadku ochrony XSRF podczas dodawania logowań zewnętrznych
         private const string XsrfKey = "XsrfId";
-
-        private string NewBankAcocuntNumber() 
-        {
-            BankContext db = new BankContext();
-            string last = db.BankAccounts.OrderByDescending(b => b.BankAccountNumber).First().BankAccountNumber;
-            int parts = int.Parse(last.Split(' ')[5] + last.Split(' ')[6]) + 1;
-            string newNumber = last;
-            newNumber = newNumber.Replace(newNumber.Split(' ')[5], parts.ToString().Substring(0,4));
-            newNumber = newNumber.Replace(newNumber.Split(' ')[6], parts.ToString().Substring(4,4));
-
-            return newNumber;
-        }
-
 
         private IAuthenticationManager AuthenticationManager
         {

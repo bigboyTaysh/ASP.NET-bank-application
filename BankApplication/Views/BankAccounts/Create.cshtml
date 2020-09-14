@@ -6,8 +6,7 @@
 
 <h2>Create</h2>
 
-
-@using (Html.BeginForm("Create", "BankAccounts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "BankAccounts", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @ViewData["Message"]
@@ -16,76 +15,77 @@
     <h4>BankAccount</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Balance, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { type = "number", min = "0", step = "0.01", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.AvailableFounds, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.AvailableFounds, new { htmlAttributes = new { type = "number", min = "0", step = "0.01", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.AvailableFounds, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Lock, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Lock, new { htmlAttributes = new { type = "number", min = "0", step = "0.01", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Lock, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.BankAccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.BankAccountNumber, new { htmlAttributes = new { @class = "form-control bankAccountNumber" } })
-            @Html.ValidationMessageFor(model => model.BankAccountNumber, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.CreationDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.CreationDate, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.CreationDate, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.BankAccountTypeID, "BankAccountTypeID", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownList("BankAccountTypeID", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.BankAccountTypeID, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    @*
-        <div class="form-group">
-            @Html.LabelFor(model => model.FileName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="file" name="FileName" />
-                @Html.ValidationMessageFor(model => model.FileName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    *@
+    
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <select name="BankAccountTypeID" style="width: 150px">
+                @foreach (var item in (List<BankApplication.Models.BankAccountType>)ViewBag.BankAccountTypes)
+                {
+                    <option value="@item.ID">
+                        @if (item.Type == "PAY_ACC_FOR_YOUNG")
+                        {
+                            @:Konto dla młodych
+                        }
+                        else if (item.Type == "PAY_ACC_FOR_ADULT")
+                        {
+                            @:Superkonto
+                        }
+                        else if (item.Type == "FOR_CUR_ACC")
+                        {
+                            @:Konto walutowe
+                        }
+                    </option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <select name="CurrencyCode" style="width: 90px ">
+                @foreach (var item in (List<BankApplication.Models.Currency>)ViewBag.Currencies)
+                {
+                    <option value="@item.Code">
+                        @item.Code
+                    </option>
+                }
+            </select>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Stwórz" class="btn btn-default" />
         </div>
     </div>
 </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+<script>
+    $(document).ready(function () {
+        $('select[name=BankAccountTypeID]').select2();
+    });
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    $("select[name=CurrencyCode]").select2({
+        templateResult: function (code) {
+            if (code.id != undefined) {
+                var baseUrl = "../../Images";
+                var $state = $(
+                    '<span><img src="' + baseUrl + '/' + code.id + '.gif" class="img-flag" /> ' + code.text + '</span>'
+                );
+                return $state;
+            }
+        },
+        templateSelection: function (code) {
+            var baseUrl = "../../Images";
+            var $state = $(
+                '<span><img src="' + baseUrl + '/' + code.id + '.gif" class="img-flag" /> ' + code.text + '</span>'
+            );
+            return $state;
+        }
+    });
+</script>
