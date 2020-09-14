@@ -19,7 +19,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>44314</IISExpressSSLPort>
+    <IISExpressPort>44315</IISExpressPort>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
@@ -292,6 +292,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BankAccountsController.cs" />
+    <Compile Include="Controllers\CreditApplicationsController.cs" />
+    <Compile Include="Controllers\CreditsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
@@ -303,6 +305,9 @@
     <Compile Include="Helper\RefreshCurrency.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Controllers\CurrenciesController.cs" />
+    <Compile Include="Models\Credit.cs" />
+    <Compile Include="Models\CreditType.cs" />
+    <Compile Include="Models\CreditApplication.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\ExchangeRatesSeries.cs" />
     <Compile Include="Models\Transaction.cs" />
@@ -460,6 +465,16 @@
     <Content Include="Views\Account\Users.cshtml" />
     <Content Include="Views\Account\Create.cshtml" />
     <Content Include="Views\Account\View.cshtml" />
+    <Content Include="Views\CreditApplications\Create.cshtml" />
+    <Content Include="Views\CreditApplications\Delete.cshtml" />
+    <Content Include="Views\CreditApplications\Details.cshtml" />
+    <Content Include="Views\CreditApplications\Edit.cshtml" />
+    <Content Include="Views\CreditApplications\Index.cshtml" />
+    <Content Include="Views\Credits\Create.cshtml" />
+    <Content Include="Views\Credits\Delete.cshtml" />
+    <Content Include="Views\Credits\Details.cshtml" />
+    <Content Include="Views\Credits\Edit.cshtml" />
+    <Content Include="Views\Credits\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

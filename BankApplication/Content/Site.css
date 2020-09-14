@@ -36,6 +36,18 @@ body > div.container.body-content > h2 {
     padding-top: 20px;
 }
 
+a:link {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+a:visited {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
 .center-form {
     margin-left: 20%;
 }
@@ -90,7 +102,7 @@ body > div.container.body-content > h2 {
 }
 
     .bank-account-div .details-type {
-        margin: 0px 0 0 20px;
+        margin: 0px 0 0 10px;
         float: left;
     }
 
@@ -118,7 +130,7 @@ body > div.container.body-content > h2 {
     }
 
     .bank-account-div.active .details-type {
-        margin: 5px 0 0 20px;
+        margin: 5px 0 0 10px;
         display: block;
     }
 
@@ -231,6 +243,10 @@ body > div.container.body-content > h2 {
     width: 50%;
     float: right;
     text-align: center;
+}
+
+.currency-content-box {
+    padding-top: 50px;
 }
 
 .currency-exchange-content {
@@ -434,6 +450,15 @@ body > div.container.body-content > h2 {
 
 .value-deposit-withdrawal {
     text-align: center;
+}
+
+.gray-text {
+    margin: 0;
+    margin-top: 3px;
+    color: #000;
+    font-size: 13px;
+    line-height: 16px;
+    color: #636363;
 }
 
 @media (min-width: 768px) and (max-width: 991px) {

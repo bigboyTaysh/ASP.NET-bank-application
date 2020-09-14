@@ -4,42 +4,55 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Przelew", "Transfer")
-</p>
+<h2></h2>
 
 <div class="form-group">
     <div class="bank-account-div history active shadow p-3 mb-5 bg-white rounded row">
         <div class="details-type pull-left">
-            <div>@Model.BankAccountType.Type</div>
-            <div class="bankAccountSelect">@Model.BankAccountNumber</div>
+            <div>
+                @if (@Model.BankAccountType.Type == "PAY_ACC_FOR_YOUNG")
+                {
+                    @:Konto dla młodych
+                }
+                else if (@Model.BankAccountType.Type == "PAY_ACC_FOR_ADULT")
+                {
+                    @:Superkonto
+                }
+                else if (@Model.BankAccountType.Type == "FOR_CUR_ACC")
+                {
+                    @:Konto walutowe
+                }
+            </div>
+            <div class="bankAccountSelect gray-text">@Model.BankAccountNumber</div>
         </div>
         <div class="pull-right noselect">
             <div class="pull-right text-align-right details-menas">
                 <span>Dostępne środki</span>
                 <br />
-                <span>@decimal.Round(Model.AvailableFounds, 2) @Model.Currency.Code</span>
+                <span>
+                    <b>
+                        @decimal.Round(Model.AvailableFounds, 2) @Model.Currency.Code
+                    </b>
+                </span>
             </div>
             <div class="pull-right">
                 <div class="pull-right text-align-right details">
-                    <span>
+                    <span class="gray-text">
                         @decimal.Round(Model.Balance, 2)
                         @Model.Currency.Code
                     </span>
                     <br />
-                    <span>
+                    <span class="gray-text">
                         @decimal.Round(Model.Lock, 2)
                         @Model.Currency.Code
                     </span>
                 </div>
                 <div class="pull-right text-align-left details">
-                    <span>
+                    <span class="gray-text">
                         Sadlo
                     </span>
                     <br />
-                    <span>
+                    <span class="gray-text">
                         Blokady
                     </span>
                 </div>
@@ -88,13 +101,7 @@
                 Data
             </th>
             <th>
-                Operacja
-            </th>
-            <th>
                 Kwota
-            </th>
-            <th>
-                Saldo
             </th>
         </tr>
     </thead>
@@ -142,6 +149,13 @@
 
     $(document).ready(function () {
         searchTransactions(1);
+    });
+
+    $(window).scroll(function () {
+        if (($(window).scrollTop() + $(window).height() >= $("body").height() + 70) && !active) {
+            page++;
+            searchTransactions(page, "append");
+        }
     });
 
     $(".submit-cash-deposit").on("click", function () {

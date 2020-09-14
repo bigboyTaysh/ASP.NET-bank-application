@@ -49,6 +49,8 @@ namespace BankApplication.Models
         [HttpPost]
         public string ExchangeCurrency(string type, decimal value, string fromBankAccountNumber, string toBankAccountNumber)
         {
+            RefreshCurrency.RefreshCurrenciesAsync().ConfigureAwait(false);
+
             Transaction transaction = new Transaction();
             var fromBankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber== fromBankAccountNumber);
             var toBankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == toBankAccountNumber);
@@ -86,8 +88,6 @@ namespace BankApplication.Models
 
             try
             {
-
-
                 transaction.CurrencyFrom = fromBankAccount.Currency;
                 transaction.CurrencyTo = toBankAccount.Currency;
                 transaction.ToBankAccountNumber = toBankAccount.BankAccountNumber;
@@ -99,7 +99,6 @@ namespace BankApplication.Models
                 transaction.Description = "Wymiana waluty";
                 transaction.ReceiverName = db.Profiles.Single(p => p.Login == User.Identity.Name).FullName;
 
-                transaction.OperationDate = DateTime.Now;
                 transaction.Date = DateTime.Now;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();

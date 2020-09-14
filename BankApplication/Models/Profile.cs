@@ -18,5 +18,7 @@ namespace BankApplication.Models
             get { return FirstName + " " + LastName; }
         }
         public virtual List<BankAccount> BankAccounts { get; set; }
+        public virtual List<CreditApplication> CreditApplications { get; set; }
+        public virtual List<Credit> Credits { get; set; }
     }
 }

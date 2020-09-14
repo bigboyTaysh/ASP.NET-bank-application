@@ -4,62 +4,81 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2></h2>
 
 <div>
-    <h4>BankAccount</h4>
+    <h4>Szczegóły konta</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.BankAccountType.Type)
-        </dt>
+    <div class="col-xs-6">
+        <span class="gray-text">
+            Typ konta
+        </span>
+        <br />
+        <span>
+            @if (@Model.BankAccountType.Type == "PAY_ACC_FOR_YOUNG")
+            {
+                @:Konto dla młodych
+            }
+            else if (@Model.BankAccountType.Type == "PAY_ACC_FOR_ADULT")
+            {
+                @:Superkonto
+            }
+            else if (@Model.BankAccountType.Type == "FOR_CUR_ACC")
+            {
+                @:Konto walutowe
+            }
+        </span>
+        <br />
+        <br />
 
-        <dd>
-            @Html.DisplayFor(model => model.BankAccountType.Type)
-        </dd>
-
-        <dt>
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.Balance)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.Balance)
-        </dd>
+        </span>
+        <br />
+        <br />
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AvailableFounds)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AvailableFounds)
-        </dd>
-
-        <dt>
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.Lock)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.Lock)
-        </dd>
+        </span>
+        <br />
+        <br />
 
-        <dt>
+        <span class="gray-text">
+            @Html.DisplayNameFor(model => model.AvailableFounds)
+        </span>
+        <br />
+        <span>
+            @Html.DisplayFor(model => model.AvailableFounds)
+        </span>
+        <br />
+        <br />
+
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.BankAccountNumber)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.BankAccountNumber)
-        </dd>
+        </span>
+        <br />
+        <br />
 
-        <dt>
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.CreationDate)
-        </dd>
-    </dl>
+        </span>
+        <br />
+        <br />
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

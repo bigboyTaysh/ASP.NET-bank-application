@@ -21,12 +21,10 @@ namespace BankApplication.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private BankContext db = new BankContext();
-
-        RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(
+        private readonly BankContext db = new BankContext();
+        readonly RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(
                 new RoleStore<IdentityRole>(new ApplicationDbContext()));
-
-        UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(
+        readonly UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(new ApplicationDbContext()));
 
 
@@ -95,7 +93,7 @@ namespace BankApplication.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Nieprawidłowa próba logowania.");
@@ -195,7 +193,7 @@ namespace BankApplication.Controllers
                         Balance = 0.0m,
                         AvailableFounds = 0.0m,
                         Lock = 0.0m,
-                        BankAccountNumber = NewBankAcocuntNumber(),
+                        BankAccountNumber = BankAccountsController.NewBankAcocuntNumber(),
                         CreationDate = DateTime.Today,
                         BankAccountTypeID = model.BankAccountTypeID,
                         CurrencyID = db.Currencies.Single(c => c.Code == "PLN").ID
@@ -310,7 +308,7 @@ namespace BankApplication.Controllers
                             Balance = 0.0m,
                             AvailableFounds = 0.0m,
                             Lock = 0.0m,
-                            BankAccountNumber = NewBankAcocuntNumber(),
+                            BankAccountNumber = BankAccountsController.NewBankAcocuntNumber(),
                             CreationDate = DateTime.Today,
                             BankAccountTypeID = model.BankAccountTypeID,
                             CurrencyID = db.Currencies.Single(c => c.Code == "PLN").ID
@@ -514,7 +512,7 @@ namespace BankApplication.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
         }
 
         //
@@ -674,19 +672,6 @@ namespace BankApplication.Controllers
         #region Pomocnicy
         // Używane w przypadku ochrony XSRF podczas dodawania logowań zewnętrznych
         private const string XsrfKey = "XsrfId";
-
-        private string NewBankAcocuntNumber() 
-        {
-            BankContext db = new BankContext();
-            string last = db.BankAccounts.OrderByDescending(b => b.BankAccountNumber).First().BankAccountNumber;
-            int parts = int.Parse(last.Split(' ')[5] + last.Split(' ')[6]) + 1;
-            string newNumber = last;
-            newNumber = newNumber.Replace(newNumber.Split(' ')[5], parts.ToString().Substring(0,4));
-            newNumber = newNumber.Replace(newNumber.Split(' ')[6], parts.ToString().Substring(4,4));
-
-            return newNumber;
-        }
-
 
         private IAuthenticationManager AuthenticationManager
         {

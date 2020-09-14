@@ -140,7 +140,7 @@ namespace BankApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Transfer([Bind(Include = "ReceiverName,ToBankAccountNumber,Description,ValueTo,Date,CurrencyToID")] Transaction transaction, int BankAccountID)
+        public ActionResult Transfer([Bind(Include = "ReceiverName,ToBankAccountNumber,Description,ValueTo,CurrencyToID")] Transaction transaction, int BankAccountID)
         {
             var bankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
             var bankAccount = db.BankAccounts.SingleOrDefault(b => b.ID == BankAccountID);
@@ -206,8 +206,8 @@ namespace BankApplication.Controllers
                 transaction.CurrencyFrom = bankAccount.Currency;
 
                 transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "TRANSFER").ID;
+                transaction.Date = DateTime.Now;
 
-                transaction.OperationDate = DateTime.Now;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -232,18 +232,17 @@ namespace BankApplication.Controllers
 
             Transaction transaction = new Transaction
             {
-                ValueFrom = deciamlValue,
-                BalanceAfterTransactionUserFrom = bankAccount.Balance,
+                ValueTo = deciamlValue,
+                BalanceAfterTransactionUserTo= bankAccount.Balance,
 
                 FromBankAccountNumber = bankAccount.BankAccountNumber,
                 ToBankAccountNumber = bankAccount.BankAccountNumber,
                 ReceiverName = db.Profiles.Single(p => p.BankAccounts.Any(b => b.BankAccountNumber == bankAccountNumber)).FullName,
                 Description = "Wpłana na konto",
-                CurrencyFrom = bankAccount.Currency,
+                CurrencyTo = bankAccount.Currency,
 
                 TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CASH_DEPOSIT").ID,
 
-                OperationDate = DateTime.Now,
                 Date = DateTime.Now
             };
 
@@ -276,7 +275,6 @@ namespace BankApplication.Controllers
 
                     TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CASH_WITHDRAWAL").ID,
 
-                    OperationDate = DateTime.Now,
                     Date = DateTime.Now
                 };
 
@@ -328,7 +326,7 @@ namespace BankApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,ValueTo,BalanceAfterTransactionUserFrom,BalanceAfterTransactionUserTo,FromBankAccountNumber,ToBankAccountNumber,Date,TransactionTypeID")] Transaction transaction)
+        public ActionResult Edit([Bind(Include = "ID,ValueTo,BalanceAfterTransactionUserFrom,BalanceAfterTransactionUserTo,FromBankAccountNumber,ToBankAccountNumber,TransactionTypeID")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
