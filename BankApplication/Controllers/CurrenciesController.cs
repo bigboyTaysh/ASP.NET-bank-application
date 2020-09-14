@@ -49,6 +49,8 @@ namespace BankApplication.Models
         [HttpPost]
         public string ExchangeCurrency(string type, decimal value, string fromBankAccountNumber, string toBankAccountNumber)
         {
+            RefreshCurrency.RefreshCurrenciesAsync().ConfigureAwait(false);
+
             Transaction transaction = new Transaction();
             var fromBankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber== fromBankAccountNumber);
             var toBankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == toBankAccountNumber);
