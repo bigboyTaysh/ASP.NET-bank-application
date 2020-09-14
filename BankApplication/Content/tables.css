@@ -7,6 +7,7 @@
 
 .clickable-tr[clicked="true"] {
     border-left: 1px solid black;
+    background-color: #e9e9e9;
 }
 
 .table-inside {

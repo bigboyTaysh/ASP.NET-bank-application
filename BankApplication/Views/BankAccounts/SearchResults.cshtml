@@ -5,7 +5,18 @@
 {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.BankAccountType.Type)
+            @if (item.BankAccountType.Type == "PAY_ACC_FOR_YOUNG")
+            {
+                @:Konto dla młodych
+            }
+            else if (item.BankAccountType.Type == "PAY_ACC_FOR_ADULT")
+            {
+                @:Superkonto
+            }
+            else if (item.BankAccountType.Type == "FOR_CUR_ACC")
+            {
+                @:Konto walutowe
+            }
         </td>
         <td>
             @Html.ActionLink(item.BankAccountNumber, "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default", target = "_blank" })

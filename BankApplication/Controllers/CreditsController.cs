@@ -58,13 +58,11 @@ namespace BankApplication.Controllers
                     BalanceAfterTransactionUserTo = bankAccount.Balance,
                     CurrencyTo = bankAccount.Currency,
                     ToBankAccountNumber = bankAccount.BankAccountNumber,
-                    FromBankAccountNumber = bankAccount.BankAccountNumber,
 
                     TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
                     Description = $"Spłata raty {credit.NumberOfMonths - credit.NumberOfMonthsToEnd} kredytu {credit.ID}",
                     ReceiverName = profile.FullName,
 
-                    OperationDate = DateTime.Now,
                     Date = DateTime.Now
                 };
                 db.Transactions.Add(transaction);
@@ -118,13 +116,11 @@ namespace BankApplication.Controllers
                     BalanceAfterTransactionUserTo = bankAccount.Balance,
                     CurrencyTo = bankAccount.Currency,
                     ToBankAccountNumber = bankAccount.BankAccountNumber,
-                    FromBankAccountNumber = bankAccount.BankAccountNumber,
 
                     TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
                     Description = $"Spłata kredytu {credit.ID}, rat: {numberOfMonths}",
                     ReceiverName = profile.FullName,
 
-                    OperationDate = DateTime.Now,
                     Date = DateTime.Now
                 };
                 db.Transactions.Add(transaction);
@@ -179,13 +175,11 @@ namespace BankApplication.Controllers
                     BalanceAfterTransactionUserTo = bankAccount.Balance,
                     CurrencyTo = bankAccount.Currency,
                     ToBankAccountNumber = bankAccount.BankAccountNumber,
-                    FromBankAccountNumber = bankAccount.BankAccountNumber,
 
                     TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
                     Description = $"Całkowita spłata kredytu {credit.ID}",
                     ReceiverName = profile.FullName,
 
-                    OperationDate = DateTime.Now,
                     Date = DateTime.Now
                 };
                 db.Transactions.Add(transaction);

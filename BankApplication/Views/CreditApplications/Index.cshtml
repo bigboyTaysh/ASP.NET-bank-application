@@ -4,12 +4,12 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2></h2>
 
 @if (User.IsInRole("User"))
 {
     <p>
-        @Html.ActionLink("Create New", "Create")
+        @Html.ActionLink("Złóż wniosek", "Create", null, new { @class= "btn btn-default pull-right" })
     </p>
 }
 
@@ -30,7 +30,7 @@
         <th>
             @Html.DisplayNameFor(model => model.DateOfSubmission)
         </th>
-        <th>
+        <th style="width: 190px; text-align: center">
             @Html.DisplayNameFor(model => model.State)
         </th>
         <th></th>
@@ -40,21 +40,41 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CreditAmount)
+                <a href="/CreditApplications/Details/@Html.DisplayFor(modelItem => item.ID)">
+                    <div style="height:100%;width:100%">
+                        @Html.DisplayFor(modelItem => item.CreditAmount)
+                    </div>
+                </a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TotalRepayment)
+                <a href="/CreditApplications/Details/@Html.DisplayFor(modelItem => item.ID)">
+                    <div style="height:100%;width:100%">
+                        @Html.DisplayFor(modelItem => item.TotalRepayment)
+                    </div>
+                </a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MonthRepayment)
+                <a href="/CreditApplications/Details/@Html.DisplayFor(modelItem => item.ID)">
+                    <div style="height:100%;width:100%">
+                        @Html.DisplayFor(modelItem => item.MonthRepayment)
+                    </div>
+                </a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NumberOfMonths)
+                <a href="/CreditApplications/Details/@Html.DisplayFor(modelItem => item.ID)">
+                    <div style="height:100%;width:100%">
+                        @Html.DisplayFor(modelItem => item.NumberOfMonths)
+                    </div>
+                </a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateOfSubmission)
+                <a href="/CreditApplications/Details/@Html.DisplayFor(modelItem => item.ID)">
+                    <div style="height:100%;width:100%">
+                        @Html.DisplayFor(modelItem => item.DateOfSubmission)
+                    </div>
+                </a>
             </td>
-            <td>
+            <td style="width: 190px; text-align: center">
                 @if (User.IsInRole("User"))
                 {
                     if (item.State == true)

@@ -4,159 +4,187 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2></h2>
 
 <div>
-    <h4>Credit</h4>
+    <h4>Szczegóły kredytu</h4>
     <hr />
-    <dl class="dl-horizontal">
-        @if(ViewBag.Message != null)
-        {
-            <span>@ViewBag.Message</span>
-        }
+    @if (ViewBag.Message != "")
+    {
+        <div class="toast-container">
+            <div class="toast" style="display: inline-block">
+                @ViewBag.Message
+            </div>
+        </div>
 
-        <dt>
+    }
+
+    <div class="col-xs-6">
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.ID)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.ID)
-        </dd>
+        </span>
+        <br />
+        <br />
 
-        <dt>
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.CreditAmount)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.CreditAmount)
-        </dd>
+        </span>
+        <br />
+        <br />
 
-        <dt>
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.TotalRepayment)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.TotalRepayment)
-        </dd>
+        </span>
+        <br />
+        <br />
 
-        <dt>
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.CurrentRepayment)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.CurrentRepayment)
-        </dd>
+        </span>
+        <br />
+        <br />
 
-        <dt>
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.MonthRepayment)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.MonthRepayment)
-        </dd>
+        </span>
+        <br />
+        <br />
 
-        <dt>
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.NumberOfMonths)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.NumberOfMonths)
-        </dd>
+        </span>
+        <br />
+        <br />
 
-        <dt>
+        <span class="gray-text">
             @Html.DisplayNameFor(model => model.NumberOfMonthsToEnd)
-        </dt>
-
-        <dd>
+        </span>
+        <br />
+        <span>
             @Html.DisplayFor(model => model.NumberOfMonthsToEnd)
-        </dd>
+        </span>
+        <br />
+        <br />
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LastPayment)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LastPayment)
-        </dd>
-
-        @if (!Model.IsPaidOff)
-        {
-            using (Html.BeginForm("PayOffOneInstallment", "Credits", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.ID)
-
-                <div class="form-group">
-                    <div class="col-md-offset-1">
-                        <input type="submit" value="Zapłać ratę" class="btn btn-default" />
-                    </div>
-                </div>
-            }
-
-            using (Html.BeginForm("PayOffCountOfNumberInstallments", "Credits", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.ID)
-
-                <div class="form-group">
-                    <div class="col-md-offset-1">
-                        <select name="numberOfMonths">
-                            @for (int i = 1; i <= Model.NumberOfMonthsToEnd; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-md-offset-1">
-                        <input type="submit" value="Zapłać raty" class="btn btn-default" />
-                    </div>
-                </div>
-            }
-
-
-            using (Html.BeginForm("PayOffAll", "Credits", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.ID)
-
-                <div class="form-group">
-                    <div class="col-md-offset-1">
-                        <input type="submit" value="Spłać całość" class="btn btn-default" />
-                    </div>
-                </div>
-            }
-        }
-        else
-        {
-            <span>
-                Spłacono
+    @if (!Model.IsPaidOff)
+    {
+        <div class="col-xs-6">
+            <span class="gray-text">
+                @Html.DisplayNameFor(model => model.StartDate)
             </span>
-        }
-    </dl>
+            <br />
+            <span>
+                @Html.DisplayFor(model => model.StartDate)
+            </span>
+            <br />
+            <br />
+
+            <span class="gray-text">
+                @Html.DisplayNameFor(model => model.EndDate)
+            </span>
+            <br />
+            <span>
+                @Html.DisplayFor(model => model.EndDate)
+            </span>
+            <br />
+            <br />
+
+            <span class="gray-text">
+                @Html.DisplayNameFor(model => model.LastPayment)
+            </span>
+            <br />
+            <span>
+                @Html.DisplayFor(model => model.LastPayment)
+            </span>
+            <br />
+            <br />
+
+            @if (!User.IsInRole("Admin"))
+            {
+                <span>
+                    @using (Html.BeginForm("PayOffOneInstallment", "Credits", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.ID)
+
+                        <div class="form-group">
+                            <input type="submit" value="Zapłać ratę" class="btn btn-default" />
+                        </div>
+                    }
+                </span>
+                <br />
+
+                <span>
+                    @using (Html.BeginForm("PayOffCountOfNumberInstallments", "Credits", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.ID)
+
+                        <div class="form-group">
+                            <select name="numberOfMonths" class="form-control" style="width: 95px">
+                                @for (int i = 1; i <= Model.NumberOfMonthsToEnd; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+
+                            <input type="submit" value="Zapłać raty" class="btn btn-default" />
+                        </div>
+                    }
+                </span>
+                <br />
+
+                <span>
+                    @using (Html.BeginForm("PayOffAll", "Credits", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.ID)
+
+                        <div class="form-group">
+                            <input type="submit" value="Spłać całość" class="btn btn-default" />
+                        </div>
+                    }
+                </span>
+                <br />
+                <br />
+            }
+        </div>
+    }
+    else
+    {
+        <span>
+            Spłacono
+        </span>
+    }
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

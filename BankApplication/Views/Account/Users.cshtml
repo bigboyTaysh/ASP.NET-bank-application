@@ -4,29 +4,36 @@
     ViewBag.Title = "Workers";
 }
 
-<h2>Workers</h2>
+<h2></h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @if (User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Dodaj pracownika", "Create", null, new { @class = "btn btn-default pull-right" })
+    }
+    else
+    {
+        @Html.ActionLink("Dodaj klienta", "Create", null, new { @class = "btn btn-default pull-right" })
+    }
+
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Login)
+            Login
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Email)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FirstName)
+            Imię
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LastName)
+            Nazwisko
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PESEL)
+            PESEL
         </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -45,11 +52,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.PESEL)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
         </td>
     </tr>
 }

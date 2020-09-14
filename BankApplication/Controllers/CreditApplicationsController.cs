@@ -151,12 +151,12 @@ namespace BankApplication.Controllers
                         BalanceAfterTransactionUserTo = toBankAccount.Balance,
                         CurrencyTo = toBankAccount.Currency,
                         ToBankAccountNumber = toBankAccount.BankAccountNumber,
+                        FromBankAccountNumber = toBankAccount.BankAccountNumber,
 
                         TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CREDIT_TRANSFER").ID,
                         Description = $"Kredyt {credit.ID}",
                         ReceiverName = profile.FullName,
 
-                        OperationDate = DateTime.Now,
                         Date = DateTime.Now
                     };
                     db.Transactions.Add(transaction);
