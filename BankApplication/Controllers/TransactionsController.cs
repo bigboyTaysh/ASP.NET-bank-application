@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using BankApplication.DAL;
 using BankApplication.Models;
+using BankApplication.Helper;
 using Microsoft.AspNet.Identity;
 using PagedList;
 
@@ -23,6 +24,8 @@ namespace BankApplication.Controllers
         // GET: Transactions
         public ActionResult Index(string bankAccountNumber)
         {
+            ViewBag.Types = db.TransactionTypes.ToList();
+
             if (User.IsInRole("Admin") || User.IsInRole("Worker"))
             {
                 var bankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == bankAccountNumber);
@@ -52,41 +55,168 @@ namespace BankApplication.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult Transactions(string bankAccountNumber, int? page, int? size)
+        public PartialViewResult Transactions
+            (
+                string bankAccountNumber, int? page, int? size,
+                string senderReceiver,
+                string description,
+                decimal? amountFrom,
+                decimal? amountTo,
+                DateTime dataFrom,
+                DateTime dataTo,
+                int type
+            )
         {
             Profile user;
-            List<Transaction> transactions = new List<Transaction>();
+            IQueryable<Transaction> transactions = null;
             ViewBag.BankAccountNumber = bankAccountNumber;
 
+            decimal amountFromNN = (amountFrom ?? 0m);
+            decimal amountToNN = (amountTo ?? 999999999999999m);
 
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin") || User.IsInRole("Worker"))
             {
-                transactions = db.Transactions
-                    .Where(t => bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber)
-                    .Include(t => t.TransactionType)
-                    .Include(t => t.CurrencyTo)
-                    .OrderByDescending(t => t.Date).ThenByDescending(t => t.ID).ToList();
+                if (type == 0)
+                {
+                    transactions = db.Transactions
+                    .Where
+                        (t =>
+                            (bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber) &&
+                            t.Description.Contains(description)
+                        );
+                }
+                else
+                {
+                    transactions = db.Transactions
+                    .Where
+                        (t =>
+                            (bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber) &&
+                            t.Description.Contains(description) &&
+                            t.TransactionType.ID == type
+                        );
+                }
+                
             }
             else
             {
                 user = db.Profiles.Single(p => p.Email == User.Identity.Name);
                 if (user.BankAccounts.Any(b => b.BankAccountNumber == bankAccountNumber)) 
                 {
-                    transactions = db.Transactions
-                    .Where(t => bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber)
-                    .Include(t => t.TransactionType)
-                    .Include(t => t.CurrencyTo)
-                    .OrderByDescending(t => t.Date).ThenByDescending(t => t.ID).ToList();
+                    if (type == 0)
+                    {
+                        transactions = db.Transactions
+                        .Where
+                            (t =>
+                                (bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber) &&
+                                t.Description.Contains(description)
+                            );
+                    }
+                    else
+                    {
+                        transactions = db.Transactions
+                        .Where
+                            (t =>
+                                (bankAccountNumber == t.FromBankAccountNumber || bankAccountNumber == t.ToBankAccountNumber) &&
+                                t.Description.Contains(description) &&
+                                t.TransactionType.ID == type
+                            );
+                    }
+                    
                 } 
             }
+
+            List<Transaction> transactionsList = transactions
+                .Include(t => t.TransactionType)
+                .Include(t => t.CurrencyTo)
+                .OrderByDescending(t => t.Date).ThenByDescending(t => t.ID).ToList()
+                .Where(t => (t.Date.Date.CompareTo(dataFrom) >= 0 && t.Date.Date.CompareTo(dataTo) <= 0) )
+                .Select(t => 
+                    {
+                        if((t.TransactionType.Type == "TRANSFER" || t.TransactionType.Type == "CURR_EXCHANGE") && t.FromBankAccountNumber == bankAccountNumber)
+                        {
+                            if
+                            (
+                                (t.ReceiverName ?? "").Contains(senderReceiver) &&
+                                t.ValueFrom >= amountFromNN &&
+                                t.ValueFrom <= amountToNN
+                            )
+                            {
+                                return t;
+                            }
+                            else
+                            {
+                                return default;
+                            }
+                            
+                        } 
+                        else if ((t.TransactionType.Type == "TRANSFER" || t.TransactionType.Type == "CURR_EXCHANGE") && t.ToBankAccountNumber == bankAccountNumber)
+                        {
+                            if
+                            (
+                                (t.SenderName ?? "").Contains(senderReceiver) &&
+                                t.ValueTo >= amountFromNN &&
+                                t.ValueTo <= amountToNN
+                            )
+                            {
+                                return t;
+                            }
+                            else
+                            {
+                                return default;
+                            }
+
+                        }
+                        else if (t.TransactionType.Type == "CASH_DEPOSIT")
+                        {
+                            if
+                            (
+                                (t.SenderName ?? "").Contains(senderReceiver) &&
+                                t.ValueTo >= amountFromNN &&
+                                t.ValueTo <= amountToNN
+                            )
+                            {
+                                return t;
+                            }
+                            else
+                            {
+                                return default;
+                            }
+                        }
+                        else if (t.TransactionType.Type == "CASH_WITHDRAWAL")
+                        {
+                            if
+                            (
+                                (t.SenderName ?? "").Contains(senderReceiver) &&
+                                t.ValueFrom >= amountFromNN &&
+                                t.ValueFrom <= amountToNN
+                            )
+                            {
+                                return t;
+                            }
+                            else
+                            {
+                                return default;
+                            }
+                        }
+                        else
+                        {
+                            return default;
+                        }
+                    }
+                )
+                .Where(t => t != null)
+                .ToList();
+
+            //transactions.Where( t=> (t.ReceiverName.Contains(senderReceiver) || t.SenderName.Contains(senderReceiver)) &&
+            //                ((t.ValueFrom >= amountFromNN && t.ValueFrom <= amountToNN) || (t.ValueTo >= amountFromNN && t.ValueTo <= amountToNN)));
 
 
             int pageSize = (size ?? 10);
             int pageNumber = (page ?? 1);
 
-            ViewBag.Count = transactions.Count;
+            ViewBag.Count = transactionsList.Count;
 
-            return PartialView("TransfersList", transactions.ToPagedList(pageNumber, pageSize));
+            return PartialView("TransfersList", transactionsList.ToPagedList(pageNumber, pageSize));
         }
 
         [HttpPost]

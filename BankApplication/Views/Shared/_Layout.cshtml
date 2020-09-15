@@ -37,6 +37,7 @@
                     {
                         <li>@Html.ActionLink("Konta bankowe", "Index", "BankAccounts")</li>
                         <li>@Html.ActionLink("Pracownicy", "Workers", "Account")</li>
+                        <li>@Html.ActionLink("Rodzaje kredytów", "Index", "CreditTypes")</li>
                     }
                     @if (User.IsInRole("Worker"))
                     {
@@ -54,7 +55,6 @@
                                 <li>@Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "dropdown-toggle" })</li>
                             </ul>
                         </li>
-                        <li>@Html.ActionLink("Kantor", "Index", "Currencies")</li>
                         <li>@Html.ActionLink("Kantor", "Index", "Currencies")</li>
                     }
                     @if (User.Identity.IsAuthenticated)

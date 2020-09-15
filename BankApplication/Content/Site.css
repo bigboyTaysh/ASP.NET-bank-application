@@ -461,6 +461,11 @@ a:visited {
     color: #636363;
 }
 
+.search-transactions-group {
+    width: 40%;
+    margin: 0 auto;
+}
+
 @media (min-width: 768px) and (max-width: 991px) {
     .navbar-collapse.collapse {
         display: none !important;

@@ -11,7 +11,7 @@ using System.Web;
 
 namespace BankApplication.Helper
 {
-    public class RefreshCurrency
+    public static class RefreshCurrency
     {
         public static async Task RefreshCurrenciesAsync()
         {
