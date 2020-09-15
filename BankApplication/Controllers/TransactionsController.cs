@@ -198,6 +198,22 @@ namespace BankApplication.Controllers
                                 return default;
                             }
                         }
+                        else if (t.TransactionType.Type == "CREDIT_TRANSFER")
+                        {
+                            if
+                            (
+                                (t.SenderName ?? "").Contains(senderReceiver) &&
+                                t.ValueFrom >= amountFromNN &&
+                                t.ValueFrom <= amountToNN
+                            )
+                            {
+                                return t;
+                            }
+                            else
+                            {
+                                return default;
+                            }
+                        }
                         else
                         {
                             return default;
