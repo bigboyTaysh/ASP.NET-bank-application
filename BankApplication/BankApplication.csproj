@@ -27,6 +27,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TypeScriptToolsVersion>3.8</TypeScriptToolsVersion>
+    <IISExpressSSLPort />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -294,6 +295,7 @@
     <Compile Include="Controllers\BankAccountsController.cs" />
     <Compile Include="Controllers\CreditApplicationsController.cs" />
     <Compile Include="Controllers\CreditsController.cs" />
+    <Compile Include="Controllers\CreditTypesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
@@ -475,6 +477,11 @@
     <Content Include="Views\Credits\Details.cshtml" />
     <Content Include="Views\Credits\Edit.cshtml" />
     <Content Include="Views\Credits\Index.cshtml" />
+    <Content Include="Views\CreditTypes\Create.cshtml" />
+    <Content Include="Views\CreditTypes\Delete.cshtml" />
+    <Content Include="Views\CreditTypes\Details.cshtml" />
+    <Content Include="Views\CreditTypes\Edit.cshtml" />
+    <Content Include="Views\CreditTypes\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

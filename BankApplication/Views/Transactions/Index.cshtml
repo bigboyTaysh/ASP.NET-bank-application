@@ -91,6 +91,115 @@
     </div>
 }
 
+<div class="search-transactions-group">
+    <div class="col-md-6">
+        <span class="gray-text">
+            Nadawca/Odbiorca
+        </span>
+        <br />
+        <span>
+            <input class="sender-receiver" />
+        </span>
+        <br />
+        <br />
+
+        <span class="gray-text">
+            Kwota od
+        </span>
+        <br />
+        <span>
+            <input class="amount-from valueTextBox" />
+        </span>
+        <br />
+        <br />
+
+        <span class="gray-text">
+            Data od
+        </span>
+        <br />
+        <span>
+            <input type="date" class="data-from" value="@DateTime.Today.AddMonths(-1).ToString("yyyy-MM-dd")" />
+        </span>
+        <br />
+        <br />
+    </div>
+
+
+    <div class="col-md-6">
+        <span class="gray-text">
+            Opis
+        </span>
+        <br />
+        <span>
+            <input class="description" />
+        </span>
+        <br />
+        <br />
+
+        <span class="gray-text">
+            do
+        </span>
+        <br />
+        <span>
+            <input class="amount-to valueTextBox" />
+        </span>
+        <br />
+        <br />
+
+        <span class="gray-text">
+            Data od
+        </span>
+        <br />
+        <span>
+            <input type="date" class="data-to" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+        </span>
+        <br />
+        <br />
+    </div>
+
+    <div class="col-md-6 col-md-offset-3">
+        <span class="gray-text" style="text-align: center">
+            Typ transakcji
+        </span>
+        <br />
+        <span>
+            <select class="type">
+                <option value="0">
+                    Wszystkie
+                </option>
+                @foreach (var item in (List<BankApplication.Models.TransactionType>)ViewBag.Types)
+                {
+            <option value="@item.ID">
+                @if (item.Type == "TRANSFER")
+                {
+                    @:Przelew
+                }
+                else if (item.Type == "CASH_DEPOSIT")
+                {
+                    @:Wpłata
+                }
+                else if (item.Type == "CASH_WITHDRAWAL")
+                {
+                    @:Wypłata
+                }
+                else if (item.Type == "CURR_EXCHANGE")
+                {
+                    @:Wymiana waluty
+                }
+                else if (item.Type == "CREDIT_TRANSFER")
+                {
+                    @:Kredyt/Rata
+                }
+            </option>
+                }
+            </select>
+        </span>
+        <br />
+        <br />
+    </div>
+</div>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -120,24 +229,40 @@
     var page = 1;
     var active = false;
 
-    function searchTransactions(page, type) {
+    function searchTransactions(page, append) {
         active = true;
         var bankAccountNumber = $(".active > .details-type > div.bankAccountSelect").text();
+        var senderReceiver = $(".sender-receiver").val();
+        var description = $(".description").val();
+        var amountFrom = $(".amount-from").val();
+        var amountTo = $(".amount-to").val();
+        var dataFrom = $(".data-from").val();
+        var dataTo = $(".data-to").val();
+        var type = $(".type").val();
+
+        console.log(type);
 
         $.post("@Url.Action("Transactions", "Transactions")",
             {
                 bankAccountNumber: bankAccountNumber,
                 page: page,
+                senderReceiver: senderReceiver,
+                description: description,
+                amountFrom: amountFrom,
+                amountTo: amountTo,
+                dataFrom: dataFrom,
+                dataTo: dataTo,
+                type: type,
             },
             function (data) {
-                if (type == "append") {
+                if (append == "append") {
                     $(".table-transactions-result").append(data);
                 } else {
                     $(".loading-container").hide();
 
                     if (data != "") {
                         $(".table-transactions-result").html(data);
-                    } else {
+                    } else if (data === "" && page == 1){
                         $(".table-transactions-result").html(
                             "<tr><td colspan='5'>Brak operacji</td></tr>"
                         );
@@ -156,6 +281,18 @@
             page++;
             searchTransactions(page, "append");
         }
+    });
+
+    $(".type").select2();
+
+    $(".sender-receiver, .description, .amount-from, .amount-to, .data-from, .data-to")
+        .on("keyup change paste", function () {
+            searchTransactions(1);
+        }
+    );
+
+    $(".type").on("select2:select", function () {
+        searchTransactions(1);
     });
 
     $(".submit-cash-deposit").on("click", function () {

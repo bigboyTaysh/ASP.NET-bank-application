@@ -235,7 +235,7 @@ namespace BankApplication.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
+            ViewBag.BankAccountTypes = db.BankAccountTypes.ToList();
             return View();
         }
 
@@ -276,7 +276,7 @@ namespace BankApplication.Controllers
 
                         SendMail(profile.Email, "Rejestracja", "Witamy na pokładzie ");
 
-                        return RedirectToAction("Index", "BankAccoutns");
+                        return RedirectToAction("Index", "BankAccounts");
                     }
                     AddErrors(result);
                 } 
@@ -321,7 +321,7 @@ namespace BankApplication.Controllers
 
                         SendMail(profile.Email, "Rejestracja", "Witamy w naszym banku ");
 
-                        return RedirectToAction("Index", "BankAccoutns");
+                        return RedirectToAction("Index", "Home");
                     }
                     AddErrors(result);
                 }
@@ -329,7 +329,7 @@ namespace BankApplication.Controllers
             }
 
             // Dotarcie do tego miejsca wskazuje, że wystąpił błąd, wyświetl ponownie formularz
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
+            ViewBag.BankAccountTypes = db.BankAccountTypes.ToList();
             return View(model);
         }
 
