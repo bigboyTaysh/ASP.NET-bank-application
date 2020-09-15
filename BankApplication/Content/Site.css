@@ -420,6 +420,7 @@ a:visited {
 
 
 .toast-container {
+    z-index: 1;
     position: fixed;
     min-width: 20%;
     max-width: 40%;

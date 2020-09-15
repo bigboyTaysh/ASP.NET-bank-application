@@ -265,7 +265,7 @@
             bankAccountFromElem.css('border-radius', 'none');
             bankAccountFromElem.removeClass('exchange-error');
 
-            if (parseFloat(available) < parseFloat(value) || parseFloat(value) < 0) {
+            if (parseFloat(available) < parseFloat(value) || parseFloat(value) <= 0) {
                 $(".value").addClass('exchange-error');
             } else {
                 $(".value").removeClass('exchange-error');
