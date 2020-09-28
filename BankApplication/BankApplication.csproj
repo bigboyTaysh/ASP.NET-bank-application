@@ -344,6 +344,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\CHF.gif" />
+    <Content Include="Images\EUR.gif" />
+    <Content Include="Images\GBP.gif" />
+    <Content Include="Images\PLN.gif" />
+    <Content Include="Images\supermoon7.jpg" />
+    <Content Include="Images\USD.gif" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
@@ -536,7 +542,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

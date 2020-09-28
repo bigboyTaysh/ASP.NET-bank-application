@@ -60,7 +60,25 @@
     <div class="form-group">
         @Html.LabelFor(model => model.BankAccountTypeID, "BankAccountTypeID", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownList("BankAccountTypeID", null, htmlAttributes: new { @class = "form-control" })
+            <select name="BankAccountTypeID" style="width: 150px">
+                @foreach (var item in (List<BankApplication.Models.BankAccountType>)ViewBag.BankAccountTypes)
+                {
+                    <option value="@item.ID">
+                        @if (item.Type == "PAY_ACC_FOR_YOUNG")
+                        {
+                            @:Konto dla młodych
+                        }
+                        else if (item.Type == "PAY_ACC_FOR_ADULT")
+                        {
+                            @:Superkonto
+                        }
+                        else if (item.Type == "FOR_CUR_ACC")
+                        {
+                            @:Konto walutowe
+                        }
+                    </option>
+                }
+            </select>
             @Html.ValidationMessageFor(model => model.BankAccountTypeID, "", new { @class = "text-danger" })
         </div>
     </div>
