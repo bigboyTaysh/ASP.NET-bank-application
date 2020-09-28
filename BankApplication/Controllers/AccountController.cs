@@ -149,7 +149,7 @@ namespace BankApplication.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
+            ViewBag.BankAccountTypes = db.BankAccountTypes.ToList();
             return View();
         }
 
@@ -212,7 +212,7 @@ namespace BankApplication.Controllers
             }
 
             // Dotarcie do tego miejsca wskazuje, że wystąpił błąd, wyświetl ponownie formularz
-            ViewBag.BankAccountTypeID = new SelectList(db.BankAccountTypes, "ID", "Type");
+            ViewBag.BankAccountTypes = db.BankAccountTypes.ToList();
             return View(model);
         }
 
