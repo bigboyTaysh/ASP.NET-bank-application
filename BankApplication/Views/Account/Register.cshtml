@@ -58,7 +58,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.BankAccountTypeID, "BankAccountTypeID", htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.BankAccountTypeID, "Typ konta", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             <select name="BankAccountTypeID" style="width: 150px">
                 @foreach (var item in (List<BankApplication.Models.BankAccountType>)ViewBag.BankAccountTypes)
