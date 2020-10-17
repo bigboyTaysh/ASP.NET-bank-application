@@ -1,45 +1,56 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BankApplication.Models;
 
 namespace BankApplication.Data
 {
-    public class BankInitializer : DropCreateDatabaseIfModelChanges<BankContext>
+    public class BankInitializer
     {
-        protected override void Seed(BankContext context)
+        public static void Seed(IServiceProvider serviceProvider)
         {
-            var roleManager = new RoleManager<IdentityRole>(
-                new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            var context = serviceProvider.GetService<ApplicationDbContext>();
+            UserManager<ApplicationUser> userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
 
-            var userManager = new UserManager<ApplicationUser>(
-                new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            if (!context.Profiles.Any())
+            {
 
-            roleManager.Create(new IdentityRole("Admin"));
-            roleManager.Create(new IdentityRole("User"));
-            roleManager.Create(new IdentityRole("Worker"));
 
-            var user = new ApplicationUser { UserName = "email1@wp.pl" };
-            string password = "Password.1";
-            userManager.Create(user, password);
-            userManager.AddToRole(user.Id, "User");
+                string[] roles = new string[] { "Admin", "User", "Worker" };
 
-            var user2 = new ApplicationUser { UserName = "email2@wp.pl" };
-            string password2 = "Password.2";
-            userManager.Create(user2, password2);
-            userManager.AddToRole(user2.Id, "User");
+                foreach (string role in roles)
+                {
+                    var roleStore = new RoleStore<IdentityRole>(context);
 
-            var user3 = new ApplicationUser { UserName = "admin@wp.pl" };
-            string password3 = "Admin.1";
-            userManager.Create(user3, password3);
-            userManager.AddToRole(user3.Id, "Admin");
+                    roleStore.CreateAsync(new IdentityRole(role));
+                }
 
-            var worker = new ApplicationUser { UserName = "worker@wp.pl" };
-            string workerpass = "Worker.1";
-            userManager.Create(worker, workerpass);
-            userManager.AddToRole(worker.Id, "Worker");
+                var user = new ApplicationUser { UserName = "email1@wp.pl" };
+                string password = "Password.1";
+                userManager.CreateAsync(user, password);
+                userManager.AddToRoleAsync(user, "User");
 
-            var currencies = new List<Currency>
+                var user2 = new ApplicationUser { UserName = "email2@wp.pl" };
+                string password2 = "Password.2";
+                userManager.CreateAsync(user2, password2);
+                userManager.AddToRoleAsync(user2, "User");
+
+                var user3 = new ApplicationUser { UserName = "admin@wp.pl" };
+                string password3 = "Admin.1";
+                userManager.CreateAsync(user3, password3);
+                userManager.AddToRoleAsync(user3, "Admin");
+
+                var worker = new ApplicationUser { UserName = "worker@wp.pl" };
+                string workerpass = "Worker.1";
+                userManager.CreateAsync(worker, workerpass);
+                userManager.AddToRoleAsync(worker, "Worker");
+
+                var currencies = new List<Currency>
             {
                 new Currency {
                     Name = "złoty",
@@ -78,10 +89,10 @@ namespace BankApplication.Data
                 },
             };
 
-            currencies.ForEach(c => context.Currencies.Add(c));
-            context.SaveChanges();
+                currencies.ForEach(c => context.Currencies.Add(c));
+                context.SaveChanges();
 
-            var transactionTypes = new List<TransactionType>
+                var transactionTypes = new List<TransactionType>
             {
                 new TransactionType {Type = "TRANSFER"},
                 new TransactionType {Type = "CASH_WITHDRAWAL"},
@@ -90,25 +101,25 @@ namespace BankApplication.Data
                 new TransactionType {Type = "CREDIT_TRANSFER"}
             };
 
-            transactionTypes.ForEach(t => context.TransactionTypes.Add(t));
-            context.SaveChanges();
+                transactionTypes.ForEach(t => context.TransactionTypes.Add(t));
+                context.SaveChanges();
 
-            var bankAccountTypes = new List<BankAccountType>
+                var bankAccountTypes = new List<BankAccountType>
             {
                 new BankAccountType {Type = "PAY_ACC_FOR_YOUNG", Commission = 0m},
                 new BankAccountType {Type = "PAY_ACC_FOR_ADULT", Commission = 5m},
                 new BankAccountType {Type = "FOR_CUR_ACC", Commission = 7m}
             };
 
-            bankAccountTypes.ForEach(b => context.BankAccountTypes.Add(b));
-            context.SaveChanges();
+                bankAccountTypes.ForEach(b => context.BankAccountTypes.Add(b));
+                context.SaveChanges();
 
 
-            var creditType = new CreditType { Name = "kredyt gotówkowy", Commission = 8.99m, Rates = 0m };
-            context.CreditTypes.Add(creditType);
-            context.SaveChanges();
+                var creditType = new CreditType { Name = "kredyt gotówkowy", Commission = 8.99m, Rates = 0m };
+                context.CreditTypes.Add(creditType);
+                context.SaveChanges();
 
-            var bankAccounts = new List<BankAccount>
+                var bankAccounts = new List<BankAccount>
             {
                 new BankAccount {Balance = 10.50m,
                     AvailableFounds = 10.50m,
@@ -138,10 +149,10 @@ namespace BankApplication.Data
                 }
             };
 
-            bankAccounts.ForEach(b => context.BankAccounts.Add(b));
-            context.SaveChanges();
+                bankAccounts.ForEach(b => context.BankAccounts.Add(b));
+                context.SaveChanges();
 
-            var profiles = new List<Profile>
+                var profiles = new List<Profile>
             {
                 new Profile
                     {
@@ -163,8 +174,9 @@ namespace BankApplication.Data
                 new Profile { Email = worker.UserName, Login = worker.UserName},
             };
 
-            profiles.ForEach(p => context.Profiles.Add(p));
-            context.SaveChanges();
+                profiles.ForEach(p => context.Profiles.Add(p));
+                context.SaveChanges();
+            }
         }
     }
 }
