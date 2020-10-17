@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using PESEL.Attributes;
+using BankApplication.Data;
 
 namespace BankApplication.Areas.Identity.Pages.Account
 {
@@ -25,6 +26,7 @@ namespace BankApplication.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext db;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -101,7 +103,34 @@ namespace BankApplication.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    
+                    await _userManager.AddToRoleAsync(user, "User");
+
+                    Profile profile = new Profile
+                    {
+                        Login = Input.Email,
+                        Email = Input.Email,
+                        FirstName = Input.FirstName,
+                        LastName = Input.LastName,
+                        PESEL = Input.PESEL,
+                        BankAccounts = new List<BankAccount>()
+                    };
+
+                    BankAccount bankAccount = new BankAccount()
+                    {
+                        Balance = 0.0m,
+                        AvailableFounds = 0.0m,
+                        Lock = 0.0m,
+                        BankAccountNumber = BankAccountsController.NewBankAcocuntNumber(),
+                        CreationDate = DateTime.Today,
+                        BankAccountTypeID = Input.BankAccountTypeID,
+                        CurrencyID = db.Currencies.Single(c => c.Code == "PLN").ID
+                    };
+
+                    db.BankAccounts.Add(bankAccount);
+                    profile.BankAccounts.Add(bankAccount);
+                    db.Profiles.Add(profile);
+                    db.SaveChanges();
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
