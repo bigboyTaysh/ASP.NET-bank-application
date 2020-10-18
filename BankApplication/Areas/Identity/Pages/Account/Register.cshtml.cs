@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using PESEL.Attributes;
 using BankApplication.Data;
+using BankApplication.Controllers;
 
 namespace BankApplication.Areas.Identity.Pages.Account
 {
@@ -26,7 +27,7 @@ namespace BankApplication.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly ApplicationDbContext db;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -120,16 +121,16 @@ namespace BankApplication.Areas.Identity.Pages.Account
                         Balance = 0.0m,
                         AvailableFounds = 0.0m,
                         Lock = 0.0m,
-                        BankAccountNumber = BankAccountsController.NewBankAcocuntNumber(),
+                        BankAccountNumber = NewBankAcocuntNumber(),
                         CreationDate = DateTime.Today,
                         BankAccountTypeID = Input.BankAccountTypeID,
-                        CurrencyID = db.Currencies.Single(c => c.Code == "PLN").ID
+                        CurrencyID = _context.Currencies.Single(c => c.Code == "PLN").ID
                     };
 
-                    db.BankAccounts.Add(bankAccount);
+                    _context.BankAccounts.Add(bankAccount);
                     profile.BankAccounts.Add(bankAccount);
-                    db.Profiles.Add(profile);
-                    db.SaveChanges();
+                    _context.Profiles.Add(profile);
+                    _context.SaveChanges();
 
                     _logger.LogInformation("User created a new account with password.");
 
@@ -163,6 +164,17 @@ namespace BankApplication.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private string NewBankAcocuntNumber()
+        {
+            string last = _context.BankAccounts.OrderByDescending(b => b.BankAccountNumber).First().BankAccountNumber;
+            int parts = int.Parse(last.Split(' ')[5] + last.Split(' ')[6]) + 1;
+            string newNumber = last;
+            newNumber = newNumber.Replace(newNumber.Split(' ')[5], parts.ToString().Substring(0, 4));
+            newNumber = newNumber.Replace(newNumber.Split(' ')[6], parts.ToString().Substring(4, 4));
+
+            return newNumber;
         }
     }
 }

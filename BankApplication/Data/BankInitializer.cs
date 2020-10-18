@@ -1,126 +1,141 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using BankApplication.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BankApplication.Models;
 
 namespace BankApplication.Data
 {
     public class BankInitializer
     {
-        public static void Seed(IServiceProvider serviceProvider)
+        public static async Task SeedAsync(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
-            var context = serviceProvider.GetService<ApplicationDbContext>();
-            UserManager<ApplicationUser> userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
-
             if (!context.Profiles.Any())
             {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await roleManager.CreateAsync(new IdentityRole("User"));
+                await roleManager.CreateAsync(new IdentityRole("Worker"));
 
-
-                string[] roles = new string[] { "Admin", "User", "Worker" };
-
-                foreach (string role in roles)
+                var user = new ApplicationUser
                 {
-                    var roleStore = new RoleStore<IdentityRole>(context);
-
-                    roleStore.CreateAsync(new IdentityRole(role));
-                }
-
-                var user = new ApplicationUser { UserName = "email1@wp.pl" };
+                    UserName = "email1@wp.pl",
+                    Email = "email1@wp.pl",
+                    LockoutEnabled = false,
+                    EmailConfirmed = true
+                };
                 string password = "Password.1";
-                userManager.CreateAsync(user, password);
-                userManager.AddToRoleAsync(user, "User");
+                await userManager.CreateAsync(user, password);
+                await userManager.AddToRoleAsync(user, "User");
 
-                var user2 = new ApplicationUser { UserName = "email2@wp.pl" };
+                var user2 = new ApplicationUser
+                {
+                    UserName = "email2@wp.pl",
+                    Email = "email2@wp.pl",
+                    LockoutEnabled = false,
+                    EmailConfirmed = true
+                };
                 string password2 = "Password.2";
-                userManager.CreateAsync(user2, password2);
-                userManager.AddToRoleAsync(user2, "User");
+                await userManager.CreateAsync(user2, password2);
+                await userManager.AddToRoleAsync(user2, "User");
 
-                var user3 = new ApplicationUser { UserName = "admin@wp.pl" };
+                var user3 = new ApplicationUser
+                {
+                    UserName = "admin@wp.pl",
+                    Email = "admin@wp.pl",
+                    LockoutEnabled = false,
+                    EmailConfirmed = true
+                };
                 string password3 = "Admin.1";
-                userManager.CreateAsync(user3, password3);
-                userManager.AddToRoleAsync(user3, "Admin");
+                await userManager.CreateAsync(user3, password3);
+                await userManager.AddToRoleAsync(user3, "Admin");
 
-                var worker = new ApplicationUser { UserName = "worker@wp.pl" };
+                var worker = new ApplicationUser
+                {
+                    UserName = "worker@wp.pl",
+                    Email = "worker@wp.pl",
+                    LockoutEnabled = false,
+                    EmailConfirmed = true
+                };
                 string workerpass = "Worker.1";
-                userManager.CreateAsync(worker, workerpass);
-                userManager.AddToRoleAsync(worker, "Worker");
+                await userManager.CreateAsync(worker, workerpass);
+                await userManager.AddToRoleAsync(worker, "Worker");
 
                 var currencies = new List<Currency>
-            {
-                new Currency {
-                    Name = "złoty",
-                    Code = "PLN",
-                    EffectiveDate = DateTime.Now,
-                    Bid = 1.0000m,
-                    Ask = 1.0000m
-                },
-                new Currency {
-                    Name = "euro",
-                    Code = "EUR",
-                    EffectiveDate = DateTime.Now,
-                    Bid = 0.0000m,
-                    Ask = 0.0000m
-                },
-                new Currency {
-                    Name = "dolar amerykański",
-                    Code = "USD",
-                    EffectiveDate = DateTime.Now,
-                    Bid = 0.0000m,
-                    Ask = 0.0000m
-                },
-                new Currency {
-                    Name = "frank szwajcarski",
-                    Code = "CHF",
-                    EffectiveDate = DateTime.Now,
-                    Bid = 0.0000m,
-                    Ask = 0.0000m
-                },
-                new Currency {
-                    Name = "funt szterling",
-                    Code = "GBP",
-                    EffectiveDate = DateTime.Now,
-                    Bid = 0.0000m,
-                    Ask = 0.0000m
-                },
-            };
+                {
+                    new Currency
+                    {
+                        Name = "złoty",
+                        Code = "PLN",
+                        EffectiveDate = DateTime.Now,
+                        Bid = 1.0000m,
+                        Ask = 1.0000m
+                    },
+                    new Currency
+                    {
+                        Name = "euro",
+                        Code = "EUR",
+                        EffectiveDate = DateTime.Now,
+                        Bid = 0.0000m,
+                        Ask = 0.0000m
+                    },
+                    new Currency
+                    {
+                        Name = "dolar amerykański",
+                        Code = "USD",
+                        EffectiveDate = DateTime.Now,
+                        Bid = 0.0000m,
+                        Ask = 0.0000m
+                    },
+                    new Currency
+                    {
+                        Name = "frank szwajcarski",
+                        Code = "CHF",
+                        EffectiveDate = DateTime.Now,
+                        Bid = 0.0000m,
+                        Ask = 0.0000m
+                    },
+                    new Currency
+                    {
+                        Name = "funt szterling",
+                        Code = "GBP",
+                        EffectiveDate = DateTime.Now,
+                        Bid = 0.0000m,
+                        Ask = 0.0000m
+                    },
+                };
 
                 currencies.ForEach(c => context.Currencies.Add(c));
                 context.SaveChanges();
 
                 var transactionTypes = new List<TransactionType>
-            {
-                new TransactionType {Type = "TRANSFER"},
-                new TransactionType {Type = "CASH_WITHDRAWAL"},
-                new TransactionType {Type = "CASH_DEPOSIT"},
-                new TransactionType {Type = "CURR_EXCHANGE"},
-                new TransactionType {Type = "CREDIT_TRANSFER"}
-            };
+                {
+                    new TransactionType {Type = "TRANSFER"},
+                    new TransactionType {Type = "CASH_WITHDRAWAL"},
+                    new TransactionType {Type = "CASH_DEPOSIT"},
+                    new TransactionType {Type = "CURR_EXCHANGE"},
+                    new TransactionType {Type = "CREDIT_TRANSFER"}
+                };
 
                 transactionTypes.ForEach(t => context.TransactionTypes.Add(t));
                 context.SaveChanges();
 
                 var bankAccountTypes = new List<BankAccountType>
-            {
-                new BankAccountType {Type = "PAY_ACC_FOR_YOUNG", Commission = 0m},
-                new BankAccountType {Type = "PAY_ACC_FOR_ADULT", Commission = 5m},
-                new BankAccountType {Type = "FOR_CUR_ACC", Commission = 7m}
-            };
+                {
+                    new BankAccountType {Type = "PAY_ACC_FOR_YOUNG", Commission = 0m},
+                    new BankAccountType {Type = "PAY_ACC_FOR_ADULT", Commission = 5m},
+                    new BankAccountType {Type = "FOR_CUR_ACC", Commission = 7m}
+                };
 
                 bankAccountTypes.ForEach(b => context.BankAccountTypes.Add(b));
                 context.SaveChanges();
-
 
                 var creditType = new CreditType { Name = "kredyt gotówkowy", Commission = 8.99m, Rates = 0m };
                 context.CreditTypes.Add(creditType);
                 context.SaveChanges();
 
                 var bankAccounts = new List<BankAccount>
-            {
+                {
                 new BankAccount {Balance = 10.50m,
                     AvailableFounds = 10.50m,
                     Lock = 0m,
@@ -147,13 +162,13 @@ namespace BankApplication.Data
                     BankAccountType = bankAccountTypes[2],
                     Currency = currencies[1]
                 }
-            };
+                };
 
                 bankAccounts.ForEach(b => context.BankAccounts.Add(b));
                 context.SaveChanges();
 
                 var profiles = new List<Profile>
-            {
+                {
                 new Profile
                     {
                     FirstName = "John",
@@ -169,10 +184,10 @@ namespace BankApplication.Data
                     Email = user2.UserName,
                     Login = user2.UserName,
                     BankAccounts = new List<BankAccount>(){bankAccounts[1]}
-                },
-                new Profile { Email = user3.UserName, Login = user3.UserName},
-                new Profile { Email = worker.UserName, Login = worker.UserName},
-            };
+                    },
+                    new Profile { Email = user3.UserName, Login = user3.UserName},
+                    new Profile { Email = worker.UserName, Login = worker.UserName},
+                };
 
                 profiles.ForEach(p => context.Profiles.Add(p));
                 context.SaveChanges();
