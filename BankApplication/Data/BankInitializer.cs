@@ -136,8 +136,8 @@ namespace BankApplication.Data
 
                 var bankAccounts = new List<BankAccount>
                 {
-                new BankAccount {Balance = 10.50m,
-                    AvailableFounds = 10.50m,
+                new BankAccount {Balance = 50.50m,
+                    AvailableFounds = 50.50m,
                     Lock = 0m,
                     BankAccountNumber = "12 1234 1234 1234 1234 1234 1230",
                     CreationDate = new DateTime(2020, 06, 04),
@@ -190,6 +190,26 @@ namespace BankApplication.Data
                 };
 
                 profiles.ForEach(p => context.Profiles.Add(p));
+                context.SaveChanges();
+
+                var transaction = new Transaction
+                {
+                    ValueTo = 50m,
+                    ValueFrom = 50m,
+                    BalanceAfterTransactionUserFrom = 0m,
+                    BalanceAfterTransactionUserTo = 50.5m,
+                    FromBankAccountNumber = "12 1234 1234 1234 1234 1234 1231",
+                    ToBankAccountNumber = "12 1234 1234 1234 1234 1234 1230",
+                    SenderName = profiles[1].FullName,
+                    ReceiverName = profiles[0].FullName,
+                    Description = "Przelew pierwszy",
+                    Date = DateTime.Now,
+                    TransactionType = transactionTypes[0],
+                    CurrencyTo = currencies[0],
+                    CurrencyFrom = currencies[0]
+                };
+
+                context.Transactions.Add(transaction);
                 context.SaveChanges();
             }
         }

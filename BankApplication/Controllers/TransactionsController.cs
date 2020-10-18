@@ -7,55 +7,53 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BankApplication.Data;
 using BankApplication.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BankApplication.Controllers
 {
-    [Authorize]
     [Route("[controller]")]
     [ApiController]
-    public class BankAccountsController : ControllerBase
+    public class TransactionsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public BankAccountsController(ApplicationDbContext context)
+        public TransactionsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/BankAccounts
+        // GET: api/Transactions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BankAccount>>> GetBankAccounts()
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions()
         {
-            return await _context.BankAccounts.ToListAsync();
+            return await _context.Transactions.ToListAsync();
         }
 
-        // GET: api/BankAccounts/5
+        // GET: api/Transactions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BankAccount>> GetBankAccount(int id)
+        public async Task<ActionResult<Transaction>> GetTransaction(int id)
         {
-            var bankAccount = await _context.BankAccounts.FindAsync(id);
+            var transaction = await _context.Transactions.FindAsync(id);
 
-            if (bankAccount == null)
+            if (transaction == null)
             {
                 return NotFound();
             }
 
-            return bankAccount;
+            return transaction;
         }
 
-        // PUT: api/BankAccounts/5
+        // PUT: api/Transactions/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBankAccount(int id, BankAccount bankAccount)
+        public async Task<IActionResult> PutTransaction(int id, Transaction transaction)
         {
-            if (id != bankAccount.ID)
+            if (id != transaction.ID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(bankAccount).State = EntityState.Modified;
+            _context.Entry(transaction).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +61,7 @@ namespace BankApplication.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BankAccountExists(id))
+                if (!TransactionExists(id))
                 {
                     return NotFound();
                 }
@@ -76,37 +74,37 @@ namespace BankApplication.Controllers
             return NoContent();
         }
 
-        // POST: api/BankAccounts
+        // POST: api/Transactions
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<BankAccount>> PostBankAccount(BankAccount bankAccount)
+        public async Task<ActionResult<Transaction>> PostTransaction(Transaction transaction)
         {
-            _context.BankAccounts.Add(bankAccount);
+            _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBankAccount", new { id = bankAccount.ID }, bankAccount);
+            return CreatedAtAction("GetTransaction", new { id = transaction.ID }, transaction);
         }
 
-        // DELETE: api/BankAccounts/5
+        // DELETE: api/Transactions/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<BankAccount>> DeleteBankAccount(int id)
+        public async Task<ActionResult<Transaction>> DeleteTransaction(int id)
         {
-            var bankAccount = await _context.BankAccounts.FindAsync(id);
-            if (bankAccount == null)
+            var transaction = await _context.Transactions.FindAsync(id);
+            if (transaction == null)
             {
                 return NotFound();
             }
 
-            _context.BankAccounts.Remove(bankAccount);
+            _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
 
-            return bankAccount;
+            return transaction;
         }
 
-        private bool BankAccountExists(int id)
+        private bool TransactionExists(int id)
         {
-            return _context.BankAccounts.Any(e => e.ID == id);
+            return _context.Transactions.Any(e => e.ID == id);
         }
     }
 }
