@@ -8,32 +8,48 @@ using Microsoft.EntityFrameworkCore;
 using BankApplication.Data;
 using BankApplication.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace BankApplication.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class BankAccountsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BankAccountsController(ApplicationDbContext context)
+        public BankAccountsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/BankAccounts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BankAccount>>> GetBankAccounts()
         {
-            if (User.IsInRole("Admin") || User.IsInRole("Worker"))
+            Profile profile;
+            var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Any(r => r == "Admin" || r == "Worker"))
             {
                 return await _context.BankAccounts.Include("BankAccountType").Include("Currency").ToListAsync();
             }
             else
             {
-                return await _context.BankAccounts.Include("BankAccountType").Include("Currency").ToListAsync();
+                profile = _context.Profiles
+                    .Include(p => p.BankAccounts)
+                    .ThenInclude(b => b.BankAccountType)
+                    .Include(b => b.BankAccounts)
+                    .ThenInclude(b => b.Currency)
+                    .Single(p => p.Email == user.Email);
+
+                return profile.BankAccounts.ToList();
             }
         }
 

@@ -11,18 +11,22 @@ export class BankAccountContainer extends Component {
             transactions: []
         }
 
-        //this.populateBankAccountsData = this.populateBankAccountsData.bind(this);
         this.changeActiveState = this.changeActiveState.bind(this);
     }
 
     componentDidMount() {
-        this.populateTransactionsData();
+        if(this.props.clicked){
+            this.populateTransactionsData().then(() => {
+                this.props.onLoad(this.state.transactions);
+            });
+        }
     }
 
     changeActiveState(){
         if(!this.props.clicked){
-            this.populateTransactionsData();
-            this.props.onClick(this.state.index, this.state.transactions);
+            this.populateTransactionsData().then( () => {
+                this.props.onClick(this.state.index, this.state.transactions)
+            });
         }
     };
 
@@ -36,8 +40,8 @@ export class BankAccountContainer extends Component {
             bankAccountName = "Konto walutowe"
         }
 
-        let content =
-            <div>
+        return (
+            <div onClick={this.changeActiveState} className={(this.props.clicked ? "active " : "") + "bank-account-div shadow p-3 mb-5 bg-white rounded"}>
                 <div className="details-type">
                     <div>
                         {bankAccountName}
@@ -83,7 +87,9 @@ export class BankAccountContainer extends Component {
                     <br />
                 </div>
                 <div className="pull-right buttons noselect">
-
+                    <button className="btn btn-default">Szczegóły</button>
+                    <button className="btn btn-default">Szczegóły</button>
+                    <button className="btn btn-default">Szczegóły</button>
 
                     {/*
                     @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new {id = Model[0].BankAccountTypeID}, new { @class = "btn btn-default" })
@@ -91,19 +97,16 @@ export class BankAccountContainer extends Component {
                     @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
                     */}
                 </div>
-            </div>;
-
-        return (
-            <div onClick={this.changeActiveState} className={(this.props.clicked ? "active " : "") + "bank-account-div shadow p-3 mb-5 bg-white rounded"}>
-                {content}
             </div>
         )
     }
 
     async populateTransactionsData() {
         const token = await authService.getAccessToken();
-        const response = await fetch('transactions', {
-            headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+        const response = await fetch('transactions?accountNumber=' + this.props.bankAccount.bankAccountNumber + '&size=' + 1 + '&page=' + 1, {
+            headers: !token ? {} : {
+                 'Authorization': `Bearer ${token}`,
+                },
         });
         const data = await response.json();
         this.setState({ transactions: data, loading: false });

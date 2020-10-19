@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BankApplication.Data
@@ -27,6 +28,7 @@ namespace BankApplication.Data
                 string password = "Password.1";
                 await userManager.CreateAsync(user, password);
                 await userManager.AddToRoleAsync(user, "User");
+                await userManager.AddClaimAsync(user, new System.Security.Claims.Claim(ClaimTypes.Name, user.UserName));
 
                 var user2 = new ApplicationUser
                 {
@@ -38,6 +40,7 @@ namespace BankApplication.Data
                 string password2 = "Password.2";
                 await userManager.CreateAsync(user2, password2);
                 await userManager.AddToRoleAsync(user2, "User");
+                await userManager.AddClaimAsync(user, new System.Security.Claims.Claim(ClaimTypes.Name, user2.UserName));
 
                 var user3 = new ApplicationUser
                 {
@@ -49,8 +52,9 @@ namespace BankApplication.Data
                 string password3 = "Admin.1";
                 await userManager.CreateAsync(user3, password3);
                 await userManager.AddToRoleAsync(user3, "Admin");
+                await userManager.AddClaimAsync(user, new System.Security.Claims.Claim(ClaimTypes.Name, user3.UserName));
 
-                var worker = new ApplicationUser
+                var user4 = new ApplicationUser
                 {
                     UserName = "worker@wp.pl",
                     Email = "worker@wp.pl",
@@ -58,8 +62,9 @@ namespace BankApplication.Data
                     EmailConfirmed = true
                 };
                 string workerpass = "Worker.1";
-                await userManager.CreateAsync(worker, workerpass);
-                await userManager.AddToRoleAsync(worker, "Worker");
+                await userManager.CreateAsync(user4, workerpass);
+                await userManager.AddToRoleAsync(user4, "Worker");
+                await userManager.AddClaimAsync(user, new System.Security.Claims.Claim(ClaimTypes.Name, user4.UserName));
 
                 var currencies = new List<Currency>
                 {
@@ -186,7 +191,7 @@ namespace BankApplication.Data
                     BankAccounts = new List<BankAccount>(){bankAccounts[1]}
                     },
                     new Profile { Email = user3.UserName, Login = user3.UserName},
-                    new Profile { Email = worker.UserName, Login = worker.UserName},
+                    new Profile { Email = user4.UserName, Login = user4.UserName},
                 };
 
                 profiles.ForEach(p => context.Profiles.Add(p));

@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using PESEL.Attributes;
 using BankApplication.Data;
 using BankApplication.Controllers;
+using System.Security.Claims;
 
 namespace BankApplication.Areas.Identity.Pages.Account
 {
@@ -105,6 +106,7 @@ namespace BankApplication.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "User");
+                    await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(ClaimTypes.Name, user.UserName));
 
                     Profile profile = new Profile
                     {

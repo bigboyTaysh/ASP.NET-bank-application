@@ -107,6 +107,7 @@ a:visited {
     margin: 0 auto;
     max-width: 540px;
     min-width: 340px;
+    max-height: 200px;
     cursor: pointer;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -138,6 +139,7 @@ a:visited {
         box-shadow: 0 0 2px 3px rgba(80, 80, 80, 0.5);
         max-width: 550px;
         min-width: 350px;
+        max-height:350px;
         overflow: hidden;
         position: relative;
     }
@@ -150,11 +152,11 @@ a:visited {
     .bank-account-div.active .details {
         display: block;
         margin-right: 30px;
-        margin-top: 60px;
+        margin-top: 0px;
     }
 
     .bank-account-div.active .details-menas {
-        margin-top: 60px;
+        margin-top: 0px;
         margin-right: 30px
     }
 

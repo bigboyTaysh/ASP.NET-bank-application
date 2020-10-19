@@ -11,13 +11,13 @@ export class Home extends Component {
         this.state = {
                 transactions: [],
                 bankAccounts: [],
-                index: 1,
+                index: 0,
                 loading: true 
         };
 
-        this.renderBankAccounts = this.renderBankAccounts.bind(this);
         this.renderTransactionsTable = this.renderTransactionsTable.bind(this);
         this.onChangeActiveBankAccount = this.onChangeActiveBankAccount.bind(this);
+        this.onLoadActiveBankAccount = this.onLoadActiveBankAccount.bind(this);
     }
 
     componentDidMount() {
@@ -31,12 +31,10 @@ export class Home extends Component {
         })
     }
 
-    renderBankAccounts(bankAccounts, indexState) {
-        return (
-            bankAccounts.map((bankAccount, index) =>
-                <BankAccountContainer key={bankAccount.id} bankAccount={bankAccount} clicked={index === indexState } index={index} onClick={this.onChangeActiveBankAccount} />
-            )
-        );
+    onLoadActiveBankAccount(transactions){
+        this.setState({
+            transactions: transactions
+        })
     }
 
     renderTransactionsTable(transactions) {
@@ -54,7 +52,8 @@ export class Home extends Component {
                 bankAccount={bankAccount} 
                 clicked={index === this.state.index }
                 index={index} 
-                onClick={this.onChangeActiveBankAccount} 
+                onClick={this.onChangeActiveBankAccount}
+                onLoad={this.onLoadActiveBankAccount}
             />
         )
 
@@ -105,6 +104,5 @@ export class Home extends Component {
         });
         const data = await response.json();
         this.setState({ bankAccounts: data, loading: false });
-        //this.populateTransactionsData();
     }
 }
