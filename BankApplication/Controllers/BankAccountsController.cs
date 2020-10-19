@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BankApplication.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     [ApiController]
     public class BankAccountsController : ControllerBase
@@ -27,7 +27,14 @@ namespace BankApplication.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BankAccount>>> GetBankAccounts()
         {
-            return await _context.BankAccounts.ToListAsync();
+            if (User.IsInRole("Admin") || User.IsInRole("Worker"))
+            {
+                return await _context.BankAccounts.Include("BankAccountType").Include("Currency").ToListAsync();
+            }
+            else
+            {
+                return await _context.BankAccounts.Include("BankAccountType").Include("Currency").ToListAsync();
+            }
         }
 
         // GET: api/BankAccounts/5

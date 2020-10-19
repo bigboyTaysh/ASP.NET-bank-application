@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-export class TableRow extends Component {
-    static displayName = TableRow.name;
+export class TransactionRow extends Component {
+    static displayName = TransactionRow.name;
 
     constructor(props) {
         super(props);

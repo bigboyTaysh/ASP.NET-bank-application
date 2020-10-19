@@ -12,3 +12,500 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+html {
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    min-height: 101vh;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    position: relative;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+body > div.container.body-content > h2 {
+    padding-top: 20px;
+}
+
+a:link {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+a:visited {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.center-form {
+    margin-left: 20%;
+}
+
+.btn-transfer {
+    margin-right: 20%;
+}
+
+.btn-back{
+    margin-left: -30%;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.noselect *:not(.bankAccountSelect) {
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.col-md-6, .col-sm-6 {
+    position: unset !important;
+}
+
+.bank-account-div {
+    background-color: #d3d3d3;
+    border-radius: 5px;
+    border: 1px solid #808080;
+    box-shadow: none;
+    margin: 0 auto;
+    max-width: 540px;
+    min-width: 340px;
+    cursor: pointer;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+    .bank-account-div .details-type {
+        margin: 0px 0 0 10px;
+        float: left;
+    }
+
+    .bank-account-div .details {
+        display: none;
+    }
+
+    .bank-account-div .details-menas {
+        margin: 0px 20px 0px 0px;
+        overflow: hidden;
+    }
+
+    .bank-account-div .buttons {
+        display: none;
+    }
+
+    .bank-account-div.active {
+        background-color: white;
+        border: 1px solid #808080;
+        box-shadow: 0 0 2px 3px rgba(80, 80, 80, 0.5);
+        max-width: 550px;
+        min-width: 350px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .bank-account-div.active .details-type {
+        margin: 5px 0 0 10px;
+        display: block;
+    }
+
+    .bank-account-div.active .details {
+        display: block;
+        margin-right: 30px;
+        margin-top: 60px;
+    }
+
+    .bank-account-div.active .details-menas {
+        margin-top: 60px;
+        margin-right: 30px
+    }
+
+    .bank-account-div.active .buttons {
+        display: block;
+        margin: 10px;
+        margin-right: 20px
+    }
+
+        .bank-account-div.active .buttons > a {
+            min-width: 100px;
+            margin-right: 10px
+        }
+
+        .bank-account-div.active.history {
+            min-width: 340px;
+            max-width: 700px;
+        }
+
+            .bank-account-div.active.history .details {
+                margin-top: 5px;
+            }
+
+            .bank-account-div.active.history .details-menas {
+                margin-top: 5px;
+            }
+
+            .bank-account-div.active.history .buttons {
+                display: table;
+                margin: 0 auto;
+                margin-top: 30px;
+                margin-bottom: 5px;
+            }
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.currency-box {
+    height: 150px;
+    width: 100%;
+    border: 1px solid rgba(80, 80, 80, 0.5);
+    box-shadow: 0 0 2px 2px rgba(80, 80, 80, 0.5);
+    border-radius: 5px;
+    margin: 10px auto;
+}
+
+.currency-code-box {
+    text-align: center;
+    vertical-align: central;
+    font-size: 30px;
+    height: 45px;
+    width: 75px;
+    margin: 10px 10px 10px 10px;
+    border: 1px solid rgba(80, 80, 80, 0.5);
+    box-shadow: 0 0 2px 2px rgba(80, 80, 80, 0.5);
+    border-radius: 5px;
+    float: left;
+}
+
+.currency-name-box {
+    margin: 20px 10px 10px 10px;
+    float:left;
+}
+
+.currency-date-box {
+    margin: 20px 10px 10px 10px;
+    clear: both;
+}
+
+.currency-value-box {
+    width: 60%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.currency-ask-box {
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+    .currency-ask-box:after {
+        content: "";
+        background-color: rgba(80, 80, 80, 0.5);
+        position: absolute;
+        width: 1px;
+        height: 40px;
+        top: 0px;
+        left: 51%;
+        display: block;
+    }
+
+.currency-bid-box {
+    width: 50%;
+    float: right;
+    text-align: center;
+}
+
+.currency-content-box {
+    padding-top: 50px;
+}
+
+.currency-exchange-content {
+    height: 260px;
+    min-width: 350px;
+    max-width: 500px;
+    border: 1px solid rgba(80, 80, 80, 0.5);
+    box-shadow: 0 0 2px 2px rgba(80, 80, 80, 0.5);
+    border-radius: 5px;
+    margin: 10px auto;
+    overflow: hidden;
+}
+
+    .currency-exchange-content .type {
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 10px;
+        font-size: 25px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+        .currency-exchange-content .type .bid {
+            width: 50%;
+            float: left;
+            text-align: center;
+            height: 40px;
+            color: #337ab7;
+            background-color: #dbdbdb;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .currency-exchange-content .type .ask {
+            width: 50%;
+            float: right;
+            text-align: center;
+            height: 40px;
+            color: #337ab7;
+            background-color: #dbdbdb;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .currency-exchange-content .type .active {
+            color: white;
+            background-color: #337ab7;
+        }
+
+
+    .currency-exchange-content .currency-content {
+        width: 60%;
+        margin: 0 auto;
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .currency-exchange-content .currency-content .za-content {
+            width: 18px;
+            display: flex;
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+            .currency-exchange-content .currency-content .za-content .za {
+                text-align: center;
+            }
+
+        .currency-exchange-content .currency-content .currency-from {
+            width: 90px;
+        }
+
+        .currency-exchange-content .currency-content .currency-to {
+            width: 90px;
+        }
+
+
+        .currency-exchange-content .currency-content .currency-left {
+            float: left;
+        }
+
+        .currency-exchange-content .currency-content .currency-right {
+            float: right;
+        }
+
+    .currency-exchange-content .select-content {
+        width: 60%;
+        min-width: 230px;
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+
+    .currency-exchange-content .bank-account-from {
+        width: 120px;
+    }
+
+    .currency-exchange-content .bank-account-to {
+        width: 120px;
+    }
+
+    .currency-exchange-content .bank-account-left {
+        float: left;
+    }
+
+    .currency-exchange-content .bank-account-right {
+        float: right;
+    }
+
+    .currency-exchange-content .value-content {
+        width: 100%;
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+
+    .currency-exchange-content .value-content input{
+        width: 120px;
+    }
+
+    .currency-exchange-content .value-left {
+        float: left;
+    }
+
+    .currency-exchange-content .value-right {
+        float: right;
+    }
+
+    .currency-exchange-content .submit-content {
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+
+        .currency-exchange-content .submit-content .submit {
+            width: 20%;
+            margin: 0 auto;
+            margin-top: 10px;
+            float: none;
+        }
+
+.span.clear {
+    clear: left;
+    display: block;
+}
+
+.img-flag {
+    max-height: 20px;
+    max-width: 20px
+}
+
+.exchange-error {
+    border: 1px solid red;
+    border-radius: 5px;
+}
+
+.value-error {
+    border: 1px solid red;
+    border-radius: 5px;
+}
+
+.toast {
+    z-index: 1;
+    background: #F2F2F2;
+    background-color: #F2F2F2;
+    padding: 1%;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    border-radius: 5px;
+    display: none;
+    font-size: 130%;
+    margin-bottom: 5px;
+}
+
+
+.toast-container {
+    z-index: 1;
+    position: fixed;
+    min-width: 20%;
+    max-width: 40%;
+    max-width: 40%;
+    text-align: center;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.form-deposit-withdrawal {
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+    min-width: 236px;
+}
+
+    .form-deposit-withdrawal .form-control {
+        width: 30%;
+        margin: 0 auto;
+        display: unset;
+        min-width: 115px;
+    }
+
+    .form-deposit-withdrawal .submit {
+        margin-top: 10px;
+    }
+
+.value-deposit-withdrawal {
+    text-align: center;
+}
+
+.gray-text {
+    margin: 0;
+    margin-top: 3px;
+    color: #000;
+    font-size: 13px;
+    line-height: 16px;
+    color: #636363;
+}
+
+.search-transactions-group {
+    width: 40%;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .navbar-collapse.collapse {
+        display: none !important;
+    }
+
+        .navbar-collapse.collapse.in {
+            display: block !important;
+            overflow: unset;
+        }
+
+        .navbar-collapse.collapsing {
+            overflow: hidden;
+        }
+
+    .navbar-header .collapse, .navbar-toggle {
+        display: block !important;
+    }
+
+    .navbar-header {
+        float: none;
+    }
+}
+
+@media (max-width: 768px){
+    .currency-box {
+        min-width: 250px;
+        width: 70%;
+    }
+}
