@@ -24,9 +24,10 @@ export class Home extends Component {
         this.populateBankAccountsData();
     }
 
-    onChangeActiveBankAccount(index){
+    onChangeActiveBankAccount(index, transactions){
         this.setState({
-            index: index
+            index: index,
+            transactions: transactions
         })
     }
 
@@ -47,7 +48,15 @@ export class Home extends Component {
     }
 
     render() {
-        let bankAccounts = this.state.bankAccounts;
+        let bankAccounts = this.state.bankAccounts.map((bankAccount, index) =>
+            <BankAccountContainer 
+                key={bankAccount.id} 
+                bankAccount={bankAccount} 
+                clicked={index === this.state.index }
+                index={index} 
+                onClick={this.onChangeActiveBankAccount} 
+            />
+        )
 
         let rows = (this.state.transactions.length)
             ? this.renderTransactionsTable(this.state.transactions)
@@ -65,15 +74,7 @@ export class Home extends Component {
             
             <div >
                 <div className="jumbotron">
-                {bankAccounts.map((bankAccount, index) =>
-                    <BankAccountContainer 
-                        key={bankAccount.id} 
-                        bankAccount={bankAccount} 
-                        clicked={index === this.state.index }
-                        index={index} 
-                        onClick={this.onChangeActiveBankAccount} 
-                    />
-                )}
+                    {bankAccountsContents}
                 </div>
                 <table className="table">
                     <thead>
@@ -95,15 +96,6 @@ export class Home extends Component {
                 </table>
             </div>
         );
-    }
-
-    async populateTransactionsData() {
-        const token = await authService.getAccessToken();
-        const response = await fetch('transactions', {
-            headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await response.json();
-        this.setState({ transactions: data, loading: false });
     }
 
     async populateBankAccountsData() {

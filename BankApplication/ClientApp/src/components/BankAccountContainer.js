@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import authService from './api-authorization/AuthorizeService'
 
 export class BankAccountContainer extends Component {
     static displayName = BankAccountContainer.name;
@@ -6,14 +7,22 @@ export class BankAccountContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            index: props.index
+            index: props.index,
+            transactions: []
         }
+
+        //this.populateBankAccountsData = this.populateBankAccountsData.bind(this);
         this.changeActiveState = this.changeActiveState.bind(this);
+    }
+
+    componentDidMount() {
+        this.populateTransactionsData();
     }
 
     changeActiveState(){
         if(!this.props.clicked){
-            this.props.onClick(this.state.index);
+            this.populateTransactionsData();
+            this.props.onClick(this.state.index, this.state.transactions);
         }
     };
 
@@ -89,5 +98,14 @@ export class BankAccountContainer extends Component {
                 {content}
             </div>
         )
+    }
+
+    async populateTransactionsData() {
+        const token = await authService.getAccessToken();
+        const response = await fetch('transactions', {
+            headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        this.setState({ transactions: data, loading: false });
     }
 }
