@@ -21,12 +21,13 @@
             }
             else
             {
-                <table>
-                    <tr>
-                        <td>
-                            @if (item.TransactionType.Type == "TRANSFER")
-                            {
-                                if (item.ToBankAccountNumber == ViewBag.BankAccountNumber)
+                <table class="table-inside">
+                    @if (item.TransactionType.Type == "TRANSFER")
+                    {
+                        <tr>
+                            <td>
+
+                                @if (item.ToBankAccountNumber == ViewBag.BankAccountNumber)
                                 {
                                     <span>
                                         @Html.DisplayFor(modelItem => item.SenderName)
@@ -38,14 +39,22 @@
                                         @Html.DisplayFor(modelItem => item.ReceiverName)
                                     </span>
                                 }
-                            }
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="gray-text">
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                        </tr> 
+                    }
                 </table>
             }
         </td>
@@ -123,7 +132,7 @@
     <tr style="display: none" class="openable-tr">
         <td colspan="5">
             <div class="row">
-                <div class="col-xs-6">
+                <div class="col-md-6">
                     @if (item.TransactionType.Type == "TRANSFER")
                     {
                         if (item.ToBankAccountNumber == ViewBag.BankAccountNumber)
@@ -315,7 +324,7 @@
                         </span>
                     }
                 </div>
-                <div class="col-xs-6">
+                <div class="col-md-6">
                     <span class="gray-text">
                         Data transakcji
                     </span>

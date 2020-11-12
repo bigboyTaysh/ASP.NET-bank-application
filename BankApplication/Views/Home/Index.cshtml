@@ -5,7 +5,7 @@
 }
 
 <div class="jumbotron">
-    <div class="bank-account-div active shadow p-3 mb-5 bg-white rounded">
+    <div class="bank-account-div active shadow bg-white rounded">
         <div class="details-type">
             <div>
                 @if (@Model[0].BankAccountType.Type == "PAY_ACC_FOR_YOUNG")
@@ -23,8 +23,8 @@
             </div>
             <div class="bankAccountSelect gray-text">@Model[0].BankAccountNumber</div>
         </div>
-        <div class="pull-right noselect">
-            <div class="pull-right text-align-right details-menas">
+        <div class="float-right noselect">
+            <div class="float-right text-align-right details-menas">
                 <span>Dostępne środki</span>
                 <br />
                 <span>
@@ -33,8 +33,8 @@
                     </b>
                 </span>
             </div>
-            <div class="pull-right noselect">
-                <div class="pull-right text-align-right details">
+            <div class="float-right noselect">
+                <div class="float-right text-align-right details">
                     <span class="gray-text">
                         @decimal.Round(Model[0].Balance, 2)
                         @Model[0].Currency.Code
@@ -45,7 +45,7 @@
                         @Model[0].Currency.Code
                     </span>
                 </div>
-                <div class="pull-right text-align-left details">
+                <div class="float-right text-align-left details">
                     <span class="gray-text">
                         Sadlo
                     </span>
@@ -60,9 +60,9 @@
             <br />
             <br />
         </div>
-        <div class="pull-right buttons noselect">
-            @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model[0].BankAccountTypeID }, new { @class = "btn btn-default" })
-            @Html.ActionLink("Historia", "Index", "Transactions", new { bankAccountNumber = Model[0].BankAccountNumber }, new { @class = "btn btn-default" })
+        <div class="float-right buttons noselect">
+            @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model[0].BankAccountTypeID }, new { @class = "btn btn-outline-dark" })
+            @Html.ActionLink("Historia", "Index", "Transactions", new { bankAccountNumber = Model[0].BankAccountNumber }, new { @class = "btn btn-outline-dark" })
             @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
         </div>
     </div>
@@ -86,8 +86,8 @@
                 </div>
                 <div class="bankAccountSelect gray-text">@item.BankAccountNumber</div>
             </div>
-            <div class="pull-right noselect">
-                <div class="pull-right text-align-right details-menas">
+            <div class="float-right noselect">
+                <div class="float-right text-align-right details-menas">
                     <span>Dostępne środki</span>
                     <br />
                     <span>
@@ -96,8 +96,8 @@
                         </b>
                     </span>
                 </div>
-                <div class="pull-right noselect">
-                    <div class="pull-right text-align-right details">
+                <div class="float-right noselect">
+                    <div class="float-right text-align-right details">
                         <span class="gray-text">
                             @decimal.Round(item.Balance, 2)
                             @item.Currency.Code
@@ -108,7 +108,7 @@
                             @item.Currency.Code
                         </span>
                     </div>
-                    <div class="pull-right text-align-left details">
+                    <div class="float-right text-align-left details">
                         <span class="gray-text">
                             Sadlo
                         </span>
@@ -123,15 +123,17 @@
                 <br />
                 <br />
             </div>
-            <div class="pull-right buttons noselect">
-                @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Historia", "Index", "Transactions", new { bankAccountNumber = item.BankAccountNumber }, new { @class = "btn btn-default" })
+            <div class="float-right buttons noselect">
+                @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-outline-dark" })
+                @Html.ActionLink("Historia", "Index", "Transactions", new { bankAccountNumber = item.BankAccountNumber }, new { @class = "btn btn-outline-dark" })
                 @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
             </div>
         </div>
     }
 </div>
-@Html.ActionLink("Dodaj konto", "Create", "BankAccounts", null, new { @class = "btn btn-primary pull-right" })
+
+@Html.ActionLink("Dodaj konto", "Create", "BankAccounts", null, new { @class = "btn btn-primary float-right", style="margin-bottom:10px;" })
+
 <table class="table">
     <thead>
         <tr>
