@@ -5,7 +5,6 @@
 body {
     width: 100%;
     min-height: 101vh;
-    padding-top: 30px;
     padding-bottom: 20px;
     position: relative;
 }
@@ -33,6 +32,24 @@ textarea {
 body > div.container.body-content > h2 {
     padding-top: 20px;
 }
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgba(0, 0, 0, 1);
+}
+
+.nav-item {
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+} 
+
+.nav-item:hover {
+    border-bottom: 1px solid black;
+}
+
+.dropdown-item:hover {
+    background-color: #ebebeb;
+}
+
 
 a:link {
     text-decoration: inherit;
@@ -93,9 +110,6 @@ a:visited {
     max-width: 540px;
     min-width: 340px;
     cursor: pointer;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
 
