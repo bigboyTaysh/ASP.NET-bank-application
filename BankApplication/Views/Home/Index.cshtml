@@ -5,7 +5,7 @@
 }
 
 <div class="jumbotron">
-    <div class="bank-account-div active shadow bg-white rounded">
+    <div class="bank-account-div active">
         <div class="details-type">
             <div>
                 @if (@Model[0].BankAccountType.Type == "PAY_ACC_FOR_YOUNG")
@@ -40,7 +40,7 @@
                         @Model[0].Currency.Code
                     </span>
                     <br />
-                    <span class=" gray-text">
+                    <span class="gray-text">
                         @decimal.Round(Model[0].Lock, 2)
                         @Model[0].Currency.Code
                     </span>
@@ -55,10 +55,6 @@
                     </span>
                 </div>
             </div>
-        </div>
-        <div class="noselect">
-            <br />
-            <br />
         </div>
         <div class="float-right buttons noselect">
             @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model[0].BankAccountTypeID }, new { @class = "btn btn-outline-dark" })
@@ -96,7 +92,7 @@
                         </b>
                     </span>
                 </div>
-                <div class="float-right noselect">
+                <div class="float-right noselect ">
                     <div class="float-right text-align-right details">
                         <span class="gray-text">
                             @decimal.Round(item.Balance, 2)
@@ -118,10 +114,6 @@
                         </span>
                     </div>
                 </div>
-            </div>
-            <div class="noselect">
-                <br />
-                <br />
             </div>
             <div class="float-right buttons noselect">
                 @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-outline-dark" })
