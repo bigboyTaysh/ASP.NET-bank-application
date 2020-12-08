@@ -9,7 +9,7 @@
 @if (User.IsInRole("User"))
 {
     <p>
-        @Html.ActionLink("Złóż wniosek", "Create", null, new { @class= "btn btn-default pull-right" })
+        @Html.ActionLink("Złóż wniosek", "Create", null, new { @class= "btn btn-primary float-right", style = "margin-bottom: 10px" })
     </p>
 }
 

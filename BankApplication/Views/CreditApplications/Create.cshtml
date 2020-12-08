@@ -74,6 +74,7 @@
                         <span>
                             Prowizja @decimal.Round(item.Commission, 2)%
                         </span>
+                        [br]
                         <span>
                             Oprocentowanie @decimal.Round(item.Rates, 2)%
                         </span>
@@ -112,7 +113,7 @@
     $(document).ready(function () {
         $('select[name=TypeID]').select2({
             templateResult: function (item, container) {
-                return $('<span>' + item.text.replace('[br]', '<br />') + '</span>');
+                return $('<span>' + item.text.replaceAll('[br]', '<br />') + '</span>');
             },
             templateSelection: function (item, container) {
                 return item.text.replace('[br]', '');
