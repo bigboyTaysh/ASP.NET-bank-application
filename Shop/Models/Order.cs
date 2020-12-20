@@ -10,15 +10,7 @@ namespace Shop.Models
         public int ID { get; set; }
         public int Price { get; set; }
         public DateTime Date { get; set; }
-        public virtual EnumStatus Status { get; set; }
-        public virtual List<Item> Items { get; set; }
-    }
-
-    public class EnumStatus
-    {
-        public const string
-            Confirmed = "Zamówienie potwierdzone",
-            Sent = "Zamówienie wysłane",
-            Canceled = "Zamówienie anulowane";
+        public virtual OrderStatus Status { get; set; }
+        public virtual List<BasketItem> Items { get; set; }
     }
 }

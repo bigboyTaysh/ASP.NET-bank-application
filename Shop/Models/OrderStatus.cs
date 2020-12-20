@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Shop.Models
 {
-    public class Basket
+    public class OrderStatus
     {
         public int ID { get; set; }
-        public virtual List<Product> Items { get; set; }
+        public string Status { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Models
 {
-    public class Item
+    public class Product
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -15,6 +15,5 @@ namespace Shop.Models
         public decimal SalePrice { get; set; }
         public int Quantity { get; set; }
         public virtual Category Category { get; set; }
-        public virtual List<Order> Orders { get; set; }
     }
 }
