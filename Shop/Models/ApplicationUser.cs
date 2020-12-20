@@ -8,5 +8,7 @@ namespace Shop.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public Basket Basket { get; set; }
+        public virtual List<Order> Orders { get; set; }
     }
 }
