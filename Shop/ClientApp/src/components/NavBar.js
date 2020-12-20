@@ -15,6 +15,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import BasketIcon from '@material-ui/icons/ShoppingBasket';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { LoginMenu } from './api-authorization/LoginMenu';
+import { NavLink } from 'react-router-dom';
+import { Link } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -41,6 +43,17 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
     },
+    link: {
+        marginLeft: theme.spacing(10),
+        color: "#f8f9fa",
+        '&:hover': {
+            color: "#f8f9fa",
+            textDecoration: "none",
+        },
+    },
+    rightMenu: {
+        marginRight: theme.spacing(10)
+    }
 }));
 
 export default function NavBar() {
@@ -103,8 +116,11 @@ export default function NavBar() {
             <AppBar position="static">
                 <Toolbar>
                     <Typography className={classes.title} variant="h3" noWrap>
-                        Giga sklep
+                        <NavLink to="/" className={classes.link}>
+                            Giga sklep
+                        </NavLink>
                     </Typography>
+                    
                     <div className={classes.grow} />
                     <IconButton aria-label="show new items in basket" color="inherit">
                             <Badge badgeContent={itemsInBasket} color="secondary">
@@ -119,6 +135,7 @@ export default function NavBar() {
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
                             color="inherit"
+                            className={classes.rightMenu}
                         >
                             <AccountCircle />
                         </IconButton>
