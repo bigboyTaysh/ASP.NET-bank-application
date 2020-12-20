@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
             display: 'block',
         },
     },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
     sectionDesktop: {
         display: 'none',
         [theme.breakpoints.up('md')]: {
@@ -76,9 +79,7 @@ export default function NavBar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>
-                <LoginMenu/>
-            </MenuItem>
+            <LoginMenu onClick={handleMenuClose}/>
         </Menu>
     );
 
@@ -93,9 +94,7 @@ export default function NavBar() {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>
-                <LoginMenu/>
-            </MenuItem>
+            <LoginMenu onClick={handleMenuClose}/>
         </Menu>
     );
 

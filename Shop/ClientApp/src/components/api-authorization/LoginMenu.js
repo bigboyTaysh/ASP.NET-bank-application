@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { NavItem, NavLink } from 'reactstrap';
-import Link from '../Link'
+import { Link } from 'react-router-dom';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
+import { MenuItem } from '@material-ui/core';
 
 export class LoginMenu extends Component {
     constructor(props) {
@@ -46,16 +47,24 @@ export class LoginMenu extends Component {
 
     authenticatedView(userName, profilePath, logoutPath) {
         return (<Fragment>
-            <Link name={"Hello " + userName} link={profilePath}/>
-            <Link name={"Wyloguj się"} link={logoutPath}/>
+            <MenuItem>
+                <NavLink tag={Link} className="text-dark" to={profilePath} onClick={this.props.onClick}>Hello {userName}</NavLink>
+            </MenuItem>
+            <MenuItem>
+                <NavLink tag={Link} className="text-dark" to={logoutPath} onClick={this.props.onClick}>Logout</NavLink>
+            </MenuItem>
         </Fragment>);
 
     }
 
     anonymousView(registerPath, loginPath) {
         return (<Fragment>
-            <Link name={"Zaloguj się"} link={loginPath}/>
-            <Link name={"Zarejestruj się"} link={registerPath}/>
+            <MenuItem>
+                <NavLink tag={Link} className="text-dark" to={loginPath} onClick={this.props.onClick}>Zaloguj się</NavLink>
+            </MenuItem>
+            <MenuItem>
+                <NavLink tag={Link} className="text-dark" to={registerPath} onClick={this.props.onClick}>Zarejestruj się</NavLink>
+            </MenuItem>
         </Fragment>);
     }
 }
