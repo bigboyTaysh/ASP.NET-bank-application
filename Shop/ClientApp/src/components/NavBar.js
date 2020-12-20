@@ -20,9 +20,6 @@ const useStyles = makeStyles((theme) => ({
     grow: {
         flexGrow: 1,
     },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
     title: {
         display: 'none',
         [theme.breakpoints.up('sm')]: {
@@ -45,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar() {
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl, itemsInBasket] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
     const isMenuOpen = Boolean(anchorEl);
@@ -68,8 +65,6 @@ export default function NavBar() {
         setMobileMoreAnchorEl(event.currentTarget);
     };
 
-    const itemsInBasket = 0;
-
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
         <Menu
@@ -81,8 +76,9 @@ export default function NavBar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <LoginMenu></LoginMenu>
-            <LoginMenu onClick={handleMenuClose}></LoginMenu>
+            <MenuItem onClick={handleMenuClose}>
+                <LoginMenu/>
+            </MenuItem>
         </Menu>
     );
 
@@ -97,15 +93,9 @@ export default function NavBar() {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem>
-                <IconButton aria-label="show new items in basket" color="inherit">
-                    <Badge badgeContent={itemsInBasket} color="secondary">
-                        <BasketIcon />
-                    </Badge>
-                </IconButton>
-                <p>Koszyk</p>
+            <MenuItem onClick={handleMenuClose}>
+                <LoginMenu/>
             </MenuItem>
-            <LoginMenu onClick={handleMenuClose}></LoginMenu>
         </Menu>
     );
 
@@ -113,25 +103,26 @@ export default function NavBar() {
         <div className={classes.grow}>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="open drawer"
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography className={classes.title} variant="h6" noWrap>
+                    <Typography className={classes.title} variant="h3" noWrap>
                         Giga sklep
                     </Typography>
                     <div className={classes.grow} />
-                    <div className={classes.sectionDesktop}>
-                        <IconButton aria-label="show new items in basket" color="inherit">
+                    <IconButton aria-label="show new items in basket" color="inherit">
                             <Badge badgeContent={itemsInBasket} color="secondary">
                                 <BasketIcon />
                             </Badge>
                         </IconButton>
-                        <LoginMenu onClick={handleMenuClose}></LoginMenu>
+                    <div className={classes.sectionDesktop}>
+                        <IconButton
+                            edge="end"
+                            aria-label="account of current user"
+                            aria-controls={menuId}
+                            aria-haspopup="true"
+                            onClick={handleProfileMenuOpen}
+                            color="inherit"
+                        >
+                            <AccountCircle />
+                        </IconButton>
                     </div>
                     <div className={classes.sectionMobile}>
                         <IconButton
