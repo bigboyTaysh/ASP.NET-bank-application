@@ -15,5 +15,6 @@ namespace Shop.Models
         public decimal SalePrice { get; set; }
         public int Quantity { get; set; }
         public virtual Category Category { get; set; }
+        public List<Picture> Pictures { get; set; }
     }
 }
