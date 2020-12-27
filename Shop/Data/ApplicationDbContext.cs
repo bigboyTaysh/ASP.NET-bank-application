@@ -17,21 +17,29 @@ namespace Shop.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
-        public DbSet<Basket> Basket { get; set; }
-        public DbSet<Category> Category { get; set; }
-        public DbSet<Product> Item { get; set; }
-        public DbSet<Order> Order { get; set; }
+
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
+        public DbSet<Picture> Pictures { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             foreach (var property in modelBuilder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetProperties())
                 .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
             {
                 property.SetColumnType("decimal(18, 4)");
             }
+
+            modelBuilder.Entity<ProductCategory>()
+                .HasKey(pc => new { pc.ProductID, pc.CategoryID});
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

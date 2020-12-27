@@ -10,11 +10,10 @@ namespace Shop.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Details { get; set; }
         public decimal Price { get; set; }
         public decimal SalePrice { get; set; }
-        public int Quantity { get; set; }
-        public virtual Category Category { get; set; }
+        public bool Available { get; set; }
+        public List<ProductCategory> ProductCategories { get; set; }
         public List<Picture> Pictures { get; set; }
     }
 }

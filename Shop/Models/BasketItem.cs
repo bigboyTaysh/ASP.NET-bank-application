@@ -8,7 +8,7 @@ namespace Shop.Models
     public class BasketItem
     {
         public int ID { get; set; }
-        public virtual Product Product { get; set; }
+        public Product Product { get; set; }
         public Basket Basket { get; set; }
     }
 }

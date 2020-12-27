@@ -8,6 +8,6 @@ namespace Shop.Models
     public class Basket
     {
         public int ID { get; set; }
-        public virtual List<Product> Items { get; set; }
+        public List<BasketItem> Items { get; set; }
     }
 }

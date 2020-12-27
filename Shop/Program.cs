@@ -14,7 +14,7 @@ namespace Shop
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 
@@ -25,7 +25,7 @@ namespace Shop
                 try
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
-                    await ShopInicialzier.SeedAsync();
+                    ShopInicialzier.SeedAsync(context);
                 }
                 catch (Exception ex)
                 {

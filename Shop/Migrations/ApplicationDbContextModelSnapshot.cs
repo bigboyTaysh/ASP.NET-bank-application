@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop.Data;
 
-namespace Shop.Data.Migrations
+namespace Shop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -315,7 +315,7 @@ namespace Shop.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Basket");
+                    b.ToTable("Baskets");
                 });
 
             modelBuilder.Entity("Shop.Models.BasketItem", b =>
@@ -342,7 +342,7 @@ namespace Shop.Data.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("BasketItem");
+                    b.ToTable("BasketItems");
                 });
 
             modelBuilder.Entity("Shop.Models.Category", b =>
@@ -357,7 +357,7 @@ namespace Shop.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Shop.Models.Order", b =>
@@ -385,7 +385,7 @@ namespace Shop.Data.Migrations
 
                     b.HasIndex("StatusID");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Shop.Models.OrderStatus", b =>
@@ -400,7 +400,7 @@ namespace Shop.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("OrderStatus");
+                    b.ToTable("OrderStatuses");
                 });
 
             modelBuilder.Entity("Shop.Models.Picture", b =>
@@ -420,7 +420,7 @@ namespace Shop.Data.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("Picture");
+                    b.ToTable("Pictures");
                 });
 
             modelBuilder.Entity("Shop.Models.Product", b =>
@@ -430,16 +430,10 @@ namespace Shop.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BasketID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CategoryID")
-                        .HasColumnType("int");
+                    b.Property<bool>("Available")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -448,19 +442,27 @@ namespace Shop.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 4)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("SalePrice")
                         .HasColumnType("decimal(18, 4)");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("BasketID");
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Shop.Models.ProductCategory", b =>
+                {
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductID", "CategoryID");
 
                     b.HasIndex("CategoryID");
 
-                    b.ToTable("Item");
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -524,7 +526,7 @@ namespace Shop.Data.Migrations
             modelBuilder.Entity("Shop.Models.BasketItem", b =>
                 {
                     b.HasOne("Shop.Models.Basket", "Basket")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("BasketID");
 
                     b.HasOne("Shop.Models.Order", null)
@@ -554,15 +556,19 @@ namespace Shop.Data.Migrations
                         .HasForeignKey("ProductID");
                 });
 
-            modelBuilder.Entity("Shop.Models.Product", b =>
+            modelBuilder.Entity("Shop.Models.ProductCategory", b =>
                 {
-                    b.HasOne("Shop.Models.Basket", null)
-                        .WithMany("Items")
-                        .HasForeignKey("BasketID");
-
                     b.HasOne("Shop.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryID");
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shop.Models.Product", "Product")
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
