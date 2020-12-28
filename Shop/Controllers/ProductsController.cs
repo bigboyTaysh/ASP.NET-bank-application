@@ -32,7 +32,7 @@ namespace Shop.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.Include(p => p.ProductCategories).ThenInclude(p => p.Category).SingleOrDefaultAsync(p => p.ID == id);
+            var product = await _context.Products.Include(p => p.ProductCategories).ThenInclude(p => p.Category).Include(p => p.Pictures).SingleOrDefaultAsync(p => p.ID == id);
 
             if (product == null)
             {
