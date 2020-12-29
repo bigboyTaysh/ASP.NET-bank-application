@@ -19,142 +19,145 @@ import { NavLink } from 'react-router-dom';
 import { Link } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-    grow: {
-        flexGrow: 1,
+  grow: {
+    flexGrow: 1,
+  },
+  title: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
     },
-    title: {
-        display: 'none',
-        [theme.breakpoints.up('sm')]: {
-            display: 'block',
-        },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
     },
-    menuButton: {
-        marginRight: theme.spacing(2),
+  },
+  sectionMobile: {
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
     },
-    sectionDesktop: {
-        display: 'none',
-        [theme.breakpoints.up('md')]: {
-            display: 'flex',
-        },
+  },
+  link: {
+    marginLeft: theme.spacing(10),
+    color: "#f8f9fa",
+    '&:hover': {
+      color: "#f8f9fa",
+      textDecoration: "none",
     },
-    sectionMobile: {
-        display: 'flex',
-        [theme.breakpoints.up('md')]: {
-            display: 'none',
-        },
-    },
-    link: {
-        marginLeft: theme.spacing(10),
-        color: "#f8f9fa",
-        '&:hover': {
-            color: "#f8f9fa",
-            textDecoration: "none",
-        },
-    },
-    rightMenu: {
-        marginRight: theme.spacing(10)
-    }
+  },
+  rightMenu: {
+    marginRight: theme.spacing(10)
+  }
 }));
 
 export default function NavBar() {
-    const classes = useStyles();
-    const [anchorEl, setAnchorEl, itemsInBasket] = React.useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl, itemsInBasket] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const handleProfileMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    const handleMobileMenuClose = () => {
-        setMobileMoreAnchorEl(null);
-    };
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
 
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        handleMobileMenuClose();
-    };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
 
-    const handleMobileMenuOpen = (event) => {
-        setMobileMoreAnchorEl(event.currentTarget);
-    };
+  const handleMobileMenuOpen = (event) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
 
-    const menuId = 'primary-search-account-menu';
-    const renderMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <LoginMenu onClick={handleMenuClose}/>
-        </Menu>
-    );
+  const menuId = 'primary-search-account-menu';
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <LoginMenu onClick={handleMenuClose} />
+    </Menu>
+  );
 
-    const mobileMenuId = 'primary-search-account-menu-mobile';
-    const renderMobileMenu = (
-        <Menu
-            anchorEl={mobileMoreAnchorEl}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            id={mobileMenuId}
-            keepMounted
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={isMobileMenuOpen}
-            onClose={handleMobileMenuClose}
-        >
-            <LoginMenu onClick={handleMenuClose}/>
-        </Menu>
-    );
+  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const renderMobileMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      <LoginMenu onClick={handleMenuClose} />
+    </Menu>
+  );
 
-    return (
-        <div className={classes.grow}>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography className={classes.title} variant="h3" noWrap>
-                        <NavLink to="/" className={classes.link}>
-                            Giga sklep
+  return (
+    <div className={classes.grow}>
+      <AppBar
+        position="static"
+        color="secondary"
+      >
+        <Toolbar>
+          <Typography className={classes.title} variant="h3" noWrap>
+            <NavLink to="/" className={classes.link}>
+              Giga sklep
                         </NavLink>
-                    </Typography>
-                    
-                    <div className={classes.grow} />
-                    <IconButton aria-label="show new items in basket" color="inherit">
-                            <Badge badgeContent={itemsInBasket} color="secondary">
-                                <BasketIcon />
-                            </Badge>
-                        </IconButton>
-                    <div className={classes.sectionDesktop}>
-                        <IconButton
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                            className={classes.rightMenu}
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                    </div>
-                    <div className={classes.sectionMobile}>
-                        <IconButton
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit"
-                        >
-                            <MoreIcon />
-                        </IconButton>
-                    </div>
-                </Toolbar>
-            </AppBar>
-            {renderMobileMenu}
-            {renderMenu}
-        </div>
-    );
+          </Typography>
+
+          <div className={classes.grow} />
+          <IconButton aria-label="show new items in basket" color="inherit">
+            <Badge badgeContent={itemsInBasket} color="secondary">
+              <BasketIcon />
+            </Badge>
+          </IconButton>
+          <div className={classes.sectionDesktop}>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+              className={classes.rightMenu}
+            >
+              <AccountCircle />
+            </IconButton>
+          </div>
+          <div className={classes.sectionMobile}>
+            <IconButton
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </div>
+        </Toolbar>
+      </AppBar>
+      {renderMobileMenu}
+      {renderMenu}
+    </div>
+  );
 }

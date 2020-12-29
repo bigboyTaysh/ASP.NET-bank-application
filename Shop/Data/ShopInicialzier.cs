@@ -31,7 +31,7 @@ namespace Shop.Data
                     new Category { Name = "Polecane"},
                     new Category { Name = "Tradycyjne"},
                     new Category { Name = "Z mięsem"},
-                    new Category { Name = "Wegetariańska"},
+                    new Category { Name = "Wegetariańskie"},
                     new Category { Name = "Na ostro"},
                 };
 
