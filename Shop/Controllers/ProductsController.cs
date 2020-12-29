@@ -43,6 +43,25 @@ namespace Shop.Controllers
         }
 
         // GET: api/Products/5
+        [HttpGet("category/{id}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategoryId(int id)
+        {
+            var product = await _context.Products
+                .Where(p => p.ProductCategories.Any(p => p.CategoryID == id))
+                .Include(p => p.ProductCategories)
+                .ThenInclude(p => p.Category)
+                .Include(p => p.Pictures)
+                .ToListAsync();
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return product;
+        }
+
+        // GET: api/Products/5
         [HttpGet("{id}/categories")]
         public async Task<ActionResult<IEnumerable<Category>>> GetProductCategories(int id)
         {

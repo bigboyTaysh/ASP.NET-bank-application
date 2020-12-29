@@ -14,6 +14,10 @@ export class Home extends Component {
     this.populateCategories();
   }
 
+  handleClick = (value) => {
+
+  }
+
   async populateCategories () {
     const token = await authService.getAccessToken();
     const response = await fetch('api/categories', {
@@ -25,7 +29,7 @@ export class Home extends Component {
 
   render () {
     return (
-      <Categories categoriesList={this.state.categories}/>
+      <Categories categoriesList={this.state.categories} handleClick={this.handleClick}/>
     );
   }
 }

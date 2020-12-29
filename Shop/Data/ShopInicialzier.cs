@@ -28,11 +28,11 @@ namespace Shop.Data
 
                 var categories = new List<Category>
                 {
-                    new Category { Name = "Polecane"},
-                    new Category { Name = "Tradycyjne"},
-                    new Category { Name = "Z mięsem"},
-                    new Category { Name = "Wegetariańskie"},
                     new Category { Name = "Na ostro"},
+                    new Category { Name = "Wegetariańskie"},
+                    new Category { Name = "Z mięsem"},
+                    new Category { Name = "Tradycyjne"},
+                    new Category { Name = "Polecane"},
                 };
 
                 categories.ForEach(p => context.Categories.Add(p));
@@ -109,9 +109,11 @@ namespace Shop.Data
                     new ProductCategory { Product = products[2], Category = categories[0] },
                     new ProductCategory { Product = products[2], Category = categories[2] },
                     new ProductCategory { Product = products[2], Category = categories[3] },
+                    new ProductCategory { Product = products[2], Category = categories[4] },
                     new ProductCategory { Product = products[3], Category = categories[0] },
                     new ProductCategory { Product = products[3], Category = categories[2] },
                     new ProductCategory { Product = products[3], Category = categories[3] },
+                    new ProductCategory { Product = products[3], Category = categories[4] },
                     new ProductCategory { Product = products[4], Category = categories[0] },
                     new ProductCategory { Product = products[4], Category = categories[2] },
                     new ProductCategory { Product = products[5], Category = categories[2] },

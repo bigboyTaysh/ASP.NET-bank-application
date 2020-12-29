@@ -22,11 +22,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Categories({ categoriesList }) {
+export default function Categories(props) {
   const classes = useStyles();
 
-  const handleClick = () => {
-    console.log("click")
+  const handleClick = (id) => {
+    props.handleClick(id);
   };
 
   return (
@@ -34,13 +34,13 @@ export default function Categories({ categoriesList }) {
       component="ul"
       className={classes.root}
       >
-      {categoriesList.map((data) => {
+      {props.categoriesList.map((data) => {
         return (
           <li key={data.id}>
             <Chip
               label={data.name}
               //onDelete={data.label === 'React' ? undefined : handleDelete(data)}
-              onClick={handleClick}
+              onClick={() => handleClick(data.id)}
               className={classes.chip}
             />
           </li>
