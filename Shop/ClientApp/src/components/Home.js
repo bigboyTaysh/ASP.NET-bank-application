@@ -7,15 +7,21 @@ export class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { categories: [], loading: true };
+    this.state = { 
+      categories: [],
+      products: [],
+      categoriesLoading: true,
+      productsLoading: true
+    };
   }
 
   componentDidMount () {
     this.populateCategories();
+    this.populateProducts(0);
   }
 
   handleClick = (value) => {
-
+    this.populateProducts(value);
   }
 
   async populateCategories () {
@@ -24,7 +30,24 @@ export class Home extends Component {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
     });
     const data = await response.json();
-    this.setState({ categories: data, loading: false });
+    this.setState({ categories: data, categoriesLoading: false });
+  }
+
+  async populateProducts (id) {
+    const token = await authService.getAccessToken();
+    let reqUrl = '';
+    if(id === 0){
+      reqUrl = 'api/products';
+    } else {
+      reqUrl = 'api/products/category/' + id;
+    }
+
+    const response = await fetch(reqUrl, {
+      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+    });
+
+    const data = await response.json();
+    this.setState({ products: data, productsLoading: false });
   }
 
   render () {

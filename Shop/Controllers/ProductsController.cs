@@ -42,7 +42,7 @@ namespace Shop.Controllers
             return product;
         }
 
-        // GET: api/Products/5
+        // GET: api/products/category/5
         [HttpGet("category/{id}")]
         public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategoryId(int id)
         {

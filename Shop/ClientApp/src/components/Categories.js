@@ -30,10 +30,16 @@ export default function Categories(props) {
   };
 
   return (
-    <Paper 
+    <Paper
       component="ul"
       className={classes.root}
-      >
+    >
+      <Chip
+        label={"Wszystkie"}
+        //onDelete={data.label === 'React' ? undefined : handleDelete(data)}
+        onClick={() => handleClick(0)}
+        className={classes.chip}
+      />
       {props.categoriesList.map((data) => {
         return (
           <li key={data.id}>
