@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import authService from './api-authorization/AuthorizeService';
 import Categories from './Categories';
+import Cards from './Card';
+import Grid from '@material-ui/core/Grid';
 
 export class Home extends Component {
   static displayName = Home.name;
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       categories: [],
       products: [],
       categoriesLoading: true,
@@ -15,7 +17,7 @@ export class Home extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.populateCategories();
     this.populateProducts(0);
   }
@@ -24,7 +26,7 @@ export class Home extends Component {
     this.populateProducts(value);
   }
 
-  async populateCategories () {
+  async populateCategories() {
     const token = await authService.getAccessToken();
     const response = await fetch('api/categories', {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
@@ -33,10 +35,11 @@ export class Home extends Component {
     this.setState({ categories: data, categoriesLoading: false });
   }
 
-  async populateProducts (id) {
+  async populateProducts(id) {
     const token = await authService.getAccessToken();
     let reqUrl = '';
-    if(id === 0){
+
+    if (id === 0) {
       reqUrl = 'api/products';
     } else {
       reqUrl = 'api/products/category/' + id;
@@ -50,9 +53,22 @@ export class Home extends Component {
     this.setState({ products: data, productsLoading: false });
   }
 
-  render () {
+  render() {
     return (
-      <Categories categoriesList={this.state.categories} handleClick={this.handleClick}/>
+      <div>
+        <Categories categoriesList={this.state.categories} handleClick={this.handleClick} />
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Grid container justify="center">
+              {[0, 1, 2, 3].map((value) => (
+                <Grid key={value} item>
+                  <Cards/>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+        </Grid>
+      </div>
     );
   }
 }
