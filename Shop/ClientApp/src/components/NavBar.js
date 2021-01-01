@@ -56,9 +56,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function NavBar() {
+export default function NavBar(props) {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl, itemsInBasket] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
@@ -126,7 +126,7 @@ export default function NavBar() {
 
           <div className={classes.grow} />
           <IconButton aria-label="show new items in basket" color="inherit">
-            <Badge badgeContent={itemsInBasket} color="secondary">
+            <Badge badgeContent={props.itemsCount} color="secondary">
               <BasketIcon />
             </Badge>
           </IconButton>

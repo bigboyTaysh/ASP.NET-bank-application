@@ -27,7 +27,7 @@ export default function Categories(props) {
   const classes = useStyles();
 
   const handleClick = (id) => {
-    props.handleClick(id);
+    props.handleCategoriesClick(id);
   };
 
   return (

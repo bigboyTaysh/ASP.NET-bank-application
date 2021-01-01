@@ -12,6 +12,8 @@ export class Home extends Component {
     this.state = {
       categories: [],
       products: [],
+      itemsCount: 0,
+      basket: [],
       categoriesLoading: true,
       productsLoading: true
     };
@@ -22,8 +24,12 @@ export class Home extends Component {
     this.populateProducts(0);
   }
 
-  handleClick = (value) => {
+  handleCategoriesClick = (value) => {
     this.populateProducts(value);
+  }
+
+  handleProductAddClick = () => {
+    this.props.handleProductAddClick();
   }
 
   async populateCategories() {
@@ -56,11 +62,11 @@ export class Home extends Component {
   render() {
     return (
       <div>
-        <Categories categoriesList={this.state.categories} handleClick={this.handleClick} />
+        <Categories categoriesList={this.state.categories} handleCategoriesClick={this.handleCategoriesClick} />
         <Grid container justify="center" spacing={3}>
           {this.state.products.map((item) => (
             <Grid key={item.id} item>
-              <Cards product={item} />
+              <Cards product={item} handleProductAddClick={this.handleProductAddClick}/>
             </Grid>
           ))}
         </Grid>
