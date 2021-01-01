@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
   line: {
     textDecoration: "line-through",
   },
+  sale: {
+    color: "#4caf50",
+  }
 }));
 
 export default function RecipeReviewCard({ product }) {
@@ -82,7 +85,7 @@ export default function RecipeReviewCard({ product }) {
             <Typography  className={classes.line} variant="caption" color="secondary">
               {product.price} zł
             </Typography>
-            <Typography variant="h5" color="success">
+            <Typography className={classes.sale} variant="h5">
               {product.salePrice} zł
             </Typography>
           </div>
