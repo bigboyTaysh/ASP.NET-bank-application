@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RecipeReviewCard() {
+export default function RecipeReviewCard( {product} ) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -52,7 +52,7 @@ export default function RecipeReviewCard() {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            R
+            {product.name.charAt(0)}
           </Avatar>
         }
         action={
@@ -60,12 +60,12 @@ export default function RecipeReviewCard() {
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={product.name}
+        subtitle ={product.pictures}
       />
       <CardMedia
         className={classes.media}
-        image="/static/images/cards/paella.jpg"
+        image={"images/" + product.pictures[0].path}
         title="Paella dish"
       />
       <CardContent>

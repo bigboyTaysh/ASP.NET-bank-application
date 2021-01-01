@@ -57,17 +57,13 @@ export class Home extends Component {
     return (
       <div>
         <Categories categoriesList={this.state.categories} handleClick={this.handleClick} />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Grid container justify="center">
-              {[0, 1, 2, 3].map((value) => (
-                <Grid key={value} item>
-                  <Cards/>
-                </Grid>
-              ))}
-            </Grid>
+          <Grid container justify="center" spacing={3}>
+            {this.state.products.map((item) => (
+              <Grid key={item.id} item>
+                <Cards product={item} />
+              </Grid>
+            ))}
           </Grid>
-        </Grid>
       </div>
     );
   }
