@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
   rightMenu: {
     marginRight: theme.spacing(10)
-  }, 
+  },
   typography: {
     padding: theme.spacing(3),
   },
@@ -140,10 +140,10 @@ export default function NavBar(props) {
         <Fade {...TransitionProps} timeout={350}>
           <Paper>
             <Typography
-            className={classes.typography}
-            variant="h5"
+              className={classes.typography}
+              variant="h5"
             >
-              {(data.itemsCount > 0 ? 'Całkowity koszt: ' + data.basket.reduce((a,b) => a + b.price, 0) + ' zł' : 'Koszyk jest pusty')}
+              {(data.itemsCount > 0 ? 'Całkowity koszt: ' + data.basket.reduce((a, b) => a + b.price, 0) + ' zł' : 'Koszyk jest pusty')}
             </Typography>
           </Paper>
         </Fade>
@@ -164,11 +164,13 @@ export default function NavBar(props) {
             </NavLink>
           </Typography>
           <div className={classes.grow} />
-          <IconButton aria-label="show new items in basket" color="inherit" onMouseEnter={handleClickBasket} onMouseLeave={handleClickBasket}>
-            <Badge badgeContent={data.itemsCount} color="secondary">
-              <BasketIcon fontSize="large" />
-            </Badge>
-          </IconButton>
+          <NavLink to="/basket" className={classes.link}>
+            <IconButton aria-label="show new items in basket" color="inherit" onMouseEnter={handleClickBasket} onMouseLeave={handleClickBasket}>
+              <Badge badgeContent={data.itemsCount} color="secondary">
+                <BasketIcon fontSize="large" />
+              </Badge>
+            </IconButton>
+          </NavLink>
           <div className={classes.sectionDesktop}>
             <IconButton
               edge="end"
