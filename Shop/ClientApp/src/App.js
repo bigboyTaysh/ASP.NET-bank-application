@@ -21,16 +21,18 @@ export default class App extends Component {
     };
   }
 
-  handleProductAddClick = () => {
+  handleProductAddClick = (product) => {
     this.setState({
-      itemsCount: this.state.itemsCount + 1
+      itemsCount: this.state.itemsCount + 1,
+      basket: this.state.basket.concat(product),
     });
+    console.log(this.state.basket)
   }
 
   render() {
     return (
       <div>
-        <NavBar itemsCount={this.state.itemsCount} />
+        <NavBar data={this.state} />
         <Layout>
           <Route exact path='/' render={() => <Home handleProductAddClick={this.handleProductAddClick}/>} />
           <AuthorizeRoute path='/fetch-data' component={FetchData} />

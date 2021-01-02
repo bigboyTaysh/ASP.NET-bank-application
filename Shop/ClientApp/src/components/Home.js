@@ -28,8 +28,8 @@ export class Home extends Component {
     this.populateProducts(value);
   }
 
-  handleProductAddClick = () => {
-    this.props.handleProductAddClick();
+  handleProductAddClick = (product) => {
+    this.props.handleProductAddClick(product);
   }
 
   async populateCategories() {

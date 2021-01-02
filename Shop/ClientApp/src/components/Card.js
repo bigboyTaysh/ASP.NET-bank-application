@@ -46,12 +46,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RecipeReviewCard(props) {
   const classes = useStyles();
-  const [added, setAdded] = React.useState(false);
   const product = props.product;
 
   const handleAddClick = () => {
-    setAdded(!added);
-    props.handleProductAddClick();
+    props.handleProductAddClick(product);
   };
 
   return (

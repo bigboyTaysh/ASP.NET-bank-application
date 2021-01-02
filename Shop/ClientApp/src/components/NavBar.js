@@ -17,6 +17,9 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import { LoginMenu } from './api-authorization/LoginMenu';
 import { NavLink } from 'react-router-dom';
 import { Link } from '@material-ui/core';
+import Popper from '@material-ui/core/Popper';
+import Paper from '@material-ui/core/Paper';
+import Fade from '@material-ui/core/Fade';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -53,19 +56,29 @@ const useStyles = makeStyles((theme) => ({
   },
   rightMenu: {
     marginRight: theme.spacing(10)
-  }
+  }, 
+  typography: {
+    padding: theme.spacing(3),
+  },
 }));
 
 export default function NavBar(props) {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorLoginEl, setAnchorLoginEl] = React.useState(null);
+  const [anchorBasketEl, setAnchorBasketEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const isMenuOpen = Boolean(anchorEl);
+  const isMenuOpen = Boolean(anchorLoginEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const menuId = 'primary-search-account-menu';
+
+  const isBasketOpen = Boolean(anchorBasketEl);
+  const idBasket = isBasketOpen ? 'simple-popper' : undefined;
+
+  const data = props.data;
 
   const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorLoginEl(event.currentTarget);
   };
 
   const handleMobileMenuClose = () => {
@@ -73,7 +86,7 @@ export default function NavBar(props) {
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    setAnchorLoginEl(null);
     handleMobileMenuClose();
   };
 
@@ -81,10 +94,13 @@ export default function NavBar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const menuId = 'primary-search-account-menu';
+  const handleClickBasket = (event) => {
+    setAnchorBasketEl(anchorBasketEl ? null : event.currentTarget);
+  };
+
   const renderMenu = (
     <Menu
-      anchorEl={anchorEl}
+      anchorEl={anchorLoginEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={menuId}
       keepMounted
@@ -111,6 +127,30 @@ export default function NavBar(props) {
     </Menu>
   );
 
+  const renderBasket = (
+    <Popper
+      open={isBasketOpen}
+      id={idBasket}
+      anchorEl={anchorBasketEl}
+      placement="bottom"
+      disablePortal={false}
+      transition
+    >
+      {({ TransitionProps }) => (
+        <Fade {...TransitionProps} timeout={350}>
+          <Paper>
+            <Typography
+            className={classes.typography}
+            variant="h5"
+            >
+              {(data.itemsCount > 0 ? 'Całkowity koszt: ' + data.basket.reduce((a,b) => a + b.price, 0) + ' zł' : 'Koszyk jest pusty')}
+            </Typography>
+          </Paper>
+        </Fade>
+      )}
+    </Popper>
+  );
+
   return (
     <div className={classes.grow}>
       <AppBar
@@ -121,13 +161,12 @@ export default function NavBar(props) {
           <Typography className={classes.title} variant="h3" noWrap>
             <NavLink to="/" className={classes.link}>
               Giga sklep
-                        </NavLink>
+            </NavLink>
           </Typography>
-
           <div className={classes.grow} />
-          <IconButton aria-label="show new items in basket" color="inherit">
-            <Badge badgeContent={props.itemsCount} color="secondary">
-              <BasketIcon />
+          <IconButton aria-label="show new items in basket" color="inherit" onMouseEnter={handleClickBasket} onMouseLeave={handleClickBasket}>
+            <Badge badgeContent={data.itemsCount} color="secondary">
+              <BasketIcon fontSize="large" />
             </Badge>
           </IconButton>
           <div className={classes.sectionDesktop}>
@@ -140,7 +179,7 @@ export default function NavBar(props) {
               color="inherit"
               className={classes.rightMenu}
             >
-              <AccountCircle />
+              <AccountCircle fontSize="large" />
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
@@ -158,6 +197,7 @@ export default function NavBar(props) {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {renderBasket}
     </div>
   );
 }
