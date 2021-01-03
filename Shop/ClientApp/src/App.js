@@ -42,10 +42,15 @@ export default class App extends Component {
     });
   }
 
-  handleProductRemoveClick = (product) => {
+  handleProductRemoveClick = (index) => {
+    var basket = this.state.basket;
+    basket.splice(index, 1);
+
     this.setState({
       itemsCount: this.state.itemsCount - 1,
-      basket: this.state.basket.filter((p) => p.product !== product),
+      basket: basket, 
+    }, function () {
+      localStorage.setItem("state", JSON.stringify(this.state))
     });
   }
 
@@ -55,7 +60,7 @@ export default class App extends Component {
         <NavBar data={this.state} />
         <Layout>
           <Route exact path='/' render={() => <Home handleProductAddClick={this.handleProductAddClick}/>} />
-          <Route exact path='/basket' render={() => <Basket data={this.state} handleProductAddClick={this.handleProductRemoveClick}/>} />
+          <Route exact path='/basket' render={() => <Basket data={this.state} handleProductRemoveClick={this.handleProductRemoveClick}/>} />
           <AuthorizeRoute path='/fetch-data' component={FetchData} />
           <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         </Layout>

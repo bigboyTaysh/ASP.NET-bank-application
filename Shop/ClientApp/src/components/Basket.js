@@ -9,7 +9,7 @@ export default class Basket extends Component {
   
     render() {
       return (
-        <ProductList data={this.props.data} handleProductAddClick={this.props.handleProductRemoveClick} />
+        <ProductList data={this.props.data} handleProductRemoveClick={this.props.handleProductRemoveClick} />
       );
     }
   }

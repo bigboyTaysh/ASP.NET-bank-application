@@ -43,6 +43,10 @@ export default function SimpleAccordion(props) {
   const classes = useStyles();
   const basket = props.data.basket;
 
+  const handleProductRemoveClick = (id) => {
+    props.handleProductRemoveClick(id);
+  };
+
   return (
     <div className={classes.root}>
       {basket.map((product, index) => {
@@ -85,7 +89,15 @@ export default function SimpleAccordion(props) {
               </div>
               <div className={classes.column}>
                 <Typography>
-                  <Button size="small" color="secondary" variant="contained" className={classes.delete}>Usuń</Button>
+                  <Button
+                    size="small"
+                    color="secondary"
+                    variant="contained"
+                    className={classes.delete}
+                    onClick={() => handleProductRemoveClick(index)}
+                  >
+                    Usuń
+                  </Button>
                 </Typography>
               </div>
             </AccordionDetails>
