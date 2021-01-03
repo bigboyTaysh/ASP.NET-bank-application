@@ -16,18 +16,30 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       itemsCount: 0,
       basket: [],
-    };
+    }
+  }
+
+  componentDidMount = () => {
+    const data = JSON.parse(localStorage.getItem("state"));
+    if(data){
+      this.setState({
+        itemsCount: data.itemsCount,
+        basket: data.basket
+      });
+    }
   }
 
   handleProductAddClick = (product) => {
     this.setState({
       itemsCount: this.state.itemsCount + 1,
       basket: this.state.basket.concat(product),
+    }, function () {
+      localStorage.setItem("state", JSON.stringify(this.state))
     });
-    console.log(this.state.basket)
   }
 
   handleProductRemoveClick = (product) => {
@@ -35,7 +47,6 @@ export default class App extends Component {
       itemsCount: this.state.itemsCount - 1,
       basket: this.state.basket.filter((p) => p.product !== product),
     });
-    console.log(this.state.basket)
   }
 
   render() {
