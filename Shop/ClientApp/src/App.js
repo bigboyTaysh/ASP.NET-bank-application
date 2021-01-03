@@ -19,6 +19,7 @@ export default class App extends Component {
 
     this.state = {
       itemsCount: 0,
+      basketPrice: 0,
       basket: [],
     }
   }
@@ -28,6 +29,7 @@ export default class App extends Component {
     if(data){
       this.setState({
         itemsCount: data.itemsCount,
+        basketPrice: data.basketPrice,
         basket: data.basket
       });
     }
@@ -36,6 +38,7 @@ export default class App extends Component {
   handleProductAddClick = (product) => {
     this.setState({
       itemsCount: this.state.itemsCount + 1,
+      basketPrice: this.state.basketPrice + this.productPrice(product),
       basket: this.state.basket.concat(product),
     }, function () {
       localStorage.setItem("state", JSON.stringify(this.state))
@@ -44,14 +47,20 @@ export default class App extends Component {
 
   handleProductRemoveClick = (index) => {
     var basket = this.state.basket;
+    var price = this.productPrice(basket[index]);
     basket.splice(index, 1);
 
     this.setState({
       itemsCount: this.state.itemsCount - 1,
+      basketPrice: this.state.basketPrice - price,
       basket: basket, 
     }, function () {
       localStorage.setItem("state", JSON.stringify(this.state))
     });
+  }
+
+  productPrice = (product) => {
+    return product.salePrice < product.price ? product.salePrice : product.price;
   }
 
   render() {

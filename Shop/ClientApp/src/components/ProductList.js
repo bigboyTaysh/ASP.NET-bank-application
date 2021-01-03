@@ -51,7 +51,10 @@ export default function SimpleAccordion(props) {
     <div className={classes.root}>
       {basket.map((product, index) => {
         return (
-          <Accordion key={index}>
+          <Accordion
+           key={index}
+           variant="outlined"
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"

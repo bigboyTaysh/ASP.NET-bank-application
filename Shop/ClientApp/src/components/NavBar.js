@@ -143,7 +143,7 @@ export default function NavBar(props) {
               className={classes.typography}
               variant="h5"
             >
-              {(data.itemsCount > 0 ? 'Całkowity koszt: ' + data.basket.reduce((a, b) => a + b.price, 0) + ' zł' : 'Koszyk jest pusty')}
+              {(data.itemsCount > 0 ? 'Całkowity koszt: ' + data.basketPrice + ' zł' : 'Koszyk jest pusty')}
             </Typography>
           </Paper>
         </Fade>
