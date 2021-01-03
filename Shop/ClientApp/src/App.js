@@ -29,7 +29,7 @@ export default class App extends Component {
     if(data){
       this.setState({
         itemsCount: data.itemsCount,
-        basketPrice: data.basketPrice,
+        basketPrice: data.basketPrice.toFixed(2),
         basket: data.basket
       });
     }

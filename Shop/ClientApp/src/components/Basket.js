@@ -27,11 +27,28 @@ const useStyles = makeStyles((theme) => ({
 export default function Basket(props) {
   const classes = useStyles();
 
-  const [age, setAge] = React.useState('');
+  const [cardPayment, setCardPayment] = React.useState('');
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setCardPayment(event.target.value);
   };
+
+  var button = props.data.itemsCount > 0 ? (
+    <Button
+      variant="contained"
+      color="primary"
+    >
+      Złóż zamówienie
+    </Button>
+  ) : (
+      <Button
+        variant="contained"
+        color="primary"
+        disabled
+      >
+        Złóż zamówienie
+      </Button>
+    )
 
   return (
     <div>
@@ -63,11 +80,11 @@ export default function Basket(props) {
             </Grid>
             <Grid item xs={12}>
               <FormControl className={classes.formControl}>
-                <InputLabel id="demo-simple-select-helper-label">Płatność</InputLabel>
+                <InputLabel id="select-helper-label">Płatność</InputLabel>
                 <Select
-                  labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper"
-                  value={age}
+                  labelId="select-helper-label"
+                  id="select-helper"
+                  value={cardPayment}
                   onChange={handleChange}
                 >
                   <MenuItem value={true} selected>Kartą</MenuItem>
@@ -77,12 +94,7 @@ export default function Basket(props) {
               </FormControl>
             </Grid>
             <Grid item xs={8}>
-              <Button
-                variant="contained"
-                color="primary"
-              >
-                Złóż zamówienie
-              </Button>
+              {button}
             </Grid>
           </Grid>
         </Paper>

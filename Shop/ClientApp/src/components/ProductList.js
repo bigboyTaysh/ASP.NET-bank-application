@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   delete: {
     fontSize: theme.typography.pxToRem(15),
     float: 'right',
-  }
+  },
 }));
 
 export default function SimpleAccordion(props) {
@@ -83,16 +83,11 @@ export default function SimpleAccordion(props) {
                   </div>
                 }
               </div>
-            </AccordionSummary>
-            <AccordionDetails>
               <div className={classes.column}>
                 <Typography>
-                  {product.description}
-                </Typography>
-              </div>
-              <div className={classes.column}>
-                <Typography>
-                  <Button
+                  <Button 
+                    onClick={(event) => event.stopPropagation()}
+                    onFocus={(event) => event.stopPropagation()}
                     size="small"
                     color="secondary"
                     variant="contained"
@@ -101,6 +96,13 @@ export default function SimpleAccordion(props) {
                   >
                     Usuń
                   </Button>
+                </Typography>
+              </div>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div className={classes.column}>
+                <Typography>
+                  {product.description}
                 </Typography>
               </div>
             </AccordionDetails>

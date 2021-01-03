@@ -165,7 +165,7 @@ export default function NavBar(props) {
           </Typography>
           <div className={classes.grow} />
           <NavLink to="/basket" className={classes.link}>
-            <IconButton aria-label="show new items in basket" color="inherit" onMouseEnter={handleClickBasket} onMouseLeave={handleClickBasket}>
+            <IconButton aria-label="show new items in basket" color="inherit" onClick={(event) => event.stopPropagation()} onMouseEnter={handleClickBasket} onMouseLeave={handleClickBasket}>
               <Badge badgeContent={data.itemsCount} color="secondary">
                 <BasketIcon fontSize="large" />
               </Badge>
