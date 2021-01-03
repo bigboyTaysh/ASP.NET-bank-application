@@ -5,24 +5,37 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Grid } from '@material-ui/core';
+import { AccordionActions, Grid } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
   heading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(30),
     fontWeight: theme.typography.fontWeightRegular,
+    marginLeft: '15%'
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(20),
+    float: 'right',
+    marginRight: '15%'
   },
   line: {
-    textDecoration: "line-through",
-  },
-  price: {
-    float: "right"
+    textDecoration: 'line-through',
+    float: 'right'
   },
   sale: {
-    color: "#4caf50",
+    color: '#4caf50',
+    fontSize: theme.typography.pxToRem(22),
+  },
+  column: {
+    flexBasis: '50%',
+  },
+  delete: {
+    fontSize: theme.typography.pxToRem(15),
+    float: 'right',
   }
 }));
 
@@ -32,60 +45,53 @@ export default function SimpleAccordion(props) {
 
   return (
     <div className={classes.root}>
-      {basket.map((product) => {
+      {basket.map((product, index) => {
         return (
-          <Accordion key={product}>
+          <Accordion key={index}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography className={classes.heading}>{product.name}</Typography>
-              <Grid
-                  item
-                  alignItems="center"
-                  justify="center"
+              <div className={classes.column}>
+                <Typography
+                  className={classes.heading}
                 >
-                  {product.price === product.salePrice ?
-                    <Typography variant="h5" >
-                      {product.price} zł
+                  {product.name}
+                </Typography>
+              </div>
+              <div className={classes.column}>
+                {product.price === product.salePrice ?
+                  <Typography className={classes.secondaryHeading}>
+                    {product.price} zł
                     </Typography>
-                    :
-                    <div className={classes.price}>
-                      <Typography className={classes.line} variant="caption" color="secondary">
-                        {product.price} zł
+                  :
+                  <div className={classes.secondaryHeading}>
+                    <Typography className={classes.line} variant="body2" color="secondary">
+                      {product.price} zł
                       </Typography>
-                      <Typography className={classes.sale} variant="h5">
-                        {product.salePrice} zł
+                    <Typography className={classes.sale} >
+                      {product.salePrice} zł
                       </Typography>
-                    </div>
-                  }
-                </Grid>
+                  </div>
+                }
+              </div>
             </AccordionSummary>
             <AccordionDetails>
-              <Grid
-                container
-                spacing={3}
-              >
-                <Grid item>
-                  <Typography>
-                    {product.description}
-                  </Typography>
-                </Grid>
-              </Grid>
+              <div className={classes.column}>
+                <Typography>
+                  {product.description}
+                </Typography>
+              </div>
+              <div className={classes.column}>
+                <Typography>
+                  <Button size="small" color="secondary" variant="contained" className={classes.delete}>Usuń</Button>
+                </Typography>
+              </div>
             </AccordionDetails>
           </Accordion>
         );
       })}
-      <Accordion disabled>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel3a-content"
-          id="panel3a-header"
-        >
-          <Typography className={classes.heading}>Disabled Accordion</Typography>
-        </AccordionSummary>
-      </Accordion>
     </div>
   );
 }
