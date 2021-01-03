@@ -1,4 +1,4 @@
-import { Button, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Button, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, InputLabel, makeStyles, MenuItem, Paper, Select, Switch, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import ProductList from './ProductList';
 
@@ -20,12 +20,18 @@ const useStyles = makeStyles((theme) => ({
   },
   paperChild: {
     margin: "auto",
-    width: "50%"
+    width: "60%"
   }
 }));
 
 export default function Basket(props) {
   const classes = useStyles();
+
+  const [age, setAge] = React.useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
 
   return (
     <div>
@@ -41,21 +47,36 @@ export default function Basket(props) {
             alignItems="center"
             spacing={2}
           >
-            <Grid item xs={6} >
+            <Grid item xs={12} >
               <Paper>
                 <Typography className={classes.text}>
                   Koszt zamówienia
               </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={8}>
               <Paper>
                 <Typography className={classes.text}>
                   {props.data.basketPrice} zł
               </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
+              <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-helper-label">Płatność</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={age}
+                  onChange={handleChange}
+                >
+                  <MenuItem value={true} selected>Kartą</MenuItem>
+                  <MenuItem value={false}>Przy odbiorze</MenuItem>
+                </Select>
+                <FormHelperText>Wybierz rodzaj płatności</FormHelperText>
+              </FormControl>
+            </Grid>
+            <Grid item xs={8}>
               <Button
                 variant="contained"
                 color="primary"
