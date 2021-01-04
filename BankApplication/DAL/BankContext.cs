@@ -38,5 +38,7 @@ namespace BankApplication.DAL
             modelBuilder.Entity<CreditApplication>().Property(x => x.MonthRepayment).HasPrecision(26, 4);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
+
+        public System.Data.Entity.DbSet<BankApplication.Models.Acquirer> Acquirers { get; set; }
     }
 }

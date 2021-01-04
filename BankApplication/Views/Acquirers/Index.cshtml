@@ -1,0 +1,68 @@
+﻿@model IEnumerable<BankApplication.Models.Acquirer>
+
+@{
+    ViewBag.Title = "WWB";
+}
+
+<h2>Nasi partnerzy</h2>
+<p>Przejdź na stronę partnerów i zrób zakupy za pomocą naszej karty płatniczej</p>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        @Html.ActionLink("Dodaj", "Create", null, new { @class = "btn btn-primary float-right", style = "margin-bottom:10px;" })
+    </p>
+    <table class="table table-striped">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.URL)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.URL)
+                </td>
+                <td>
+                    @Html.ActionLink("Edytuj", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Szczegóły", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Usuń", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+
+    if (Model.Count() > 0)
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card" style="width: 15rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">@item.Description.</p>
+                            <a href="@item.URL" class="btn btn-outline-primary" target="_blank">Przejdź</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <h3>Brak parnerów :(</h3>
+    }
+}

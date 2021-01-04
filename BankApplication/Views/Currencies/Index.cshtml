@@ -46,7 +46,6 @@
         </div>
     }
 </div>
-<div class="row">
     <div class="currency-exchange-content">
         <div class="type row">
             <div class="bid active">
@@ -56,9 +55,9 @@
                 Sprzedaję
             </div>
         </div>
-        <div class="currency-content row">
+        <div class="currency-content">
             <div class="currency-left">
-                <select class="currency-to col-md-3">
+                <select class="currency-to">
                     <option value="PLN">
                         PLN
                     </option>
@@ -76,13 +75,13 @@
                     </option>
                 </select>
             </div>
-            <div class="za-content">
-                <span class="za">
+            <div class="for-content">
+                <span class="for">
                     za
                 </span>
             </div>
             <div class="currency-right">
-                <select class="currency-from col-md-3">
+                <select class="currency-from">
                     <option value="PLN" selected>
                         PLN
                     </option>
@@ -101,9 +100,8 @@
                 </select>
             </div>
         </div>
-        <br />
         <div class="select-content row">
-            <div class="row">
+            <div>
                 <div class="bank-account-left">
                     <select class="bank-account-to">
                     </select>
@@ -113,7 +111,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row">
+            <div>
                 <div class="value-content">
                     <div class="value-left">
                         <input class="form-control value valueTextBox" type="text" placeholder="Wpisz kwotę"/>
@@ -130,8 +128,6 @@
             </div>
         </div>
     </div>
-    <span class="clear"></span>
-</div>
 <script>
     var prevCurrencyFrom;
     var prevCurrencyTo;

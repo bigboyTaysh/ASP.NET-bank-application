@@ -7,7 +7,6 @@ using BankApplication.DAL;
 using BankApplication.Models;
 using BankApplication.ViewModels;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Binder;
 
 namespace BankApplication.Controllers
 {

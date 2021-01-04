@@ -5,73 +5,65 @@
 }
 
 <h2></h2>
-
-<div class="form-group">
-    <div class="bank-account-div history active shadow p-3 mb-5 bg-white rounded row">
-        <div class="details-type pull-left">
-            <div>
-                @if (@Model.BankAccountType.Type == "PAY_ACC_FOR_YOUNG")
-                {
-                    @:Konto dla młodych
-                }
-                else if (@Model.BankAccountType.Type == "PAY_ACC_FOR_ADULT")
-                {
-                    @:Superkonto
-                }
-                else if (@Model.BankAccountType.Type == "FOR_CUR_ACC")
-                {
-                    @:Konto walutowe
-                }
-            </div>
-            <div class="bankAccountSelect gray-text">@Model.BankAccountNumber</div>
-        </div>
-        <div class="pull-right noselect">
-            <div class="pull-right text-align-right details-menas">
-                <span>Dostępne środki</span>
-                <br />
-                <span>
-                    <b>
-                        @decimal.Round(Model.AvailableFounds, 2) @Model.Currency.Code
-                    </b>
-                </span>
-            </div>
-            <div class="pull-right">
-                <div class="pull-right text-align-right details">
-                    <span class="gray-text">
-                        @decimal.Round(Model.Balance, 2)
-                        @Model.Currency.Code
-                    </span>
-                    <br />
-                    <span class="gray-text">
-                        @decimal.Round(Model.Lock, 2)
-                        @Model.Currency.Code
-                    </span>
-                </div>
-                <div class="pull-right text-align-left details">
-                    <span class="gray-text">
-                        Sadlo
-                    </span>
-                    <br />
-                    <span class="gray-text">
-                        Blokady
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="noselect">
-            <br />
-            <br />
-        </div>
-        <div class="buttons noselect ">
-            @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model.BankAccountTypeID }, new { @class = "btn btn-default" })
-            @if (User.IsInRole("User"))
+<div class="bank-account-div history active">
+    <div class="details-type">
+        <div>
+            @if (@Model.BankAccountType.Type == "PAY_ACC_FOR_YOUNG")
             {
-                @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
+                @:Konto dla młodych
+            }
+            else if (@Model.BankAccountType.Type == "PAY_ACC_FOR_ADULT")
+            {
+                @:Superkonto
+            }
+            else if (@Model.BankAccountType.Type == "FOR_CUR_ACC")
+            {
+                @:Konto walutowe
             }
         </div>
+        <div class="bankAccountSelect gray-text">@Model.BankAccountNumber</div>
+    </div>
+    <div class="float-right noselect">
+        <div class="float-right text-align-right details-menas">
+            <span>Dostępne środki</span>
+            <br />
+            <span>
+                <b>
+                    @decimal.Round(Model.AvailableFounds, 2) @Model.Currency.Code
+                </b>
+            </span>
+        </div>
+        <div class="float-right">
+            <div class="float-right text-align-right details">
+                <span class="gray-text">
+                    @decimal.Round(Model.Balance, 2)
+                    @Model.Currency.Code
+                </span>
+                <br />
+                <span class="gray-text">
+                    @decimal.Round(Model.Lock, 2)
+                    @Model.Currency.Code
+                </span>
+            </div>
+            <div class="float-right text-align-left details">
+                <span class="gray-text">
+                    Sadlo
+                </span>
+                <br />
+                <span class="gray-text">
+                    Blokady
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="float-right buttons noselect">
+        @Html.ActionLink("Szczegóły", "Details", "BankAccounts", new { id = Model.BankAccountTypeID }, new { @class = "btn btn-outline-dark" })
+        @if (User.IsInRole("User"))
+        {
+            @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "btn btn-primary" })
+        }
     </div>
 </div>
-
 @if (User.IsInRole("Admin") || User.IsInRole("Worker"))
 {
     <div class="form-deposit-withdrawal">
@@ -124,7 +116,6 @@
         <br />
     </div>
 
-
     <div class="col-md-6">
         <span class="gray-text">
             Opis
@@ -169,28 +160,28 @@
                 </option>
                 @foreach (var item in (List<BankApplication.Models.TransactionType>)ViewBag.Types)
                 {
-            <option value="@item.ID">
-                @if (item.Type == "TRANSFER")
-                {
-                    @:Przelew
-                }
-                else if (item.Type == "CASH_DEPOSIT")
-                {
-                    @:Wpłata
-                }
-                else if (item.Type == "CASH_WITHDRAWAL")
-                {
-                    @:Wypłata
-                }
-                else if (item.Type == "CURR_EXCHANGE")
-                {
-                    @:Wymiana waluty
-                }
-                else if (item.Type == "CREDIT_TRANSFER")
-                {
-                    @:Kredyt/Rata
-                }
-            </option>
+                    <option value="@item.ID">
+                        @if (item.Type == "TRANSFER")
+                        {
+                            @:Przelew
+                        }
+                        else if (item.Type == "CASH_DEPOSIT")
+                        {
+                            @:Wpłata
+                        }
+                        else if (item.Type == "CASH_WITHDRAWAL")
+                        {
+                            @:Wypłata
+                        }
+                        else if (item.Type == "CURR_EXCHANGE")
+                        {
+                            @:Wymiana waluty
+                        }
+                        else if (item.Type == "CREDIT_TRANSFER")
+                        {
+                            @:Kredyt/Rata
+                        }
+                    </option>
                 }
             </select>
         </span>
@@ -198,7 +189,6 @@
         <br />
     </div>
 </div>
-
 
 <table class="table">
     <thead>

@@ -20,62 +20,77 @@
 
 </head>
 <body>
-    <div class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("WWB", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Strona główna", "Index", "Home")</li>
+            @Html.ActionLink("WWB", "Index", "Home", null, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggler">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("Strona główna", "Index", "Home", null, new { @class = "nav-link" })
+                    </li>
                     @if (User.IsInRole("Admin"))
                     {
-                        <li>@Html.ActionLink("Konta bankowe", "Index", "BankAccounts")</li>
-                        <li>@Html.ActionLink("Pracownicy", "Workers", "Account")</li>
-                        <li>@Html.ActionLink("Rodzaje kredytów", "Index", "CreditTypes")</li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Konta bankowe", "Index", "BankAccounts", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Pracownicy", "Workers", "Account", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Rodzaje kredytów", "Index", "CreditTypes", null, new { @class = "nav-link" })
+                        </li>
                     }
                     @if (User.IsInRole("Worker"))
                     {
-                        <li>@Html.ActionLink("Konta bankowe", "Index", "BankAccounts")</li>
-                        <li>@Html.ActionLink("Użytkownicy", "Users", "Account")</li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Konta bankowe", "Index", "BankAccounts", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Użytkownicy", "Users", "Account", null, new { @class = "nav-link" })
+                        </li>
                     }
                     @if (User.IsInRole("User"))
                     {
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Transakcje
-                                <span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li>@Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "dropdown-toggle" })</li>
-                            </ul>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Przelew", "Transfer", "Transactions", null, new { @class = "dropdown-item" })
+                            </div>
                         </li>
-                        <li>@Html.ActionLink("Kantor", "Index", "Currencies")</li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Kantor", "Index", "Currencies", null, new { @class = "nav-link" })
+                        </li>
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Kredyty
-                                <span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li>@Html.ActionLink("Przyznane kredyty", "Index", "Credits")</li>
-                                <li>@Html.ActionLink("Wnioski", "Index", "CreditApplications")</li>
-                            </ul>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Przyznane kredyty", "Index", "Credits", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Wnioski", "Index", "CreditApplications", null, new { @class = "dropdown-item" })
+                            </div>
                         </li>
                     }
-                    <li>@Html.ActionLink("Informacje", "About", "Home")</li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Partnerzy", "Index", "Acquirers", null, new { @class = "nav-link" })
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Informacje", "About", "Home", null, new { @class = "nav-link" })
+                    </li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
-    </div>
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <footer class="footer">
