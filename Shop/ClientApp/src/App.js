@@ -27,7 +27,7 @@ export default class App extends Component {
     if(data){
       this.setState({
         itemsCount: data.itemsCount,
-        basketPrice: parseFloat(data.basketPrice).toFixed(2),
+        basketPrice: (parseFloat(data.basketPrice)).toFixed(2),
         basket: data.basket
       });
     }
@@ -36,7 +36,7 @@ export default class App extends Component {
   handleProductAddClick = (product) => {
     this.setState({
       itemsCount: this.state.itemsCount + 1,
-      basketPrice: parseFloat(this.state.basketPrice + product.salePrice),
+      basketPrice: (parseFloat(this.state.basketPrice) + parseFloat(product.salePrice)).toFixed(2),
       basket: this.state.basket.concat(product),
     }, function () {
       localStorage.setItem("state", JSON.stringify(this.state))
@@ -50,7 +50,7 @@ export default class App extends Component {
 
     this.setState({
       itemsCount: this.state.itemsCount - 1,
-      basketPrice: parseFloat(this.state.basketPrice - price),
+      basketPrice: (parseFloat(this.state.basketPrice) - parseFloat(price)).toFixed(2),
       basket: basket, 
     }, function () {
       localStorage.setItem("state", JSON.stringify(this.state))
