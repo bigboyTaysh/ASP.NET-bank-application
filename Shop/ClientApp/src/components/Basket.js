@@ -11,7 +11,7 @@ export class Basket extends Component {
     return (
       <div>
         <ProductList data={this.props.data} handleProductRemoveClick={this.props.handleProductRemoveClick} />
-        <BasketForm data={this.props.data} />
+        <BasketForm data={this.props.data} handleBasketReset={this.props.handleBasketReset} handleSetPayment={this.props.handleSetPayment}/>
         <OrderStepper step={0}/>
       </div>
     );

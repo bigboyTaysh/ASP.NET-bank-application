@@ -1,5 +1,6 @@
 import { Button, FormControl, FormHelperText, Grid, InputLabel, makeStyles, MenuItem, Paper, Select, Typography } from '@material-ui/core';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,17 +26,24 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BasketForm(props) {
   const classes = useStyles();
-
   const [cardPayment, setCardPayment] = React.useState('');
+
+  let history = useHistory();
 
   const handleChange = (event) => {
     setCardPayment(event.target.value);
   };
 
+  const handleSumbit = () => {
+    props.handleSetPayment(true);
+    history.push('/summary')
+  }
+
   var button = props.data.itemsCount > 0 && cardPayment !== '' ? (
     <Button
       variant="contained"
       color="primary"
+      onClick={handleSumbit}
     >
       Złóż zamówienie
     </Button>
