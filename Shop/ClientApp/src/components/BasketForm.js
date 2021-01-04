@@ -32,7 +32,7 @@ export default function BasketForm(props) {
     setCardPayment(event.target.value);
   };
 
-  var button = props.data.itemsCount > 0 ? (
+  var button = props.data.itemsCount > 0 && cardPayment !== '' ? (
     <Button
       variant="contained"
       color="primary"
