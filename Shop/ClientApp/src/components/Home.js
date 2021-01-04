@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import authService from './api-authorization/AuthorizeService';
 import Categories from './Categories';
-import Cards from './Card';
-import Grid from '@material-ui/core/Grid';
+import { CSSTransition } from 'react-transition-group';
+import ProductCars from './ProductCars';
+
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -15,7 +16,8 @@ export class Home extends Component {
       itemsCount: 0,
       basket: [],
       categoriesLoading: true,
-      productsLoading: true
+      productsLoading: true,
+      skeleton: [0, 1, 2],
     };
   }
 
@@ -25,6 +27,7 @@ export class Home extends Component {
   }
 
   handleCategoriesClick = (value) => {
+    this.setState({ productsLoading: true });
     this.populateProducts(value);
   }
 
@@ -62,14 +65,14 @@ export class Home extends Component {
   render() {
     return (
       <div>
-        <Categories categoriesList={this.state.categories} handleCategoriesClick={this.handleCategoriesClick} />
-        <Grid container justify="center" spacing={3}>
-          {this.state.products.map((item) => (
-            <Grid key={item.id} item>
-              <Cards product={item} handleProductAddClick={this.handleProductAddClick}/>
-            </Grid>
-          ))}
-        </Grid>
+        <Categories categoriesLoading={this.state.categoriesLoading} categoriesList={this.state.categories} handleCategoriesClick={this.handleCategoriesClick} />
+        <CSSTransition classNames="products"
+          in={!this.state.productsLoading}
+          timeout={300}
+        >
+          <ProductCars
+            productsLoading={this.state.productsLoading} products={this.state.products} handleProductAddClick={this.handleProductAddClick} />
+        </CSSTransition>
       </div>
     );
   }

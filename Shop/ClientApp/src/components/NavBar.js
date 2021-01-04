@@ -1,22 +1,16 @@
 import React from 'react';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
 import BasketIcon from '@material-ui/icons/ShoppingBasket';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { LoginMenu } from './api-authorization/LoginMenu';
-import { NavLink } from 'react-router-dom';
-import { Link } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
 import Fade from '@material-ui/core/Fade';
@@ -159,18 +153,18 @@ export default function NavBar(props) {
       >
         <Toolbar>
           <Typography className={classes.title} variant="h3" noWrap>
-            <NavLink to="/" className={classes.link}>
+            <Link to="/" className={classes.link}>
               Giga sklep
-            </NavLink>
+            </Link>
           </Typography>
           <div className={classes.grow} />
-          <NavLink to="/basket" className={classes.link}>
-            <IconButton aria-label="show new items in basket" color="inherit" onClick={(event) => event.stopPropagation()} onMouseEnter={handleClickBasket} onMouseLeave={handleClickBasket}>
+          <Link to="/basket" className={classes.link}>
+            <IconButton aria-label="show new items in basket" color="inherit" onMouseEnter={handleClickBasket} onMouseLeave={handleClickBasket}>
               <Badge badgeContent={data.itemsCount} color="secondary">
                 <BasketIcon fontSize="large" />
               </Badge>
             </IconButton>
-          </NavLink>
+          </Link>
           <div className={classes.sectionDesktop}>
             <IconButton
               edge="end"

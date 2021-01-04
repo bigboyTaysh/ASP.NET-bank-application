@@ -5,8 +5,8 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { AccordionActions, Grid } from '@material-ui/core';
 import { Button } from '@material-ui/core';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,66 +49,73 @@ export default function SimpleAccordion(props) {
 
   return (
     <div className={classes.root}>
-      {basket.map((product, index) => {
-        return (
-          <Accordion
-           key={index}
-           variant="outlined"
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
+      <TransitionGroup>
+        {basket.map((product, index) => {
+          return (
+            <CSSTransition
+              key={index}
+              timeout={500}
+              classNames="products"
             >
-              <div className={classes.column}>
-                <Typography
-                  className={classes.heading}
+              <Accordion
+                key={index}
+                variant="outlined"
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
                 >
-                  {product.name}
-                </Typography>
-              </div>
-              <div className={classes.column}>
-                {product.price === product.salePrice ?
-                  <Typography className={classes.secondaryHeading}>
-                    {product.price} zł
+                  <div className={classes.column}>
+                    <Typography
+                      className={classes.heading}
+                    >
+                      {product.name}
                     </Typography>
-                  :
-                  <div className={classes.secondaryHeading}>
-                    <Typography className={classes.line} variant="body2" color="secondary">
-                      {product.price} zł
-                      </Typography>
-                    <Typography className={classes.sale} >
-                      {product.salePrice} zł
-                      </Typography>
                   </div>
-                }
-              </div>
-              <div className={classes.column}>
-                <Typography>
-                  <Button 
-                    onClick={(event) => event.stopPropagation()}
-                    onFocus={(event) => event.stopPropagation()}
-                    size="small"
-                    color="secondary"
-                    variant="contained"
-                    className={classes.delete}
-                    onClick={() => handleProductRemoveClick(index)}
-                  >
-                    Usuń
+                  <div className={classes.column}>
+                    {product.price === product.salePrice ?
+                      <Typography className={classes.secondaryHeading}>
+                        {product.price} zł
+                    </Typography>
+                      :
+                      <div className={classes.secondaryHeading}>
+                        <Typography className={classes.line} variant="body2" color="secondary">
+                          {product.price} zł
+                      </Typography>
+                        <Typography className={classes.sale} >
+                          {product.salePrice} zł
+                      </Typography>
+                      </div>
+                    }
+                  </div>
+                  <div className={classes.column}>
+                    <Typography onClick={(event) => event.stopPropagation()}>
+                      <Button
+                        onFocus={(event) => event.stopPropagation()}
+                        size="small"
+                        color="secondary"
+                        variant="contained"
+                        className={classes.delete}
+                        onClick={() => {handleProductRemoveClick(index)}}
+                      >
+                        Usuń
                   </Button>
-                </Typography>
-              </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.column}>
-                <Typography>
-                  {product.description}
-                </Typography>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-        );
-      })}
+                    </Typography>
+                  </div>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div className={classes.column}>
+                    <Typography>
+                      {product.description}
+                    </Typography>
+                  </div>
+                </AccordionDetails>
+              </Accordion>
+            </CSSTransition>
+          );
+        })}
+      </TransitionGroup>
     </div>
   );
 }

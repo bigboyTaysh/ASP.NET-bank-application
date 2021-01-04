@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-import  Basket  from './components/Basket';
-import { FetchData } from './components/FetchData';
-import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
+import { Basket }  from './components/Basket';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import NavBar from './components/NavBar';
@@ -29,7 +27,7 @@ export default class App extends Component {
     if(data){
       this.setState({
         itemsCount: data.itemsCount,
-        basketPrice: data.basketPrice.toFixed(2),
+        basketPrice: parseFloat(data.basketPrice).toFixed(2),
         basket: data.basket
       });
     }
@@ -38,7 +36,7 @@ export default class App extends Component {
   handleProductAddClick = (product) => {
     this.setState({
       itemsCount: this.state.itemsCount + 1,
-      basketPrice: this.state.basketPrice + this.productPrice(product),
+      basketPrice: parseFloat(this.state.basketPrice + product.salePrice),
       basket: this.state.basket.concat(product),
     }, function () {
       localStorage.setItem("state", JSON.stringify(this.state))
@@ -47,20 +45,16 @@ export default class App extends Component {
 
   handleProductRemoveClick = (index) => {
     var basket = this.state.basket;
-    var price = this.productPrice(basket[index]);
+    var price = basket[index].salePrice;
     basket.splice(index, 1);
 
     this.setState({
       itemsCount: this.state.itemsCount - 1,
-      basketPrice: this.state.basketPrice - price,
+      basketPrice: parseFloat(this.state.basketPrice - price),
       basket: basket, 
     }, function () {
       localStorage.setItem("state", JSON.stringify(this.state))
     });
-  }
-
-  productPrice = (product) => {
-    return product.salePrice < product.price ? product.salePrice : product.price;
   }
 
   render() {
@@ -70,7 +64,6 @@ export default class App extends Component {
         <Layout>
           <Route exact path='/' render={() => <Home handleProductAddClick={this.handleProductAddClick}/>} />
           <Route exact path='/basket' render={() => <Basket data={this.state} handleProductRemoveClick={this.handleProductRemoveClick}/>} />
-          <AuthorizeRoute path='/fetch-data' component={FetchData} />
           <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         </Layout>
       </div>
