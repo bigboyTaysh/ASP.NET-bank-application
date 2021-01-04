@@ -20,7 +20,8 @@ export default class App extends Component {
       itemsCount: 0,
       basketPrice: 0,
       basket: [],
-      payment: false
+      payment: false,
+      paid: false 
     };
   }
 
@@ -90,7 +91,7 @@ export default class App extends Component {
         <Layout>
           <Route exact path='/' render={() => <Home handleProductAddClick={this.handleProductAddClick} />} />
           <Route exact path='/basket' render={() => <Basket data={this.state} handleProductRemoveClick={this.handleProductRemoveClick} handleBasketReset={this.handleBasketReset} handleSetPayment={this.handleSetPayment} />} />
-          <Route exact path='/summary' render={() => <Summary data={this.state} handleBasketReset={this.handleBasketReset} handleSetPayment={this.handleSetPayment} />} />
+          <Route path='/summary/:id' render={(props) => <Summary {...props} data={this.state} handleBasketReset={this.handleBasketReset} handleSetPayment={this.handleSetPayment} />} />
           <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         </Layout>
       </div>

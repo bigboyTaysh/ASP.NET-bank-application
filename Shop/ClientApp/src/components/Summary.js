@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import OrderStepper from './OrderStepper';
+import axios from "axios";
+import { Typography } from '@material-ui/core';
 
 export class Summary extends Component {
   static displayName = Summary.name;
@@ -9,7 +11,8 @@ export class Summary extends Component {
     super(props);
 
     this.state = {
-      payment: this.props.data.payment
+      payment: this.props.data.payment,
+      id: this.props.match.params.id
     }
   }
 

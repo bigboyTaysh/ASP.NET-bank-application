@@ -35,8 +35,10 @@ export default function BasketForm(props) {
   };
 
   const handleSumbit = () => {
-    props.handleSetPayment(true);
-    history.push('/summary')
+    if(!cardPayment){
+      props.handleSetPayment(true);
+      history.push('/summary/cashOnDelivery')
+    }
   }
 
   var button = props.data.itemsCount > 0 && cardPayment !== '' ? (
