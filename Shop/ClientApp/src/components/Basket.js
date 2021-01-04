@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import BasketForm from './BasketForm';
 import ProductList from './ProductList';
+import OrderStepper from './OrderStepper';
 
 export class Basket extends Component {
 
@@ -11,6 +12,7 @@ export class Basket extends Component {
       <div>
         <ProductList data={this.props.data} handleProductRemoveClick={this.props.handleProductRemoveClick} />
         <BasketForm data={this.props.data} />
+        <OrderStepper step={0}/>
       </div>
     );
   }
