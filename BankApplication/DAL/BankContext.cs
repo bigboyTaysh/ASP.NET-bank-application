@@ -24,6 +24,7 @@ namespace BankApplication.DAL
         public DbSet<Credit> Credits { get; set; }
         public DbSet<PaymentCard> PaymentCards { get; set; }
         public DbSet<Acquirer> Acquirers { get; set; }
+        public DbSet<DirectoryServer> DirectoryServers{ get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

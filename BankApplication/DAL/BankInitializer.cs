@@ -191,6 +191,27 @@ namespace BankApplication.DAL
 
             profiles.ForEach(p => context.Profiles.Add(p));
             context.SaveChanges();
+
+            var acquirer = new Acquirer()
+            {
+                Name = "Giga Pizza",
+                URL = "https://localhost:44395/",
+                Description = "Brak pomysłu na obiad? Zamów pizzę online. Giga Pizza to giga przyjemność!",
+                ApiKey = "2a9f86fc-8fd6-439d-99af-30d743180d6a"
+            };
+
+            context.Acquirers.Add(acquirer);
+            context.SaveChanges();
+
+            var directoryServer = new DirectoryServer()
+            {
+                Name = "Main Directory Server",
+                ApiKey = "06b9e986-9609-4892-933f-9ced84f3e1c8"
+            };
+
+            context.DirectoryServers.Add(directoryServer);
+            context.SaveChanges();
+
         }
     }
 }
