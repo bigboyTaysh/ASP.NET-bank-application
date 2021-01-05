@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Szczegóły zamówienia', 'Płatność', 'Podsumowanie'];
+  return ['Szczegóły zamówienia', 'Płatność i dostawa', 'Podsumowanie'];
 }
 
 export default function OrderStepper(props) {

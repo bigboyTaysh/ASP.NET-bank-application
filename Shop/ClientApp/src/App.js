@@ -9,6 +9,7 @@ import NavBar from './components/NavBar';
 
 import './custom.css'
 import { Summary } from './components/Summary';
+import PaymentForm from './components/PaymentForm';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -21,7 +22,7 @@ export default class App extends Component {
       basketPrice: 0,
       basket: [],
       payment: false,
-      paid: false 
+      cardPayment: false
     };
   }
 
@@ -31,7 +32,8 @@ export default class App extends Component {
       this.setState({
         itemsCount: data.itemsCount,
         basketPrice: (parseFloat(data.basketPrice)).toFixed(2),
-        basket: data.basket
+        basket: data.basket,
+        cardPayment: data.cardPayment
       });
     }
   }
@@ -46,6 +48,7 @@ export default class App extends Component {
         itemsCount: this.state.itemsCount,
         basketPrice: this.state.basketPrice,
         basket: this.state.basket,
+        cardPayment: this.state.cardPayment
       }))
     });
   }
@@ -64,6 +67,7 @@ export default class App extends Component {
         itemsCount: this.state.itemsCount,
         basketPrice: this.state.basketPrice,
         basket: this.state.basket,
+        cardPayment: this.state.cardPayment
       }))
     });
   }
@@ -84,14 +88,46 @@ export default class App extends Component {
     });
   }
 
+  handleSetCardPayment = (state) => {
+    this.setState({
+      cardPayment: state
+    });
+  }
+
   render() {
     return (
       <div>
         <NavBar data={this.state} />
         <Layout>
           <Route exact path='/' render={() => <Home handleProductAddClick={this.handleProductAddClick} />} />
-          <Route exact path='/basket' render={() => <Basket data={this.state} handleProductRemoveClick={this.handleProductRemoveClick} handleBasketReset={this.handleBasketReset} handleSetPayment={this.handleSetPayment} />} />
-          <Route path='/summary/:id' render={(props) => <Summary {...props} data={this.state} handleBasketReset={this.handleBasketReset} handleSetPayment={this.handleSetPayment} />} />
+          <Route exact path='/basket'
+            render={() =>
+              <Basket
+                data={this.state}
+                handleProductRemoveClick={this.handleProductRemoveClick}
+                handleBasketReset={this.handleBasketReset}
+                handleSetPayment={this.handleSetPayment}
+                handleSetCardPayment={this.handleSetCardPayment}
+              />
+            }
+          />
+          <Route exact path='/payment'
+            render={() =>
+              <PaymentForm
+                data={this.state}
+                handleBasketReset={this.handleBasketReset}
+                handleSetCardPayment={this.handleSetCardPayment}
+              />}
+          />
+          <Route path='/summary/:id'
+            render={(props) =>
+              <Summary
+                {...props}
+                data={this.state}
+                handleBasketReset={this.handleBasketReset}
+                handleSetPayment={this.handleSetPayment}
+              />}
+          />
           <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         </Layout>
       </div>

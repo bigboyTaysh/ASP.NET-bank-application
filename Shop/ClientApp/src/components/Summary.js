@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect, useParams } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import OrderStepper from './OrderStepper';
 import axios from "axios";
-import { Typography } from '@material-ui/core';
+import { Grid, Paper, Typography } from '@material-ui/core';
 
 export class Summary extends Component {
   static displayName = Summary.name;
@@ -12,7 +12,8 @@ export class Summary extends Component {
 
     this.state = {
       payment: this.props.data.payment,
-      id: this.props.match.params.id
+      id: this.props.match.params.id,
+      basketPrice: this.props.data.basketPrice
     }
   }
 
@@ -24,6 +25,19 @@ export class Summary extends Component {
     return (
       this.state.payment ?
         (<div>
+          <Paper>
+            <Grid
+              container
+            >
+              <Grid
+                item
+              >
+                <Typography>
+                  {this.state.basketPrice}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Paper>
           <OrderStepper step={2} />
         </div>) : (
           <Redirect to='/' />
