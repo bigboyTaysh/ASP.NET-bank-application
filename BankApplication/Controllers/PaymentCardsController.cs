@@ -16,10 +16,16 @@ namespace BankApplication.Controllers
     {
         private BankContext db = new BankContext();
 
+        [Authorize]
         // GET: PaymentCards
         public async Task<ActionResult> Index()
         {
-            return View(await db.PaymentCards.ToListAsync());
+            var profile = await db.Profiles
+                .SingleOrDefaultAsync(p => p.Login == User.Identity.Name);
+
+            var paymentCards = profile.BankAccounts.Select(b => b.PaymentCard).Where(p => p != null).ToList();
+
+            return View(paymentCards);
         }
 
         // GET: PaymentCards/Details/5
