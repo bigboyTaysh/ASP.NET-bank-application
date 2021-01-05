@@ -328,6 +328,7 @@
     <Compile Include="Controllers\CreditTypesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PaymentCardsController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="DAL\BankContext.cs" />
     <Compile Include="DAL\BankInitializer.cs" />
@@ -342,6 +343,7 @@
     <Compile Include="Models\CreditType.cs" />
     <Compile Include="Models\CreditApplication.cs" />
     <Compile Include="Models\Currency.cs" />
+    <Compile Include="Models\DirectoryServer.cs" />
     <Compile Include="Models\ExchangeRatesSeries.cs" />
     <Compile Include="Models\PaymentCard.cs" />
     <Compile Include="Models\Transaction.cs" />
@@ -539,6 +541,11 @@
     <Content Include="Views\Acquirers\Details.cshtml" />
     <Content Include="Views\Acquirers\Edit.cshtml" />
     <Content Include="Views\Acquirers\Index.cshtml" />
+    <Content Include="Views\PaymentCards\Create.cshtml" />
+    <Content Include="Views\PaymentCards\Delete.cshtml" />
+    <Content Include="Views\PaymentCards\Details.cshtml" />
+    <Content Include="Views\PaymentCards\Edit.cshtml" />
+    <Content Include="Views\PaymentCards\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

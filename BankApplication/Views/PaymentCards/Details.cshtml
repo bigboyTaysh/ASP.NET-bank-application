@@ -1,0 +1,50 @@
+﻿@model BankApplication.Models.PaymentCard
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PaymentCard</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentCardNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentCardNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Blocked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Blocked)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SecureCard)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SecureCard)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
