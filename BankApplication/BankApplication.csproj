@@ -343,6 +343,7 @@
     <Compile Include="Models\CreditApplication.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\ExchangeRatesSeries.cs" />
+    <Compile Include="Models\PaymentCard.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\BankAccount.cs" />
     <Compile Include="Models\BankAccountType.cs" />
