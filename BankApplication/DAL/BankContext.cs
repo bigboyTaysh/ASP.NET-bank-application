@@ -22,7 +22,8 @@ namespace BankApplication.DAL
         public DbSet<CreditType> CreditTypes { get; set; }
         public DbSet<CreditApplication> CreditApplications { get; set; }
         public DbSet<Credit> Credits { get; set; }
-
+        public DbSet<PaymentCard> PaymentCards { get; set; }
+        public DbSet<Acquirer> Acquirers { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -38,7 +39,5 @@ namespace BankApplication.DAL
             modelBuilder.Entity<CreditApplication>().Property(x => x.MonthRepayment).HasPrecision(26, 4);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
-
-        public System.Data.Entity.DbSet<BankApplication.Models.Acquirer> Acquirers { get; set; }
     }
 }

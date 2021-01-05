@@ -12,8 +12,7 @@ namespace BankApplication.Models
 
         [Display(Name = "Numer karty")]
         public string PaymentCardNumber { get; set; }
-        [Range(1000, 9999)]
-        public int Code { get; set; }
+        public string Code { get; set; }
         public bool Blocked { get; set; }
         public bool SecureCard { get; set; }
     }
