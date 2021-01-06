@@ -9,28 +9,41 @@ using System.Web;
 using System.Web.Mvc;
 using BankApplication.DAL;
 using BankApplication.Models;
+using System.Net.Http;
+using System.Web.Http.Description;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BankApplication.Controllers
+
 {
+    [Authorize]
     public class PaymentCardsController : Controller
     {
         private BankContext db = new BankContext();
 
-        [Authorize]
         // GET: PaymentCards
         public async Task<ActionResult> Index()
         {
+            List<PaymentCard> paymentCards;
 
-            var profile = await db.Profiles
-                .Include(p => p.BankAccounts)
-                .SingleOrDefaultAsync(p => p.Login == User.Identity.Name);
+            if (User.IsInRole("Admin") || User.IsInRole("Worker"))
+            {
+                paymentCards = db.PaymentCards
+                    .Include(p => p.BankAccount).ToList();
+            }
+            else
+            {
+                var profile = await db.Profiles
+                    .Include(p => p.BankAccounts)
+                    .SingleOrDefaultAsync(p => p.Login == User.Identity.Name);
 
-            var bankAccounts = profile.BankAccounts.Select(b => b.ID);
+                var bankAccounts = profile.BankAccounts.Select(b => b.ID);
 
-            var paymentCards = db.PaymentCards
-                .Include(p => p.BankAccount)
-                .Where(b => bankAccounts.Any(p => p == b.ID))
-                .ToList();
+                paymentCards = db.PaymentCards
+                    .Include(p => p.BankAccount)
+                    .Where(b => bankAccounts.Any(p => p == b.ID))
+                    .ToList();
+            }    
 
             return View(paymentCards);
         }
@@ -128,6 +141,44 @@ namespace BankApplication.Controllers
             db.PaymentCards.Remove(paymentCard);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        // POST: PaymentCards/Delete/5
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult CardSecured(string apiKey, string cardNumber, string code)
+        {
+            if (db.DirectoryServers.Any(d => d.ApiKey == apiKey))
+            {
+                var paymentCard = db.PaymentCards.SingleOrDefaultAsync(p => p.PaymentCardNumber == cardNumber && p.Code == code).Result;
+                if (paymentCard != null)
+                {
+                    if (paymentCard.SecureCard)
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.OK;
+                        return Json(new { status = true });
+                    }
+                    else
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.OK;
+                        return Json(new { status = false });
+                    }
+                    
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                }
+            } 
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            //PaymentCard paymentCard = await db.PaymentCards.FindAsync(id);
+            //db.PaymentCards.Remove(paymentCard);
+            //await db.SaveChangesAsync();
+
         }
 
         protected override void Dispose(bool disposing)

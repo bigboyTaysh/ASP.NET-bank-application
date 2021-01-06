@@ -31,6 +31,12 @@
                     <li class="nav-item">
                         @Html.ActionLink("Strona główna", "Index", "Home", null, new { @class = "nav-link" })
                     </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Karty", "Index", "PaymentCards", null, new { @class = "nav-link" })
+                        </li>
+                    }
                     @if (User.IsInRole("Admin"))
                     {
                         <li class="nav-item">
@@ -76,9 +82,8 @@
                                 @Html.ActionLink("Przyznane kredyty", "Index", "Credits", null, new { @class = "dropdown-item" })
                                 @Html.ActionLink("Wnioski", "Index", "CreditApplications", null, new { @class = "dropdown-item" })
                             </div>
-                        </li>
+                        </li> 
                     }
-
                     <li class="nav-item">
                         @Html.ActionLink("Partnerzy", "Index", "Acquirers", null, new { @class = "nav-link" })
                     </li>
