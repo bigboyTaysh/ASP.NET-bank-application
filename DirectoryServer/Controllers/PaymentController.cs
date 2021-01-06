@@ -1,9 +1,11 @@
 ﻿using DirectoryServer.Data;
 using DirectoryServer.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -33,12 +35,30 @@ namespace DirectoryServer.Controllers
 
         [HttpPost]
         [Route("cardSecure")]
-        public async Task<string> CardSecure([FromBody] SecureCardJson json)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> CardSecure([FromBody] SecureCardJson json)
         {
-            HttpResponseMessage response = await client.PostAsJsonAsync("http://localhost:44315/paymentCards/cardSecured", json);
-            response.EnsureSuccessStatusCode();
+            if (!_context.Acquirers.Any(a => a.ApiKey == json.apiKey))
+            {
+                return StatusCode(403);
+            }
 
-            return await response.Content.ReadAsStringAsync();
+            var bank = _context.Banks.FirstOrDefault();
+            json.apiKey = bank.ApiKey;
+
+            HttpResponseMessage response = await client.PostAsJsonAsync(bank.URL + "paymentCards/cardSecured", json);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return Ok(response.Content.ReadAsStringAsync().Result);
+            } 
+            else
+            {
+                return StatusCode((int)response.StatusCode);
+            }
         }
 
         /*

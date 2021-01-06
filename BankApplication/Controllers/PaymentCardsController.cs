@@ -155,12 +155,12 @@ namespace BankApplication.Controllers
                 {
                     if (paymentCard.SecureCard)
                     {
-                        Response.StatusCode = (int)HttpStatusCode.OK;
+                        //Response.StatusCode = (int)HttpStatusCode.OK;
                         return Json(new { status = true });
                     }
                     else
                     {
-                        Response.StatusCode = (int)HttpStatusCode.OK;
+                        //Response.StatusCode = (int)HttpStatusCode.OK;
                         return Json(new { status = false });
                     }
                     
@@ -172,7 +172,7 @@ namespace BankApplication.Controllers
             } 
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
             //PaymentCard paymentCard = await db.PaymentCards.FindAsync(id);
