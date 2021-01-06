@@ -4,6 +4,7 @@ import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
 import OrderStepper from './OrderStepper';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   bankAccountNumber: {
-    width: '35ch'
-  }, 
+    width: '25ch'
+  },
   pin: {
     width: '10ch'
   }
@@ -44,7 +45,7 @@ export default function PaymentForm(props) {
   const [values, setValues] = React.useState({
     address: '',
     cardNumber: '',
-    cardPin: ''
+    code: ''
   });
 
   let history = useHistory();
@@ -61,13 +62,31 @@ export default function PaymentForm(props) {
   };
 
   const handleSumbit = () => {
-    if (!cardPayment) {
-      //props.handleSetPayment(true);
-      //history.push('/summary/cashOnDelivery')
+    const data = {
+      apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
+      cardNumber: values.cardNumber,
+      code: values.code
     }
+
+    axios.post('https://localhost:44339/api/payment/cardSecure', {
+      apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
+      cardNumber: values.cardNumber,
+      code: values.code
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+    //props.handleSetPayment(true);
+    //history.push('/summary/cashOnDelivery')
   }
 
-  var button = props.data.itemsCount > 0 && cardPayment !== '' ? (
+  let button = values.address.length > 5 && values.cardNumber.trim().length == 19 && values.code.trim().length == 4 ? (
     <Button
       variant="contained"
       color="primary"
@@ -115,6 +134,7 @@ export default function PaymentForm(props) {
                 <TextField
                   required
                   label="Adres"
+                  name="address"
                   onChange={handleInputChange}
                   id="address"
                   variant="outlined"
@@ -123,7 +143,7 @@ export default function PaymentForm(props) {
               <Grid item xs={12}>
                 <NumberFormat
                   required
-                  label="Numer konta bankowego"
+                  label="Numer karty płatniczej"
                   onChange={handleInputChange}
                   name="cardNumber"
                   id="cardNumber"
@@ -131,7 +151,7 @@ export default function PaymentForm(props) {
                   customInput={TextField}
                   className={classes.bankAccountNumber}
                   isNumericString
-                  format="## #### #### #### #### #### ####"
+                  format="#### #### #### ####"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -139,8 +159,8 @@ export default function PaymentForm(props) {
                   required
                   label="Kod"
                   onChange={handleInputChange}
-                  name="cardPin"
-                  id="cardPin"
+                  name="code"
+                  id="code"
                   variant="outlined"
                   customInput={TextField}
                   className={classes.pin}
