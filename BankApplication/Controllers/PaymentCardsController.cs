@@ -143,7 +143,7 @@ namespace BankApplication.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: PaymentCards/Delete/5
+        // POST: PaymentCards/CardSecured/5
         [HttpPost]
         [AllowAnonymous]
         public ActionResult CardSecured(string apiKey, string cardNumber, string code)
