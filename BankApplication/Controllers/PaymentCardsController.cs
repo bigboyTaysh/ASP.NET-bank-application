@@ -20,10 +20,17 @@ namespace BankApplication.Controllers
         // GET: PaymentCards
         public async Task<ActionResult> Index()
         {
+
             var profile = await db.Profiles
+                .Include(p => p.BankAccounts)
                 .SingleOrDefaultAsync(p => p.Login == User.Identity.Name);
 
-            var paymentCards = profile.BankAccounts.Select(b => b.PaymentCard).Where(p => p != null).ToList();
+            var bankAccounts = profile.BankAccounts.Select(b => b.ID);
+
+            var paymentCards = db.PaymentCards
+                .Include(p => p.BankAccount)
+                .Where(b => bankAccounts.Any(p => p == b.ID))
+                .ToList();
 
             return View(paymentCards);
         }

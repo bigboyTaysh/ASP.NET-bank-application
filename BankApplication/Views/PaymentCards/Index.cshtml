@@ -18,10 +18,16 @@
             @Html.DisplayNameFor(model => model.Code)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Blocked)
+            Blokada karty
         </th>
         <th>
             @Html.DisplayNameFor(model => model.SecureCard)
+        </th>
+        <th>
+            Numer rachunku
+        </th>
+        <th>
+            Dostępne środki
         </th>
         <th></th>
     </tr>
@@ -39,6 +45,12 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.SecureCard)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BankAccount.BankAccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BankAccount.AvailableFounds)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

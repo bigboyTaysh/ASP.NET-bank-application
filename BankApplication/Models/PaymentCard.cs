@@ -15,5 +15,7 @@ namespace BankApplication.Models
         public string Code { get; set; }
         public bool Blocked { get; set; }
         public bool SecureCard { get; set; }
+        public int BankAccountID { get; set; }
+        public BankAccount BankAccount { get; set; }
     }
 }

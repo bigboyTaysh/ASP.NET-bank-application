@@ -105,26 +105,6 @@ namespace BankApplication.DAL
             bankAccountTypes.ForEach(b => context.BankAccountTypes.Add(b));
             context.SaveChanges();
 
-            var paymentCards = new List<PaymentCard>
-            {
-                new PaymentCard 
-                { 
-                    PaymentCardNumber = "1234 1234 1234 1230",
-                    Code = "0321", 
-                    Blocked = false,
-                    SecureCard = true
-                },
-                new PaymentCard
-                {
-                    PaymentCardNumber = "1234 1234 1234 1231",
-                    Code = "3021",
-                    Blocked = true,
-                    SecureCard = false
-                },
-            };
-            paymentCards.ForEach(p => context.PaymentCards.Add(p));
-            context.SaveChanges();
-
             var creditType = new CreditType { Name = "kredyt gotówkowy", Commission = 8.99m, Rates = 0m };
             context.CreditTypes.Add(creditType);
             context.SaveChanges();
@@ -139,7 +119,6 @@ namespace BankApplication.DAL
                     CreationDate = new DateTime(2020, 06, 04),
                     BankAccountType = bankAccountTypes[0],
                     Currency = currencies[0],
-                    PaymentCard = paymentCards[0]
                 },
 
                 new BankAccount {
@@ -150,7 +129,6 @@ namespace BankApplication.DAL
                     CreationDate = new DateTime(2020, 06, 03),
                     BankAccountType = bankAccountTypes[1],
                     Currency = currencies[0],
-                    PaymentCard = paymentCards[1]
                 },
 
                 new BankAccount {
@@ -165,6 +143,28 @@ namespace BankApplication.DAL
             };
 
             bankAccounts.ForEach(b => context.BankAccounts.Add(b));
+            context.SaveChanges();
+
+            var paymentCards = new List<PaymentCard>
+            {
+                new PaymentCard
+                {
+                    PaymentCardNumber = "1234 1234 1234 1230",
+                    Code = "0321",
+                    Blocked = false,
+                    SecureCard = true,
+                    BankAccount = bankAccounts[0]
+                },
+                new PaymentCard
+                {
+                    PaymentCardNumber = "1234 1234 1234 1231",
+                    Code = "3021",
+                    Blocked = true,
+                    SecureCard = false,
+                    BankAccount = bankAccounts[1]
+                },
+            };
+            paymentCards.ForEach(p => context.PaymentCards.Add(p));
             context.SaveChanges();
 
             var profiles = new List<Profile>

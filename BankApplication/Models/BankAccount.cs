@@ -44,7 +44,5 @@ namespace BankApplication.Models
 
         public virtual BankAccountType BankAccountType { get; set; }
         public virtual Currency Currency { get; set; }
-        public virtual PaymentCard PaymentCard { get; set; }
-
     }
 }
