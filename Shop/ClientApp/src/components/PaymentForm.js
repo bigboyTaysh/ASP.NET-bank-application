@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 export default function PaymentForm(props) {
   const classes = useStyles();
   const [cardPayment, setCardPayment] = React.useState('');
+  const [status, setStatus] = React.useState('');
   const [values, setValues] = React.useState({
     address: '',
     cardNumber: '',
@@ -74,14 +75,15 @@ export default function PaymentForm(props) {
       code: values.code
     })
       .then(function (response) {
-        console.log(response);
+        setStatus(response.data.status);
       })
       .catch(function (error) {
-        console.log(error);
+        setStatus(error.response.status);
       })
       .then(function () {
         // always executed
       });
+
     //props.handleSetPayment(true);
     //history.push('/summary/cashOnDelivery')
   }
@@ -103,6 +105,40 @@ export default function PaymentForm(props) {
         Zapłać
       </Button>
     )
+
+  let statusText;
+
+  let cardSecured =
+    <Typography>
+      Podana karta jest zabezpieczona
+    </Typography>
+
+  let cardNotSecured =
+    <Typography>
+      Karta nie widnieje w systemie CardSecure
+    </Typography>
+
+  let cardNotFound =
+    <Typography>
+      Nieprawidłowe dane karty
+    </Typography>
+
+  let wrong =
+    <Typography>
+      Coś poszło nie tak
+    </Typography>
+
+  if (status === true) {
+    statusText = (cardSecured)
+  } else if (status === false) {
+    statusText = (cardNotSecured)
+  } else if (status === 404) {
+    statusText = (cardNotFound)
+  } else if (status === '') {
+    statusText = ''
+  } else {
+    statusText = (wrong)
+  }
 
   return (
     <div>
@@ -128,6 +164,9 @@ export default function PaymentForm(props) {
               <Typography className={classes.text}>
                 {props.data.basketPrice} zł
                 </Typography>
+            </Grid>
+            <Grid item>
+              {statusText}
             </Grid>
             <form className={classes.form} noValidate autoComplete="off">
               <Grid item>
