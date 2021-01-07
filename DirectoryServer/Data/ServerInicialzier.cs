@@ -25,7 +25,7 @@ namespace DirectoryServer.Data
                 var bank = new Bank()
                 {
                     Name = "Bank",
-                    URL = "http://localhost:44315/",
+                    URL = "https://localhost:44377/",
                     ApiKey = "06b9e986-9609-4892-933f-9ced84f3e1c8"
                 };
 
