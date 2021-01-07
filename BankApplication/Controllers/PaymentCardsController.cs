@@ -12,6 +12,7 @@ using BankApplication.Models;
 using System.Net.Http;
 using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 namespace BankApplication.Controllers
 

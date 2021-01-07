@@ -27,6 +27,8 @@ namespace Shop
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -43,18 +45,6 @@ namespace Shop
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                                  builder =>
-                                  {
-                                      builder.WithOrigins("http://localhost",
-                                                          "https://localhost")
-                                      .AllowAnyHeader()
-                                      .AllowAnyMethod();
-                                  });
-            });
-
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -68,7 +58,6 @@ namespace Shop
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -77,17 +66,24 @@ namespace Shop
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors(builder =>
+            {
+                builder
+                    .WithOrigins("https://localhost:44339")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowCredentials();
+            });
+
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
-
-            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

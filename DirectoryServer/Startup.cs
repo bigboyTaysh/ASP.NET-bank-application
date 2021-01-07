@@ -31,17 +31,7 @@ namespace DirectoryServer
                options.UseSqlServer(
                    Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                                  builder =>
-                                  {
-                                      builder.WithOrigins("http://localhost",
-                                                          "https://localhost")
-                                      .AllowAnyHeader()
-                                      .AllowAnyMethod();
-                                  });
-            });
+            services.AddCors();
 
             services.AddControllers();
         }
@@ -49,12 +39,18 @@ namespace DirectoryServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(builder =>
+            {
+                builder
+                    .WithOrigins("https://localhost:44395")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowCredentials();
+            });
+
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            app.UseCors();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

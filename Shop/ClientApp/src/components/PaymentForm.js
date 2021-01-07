@@ -78,7 +78,11 @@ export default function PaymentForm(props) {
         setStatus(response.data.status);
       })
       .catch(function (error) {
-        setStatus(error.response.status);
+        if(error.response){
+          setStatus(error.response.status);
+        } else {
+          setStatus("error");
+        }
       })
       .then(function () {
         // always executed
