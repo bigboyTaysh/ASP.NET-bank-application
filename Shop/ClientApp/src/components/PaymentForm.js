@@ -1,9 +1,7 @@
-import { Button, FormControl, FormHelperText, Grid, InputLabel, makeStyles, MenuItem, Paper, Select, TextField, Typography } from '@material-ui/core';
+import { Backdrop, Button, CircularProgress, Grid, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
 import React from 'react';
 import NumberFormat from 'react-number-format';
-import { useHistory } from 'react-router-dom';
 import OrderStepper from './OrderStepper';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Alert } from '@material-ui/lab';
 
@@ -41,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
   alert: {
     width: '40ch'
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
 
 export default function PaymentForm(props) {
@@ -52,8 +54,7 @@ export default function PaymentForm(props) {
     cardNumber: '',
     code: ''
   });
-
-  let history = useHistory();
+  const [open, setOpen] = React.useState(false);
 
   const handleChange = (event) => {
     setCardPayment(event.target.value);
@@ -66,6 +67,14 @@ export default function PaymentForm(props) {
     });
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleToggle = () => {
+    setOpen(!open);
+  };
+
   const addOrder = () => {
     axios.post('api/orders/postOrder', {
       price: props.data.basketPrice,
@@ -74,161 +83,173 @@ export default function PaymentForm(props) {
       }))
     })
       .then(function (response) {
+        props.handleBasketReset();
+        
         window.location =
-         'https://localhost:44377/paymentCards/cardPayment?orderId=' + response.data.id
-         + '&apiKey=' + '2a9f86fc-8fd6-439d-99af-30d743180d6a'
-         + '&cardNumber=' + values.cardNumber;
+          'https://localhost:44377/paymentCards/cardPayment?orderId=' + response.data.id
+          + '&apiKey=' + '2a9f86fc-8fd6-439d-99af-30d743180d6a'
+          + '&cardNumber=' + values.cardNumber;
       })
       .catch(function (error) {
+        handleClose();
         setStatus("error");
       })
-}
+  }
 
-const handleSumbit = () => {
-  axios.post('https://localhost:44339/api/payment/cardSecure', {
-    apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
-    cardNumber: values.cardNumber,
-    code: values.code
-  })
-    .then(function (response) {
-      if (response.data.status) {
-        addOrder();
-      } else {
-        setStatus(response.data.status);
-      }
+  const handleSumbit = () => {
+    handleToggle();
+
+    axios.post('https://localhost:44339/api/payment/cardSecure', {
+      apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
+      cardNumber: values.cardNumber,
+      code: values.code
     })
-    .catch(function (error) {
-      if (error.response) {
-        setStatus(error.response.status);
-      } else {
-        setStatus("error");
-      }
-    })
+      .then(function (response) {
+        if (response.data.status) {
+          addOrder();
+        } else {
+          handleClose();
+          setStatus(response.data.status);
+        }
+      })
+      .catch(function (error) {
+        handleClose();
+        if (error.response) {
+          setStatus(error.response.status);
+        } else {
+          setStatus("error");
+        }
+      })
 
-  //props.handleSetPayment(true);
-}
+    //props.handleSetPayment(true);
+  }
 
-let button = values.address.length > 5 && values.cardNumber.trim().length == 19 && values.code.trim().length == 4 ? (
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={handleSumbit}
-  >
-    Zapłać
-  </Button>
-) : (
-    <Button
-      variant="contained"
-      color="primary"
-      disabled
-    >
-      Zapłać
-    </Button>
-  )
+  let button = values.address.length > 5 &&
+    values.cardNumber.trim().length === 19 &&
+    values.code.trim().length === 4 ? (
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSumbit}
+      >
+        Zapłać
+      </Button>
+    ) : (
+      <Button
+        variant="contained"
+        color="primary"
+        disabled
+      >
+        Zapłać
+      </Button>
+    )
 
-let statusText;
+  let statusText;
 
-let cardSecured =
-  <Typography>
-    Podana karta jest zabezpieczona
+  let cardSecured =
+    <Typography>
+      Podana karta jest zabezpieczona
     </Typography>
 
-let cardNotSecured =
-  <Alert className={classes.alert} severity="warning">Karta nie widnieje w systemie CardSecure</Alert>
+  let cardNotSecured =
+    <Alert className={classes.alert} severity="warning">Karta nie widnieje w systemie CardSecure</Alert>
 
-let cardNotFound =
-  <Alert className={classes.alert} severity="error">Nieprawidłowe dane karty</Alert>
+  let cardNotFound =
+    <Alert className={classes.alert} severity="error">Nieprawidłowe dane karty</Alert>
 
-let wrong =
-  <Alert className={classes.alert} severity="error">Coś poszło nie tak</Alert>
+  let wrong =
+    <Alert className={classes.alert} severity="error">Coś poszło nie tak</Alert>
 
-if (status === true) {
-  statusText = (cardSecured)
-} else if (status === false) {
-  statusText = (cardNotSecured)
-} else if (status === 404) {
-  statusText = (cardNotFound)
-} else if (status === '') {
-  statusText = ''
-} else {
-  statusText = (wrong)
-}
+  if (status === true) {
+    statusText = (cardSecured)
+  } else if (status === false) {
+    statusText = (cardNotSecured)
+  } else if (status === 404) {
+    statusText = (cardNotFound)
+  } else if (status === '') {
+    statusText = ''
+  } else {
+    statusText = (wrong)
+  }
 
-return (
-  <div>
-    <Paper
-      className={classes.paper}
-    >
-      <Paper className={classes.paperChild}>
-        <Grid
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-          spacing={2}
-        >
-          <Grid item>
-            <Paper>
-              <Typography className={classes.text}>
-                Koszt zamówienia
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.text}>
-              {props.data.basketPrice} zł
-                </Typography>
-          </Grid>
-          <Grid item>
-            {statusText}
-          </Grid>
-          <form className={classes.form} noValidate autoComplete="off">
+  return (
+    <div>
+      <Paper
+        className={classes.paper}
+      >
+        <Paper className={classes.paperChild}>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            spacing={2}
+          >
             <Grid item>
-              <TextField
-                required
-                label="Adres"
-                name="address"
-                onChange={handleInputChange}
-                id="address"
-                variant="outlined"
-              />
+              <Paper>
+                <Typography className={classes.text}>
+                  Koszt zamówienia
+              </Typography>
+              </Paper>
             </Grid>
-            <Grid item xs={12}>
-              <NumberFormat
-                required
-                label="Numer karty płatniczej"
-                onChange={handleInputChange}
-                name="cardNumber"
-                id="cardNumber"
-                variant="outlined"
-                customInput={TextField}
-                className={classes.bankAccountNumber}
-                isNumericString
-                format="#### #### #### ####"
-              />
+            <Grid item>
+              <Typography className={classes.text}>
+                {props.data.basketPrice} zł
+                </Typography>
             </Grid>
-            <Grid item xs={12}>
-              <NumberFormat
-                required
-                label="Kod"
-                onChange={handleInputChange}
-                name="code"
-                id="code"
-                variant="outlined"
-                customInput={TextField}
-                className={classes.pin}
-                isNumericString
-                format="####"
-              />
+            <Grid item>
+              {statusText}
             </Grid>
-          </form>
-          <Grid item>
-            {button}
+            <form className={classes.form} noValidate autoComplete="off">
+              <Grid item>
+                <TextField
+                  required
+                  label="Adres"
+                  name="address"
+                  onChange={handleInputChange}
+                  id="address"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <NumberFormat
+                  required
+                  label="Numer karty płatniczej"
+                  onChange={handleInputChange}
+                  name="cardNumber"
+                  id="cardNumber"
+                  variant="outlined"
+                  customInput={TextField}
+                  className={classes.bankAccountNumber}
+                  isNumericString
+                  format="#### #### #### ####"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <NumberFormat
+                  required
+                  label="Kod"
+                  onChange={handleInputChange}
+                  name="code"
+                  id="code"
+                  variant="outlined"
+                  customInput={TextField}
+                  className={classes.pin}
+                  isNumericString
+                  format="####"
+                />
+              </Grid>
+            </form>
+            <Grid item>
+              {button}
+            </Grid>
           </Grid>
-        </Grid>
+        </Paper>
       </Paper>
-    </Paper>
-    <OrderStepper step={1} />
-  </div>
-);
+      <OrderStepper step={1} />
+      <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </div>
+  );
 }

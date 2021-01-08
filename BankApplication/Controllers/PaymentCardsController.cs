@@ -268,10 +268,9 @@ namespace BankApplication.Controllers
             TempData.Remove("statusPrice");
             TempData.Remove("statusAcquirer");
 
-            var response = client.PostAsJsonAsync(acquirer.URL + "api/orders/updateStatus", new { id = orderId, status = status, apiKey = acquirer.ApiKey});
+            client.PostAsJsonAsync(acquirer.URL + "api/orders/updateStatus", new { id = orderId, status = status, apiKey = acquirer.ApiKey});
 
-
-            return Redirect(acquirer.URL + "api/orders/" + orderId);
+            return Redirect(acquirer.URL + "summary/" + orderId);
         }
 
         protected override void Dispose(bool disposing)
