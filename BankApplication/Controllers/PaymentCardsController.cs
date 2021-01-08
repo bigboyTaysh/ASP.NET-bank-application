@@ -156,15 +156,12 @@ namespace BankApplication.Controllers
                 {
                     if (paymentCard.SecureCard)
                     {
-                        //Response.StatusCode = (int)HttpStatusCode.OK;
                         return Json(new { status = true });
                     }
                     else
                     {
-                        //Response.StatusCode = (int)HttpStatusCode.OK;
                         return Json(new { status = false });
                     }
-                    
                 }
                 else
                 {
@@ -175,11 +172,6 @@ namespace BankApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
-
-            //PaymentCard paymentCard = await db.PaymentCards.FindAsync(id);
-            //db.PaymentCards.Remove(paymentCard);
-            //await db.SaveChangesAsync();
-
         }
 
         protected override void Dispose(bool disposing)

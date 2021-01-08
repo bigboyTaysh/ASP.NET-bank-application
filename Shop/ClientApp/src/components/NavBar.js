@@ -154,7 +154,7 @@ export default function NavBar(props) {
         <Toolbar>
           <Typography className={classes.title} variant="h3" noWrap>
             <Link to="/" className={classes.link}>
-              Giga sklep
+              Giga Pizza
             </Link>
           </Typography>
           <div className={classes.grow} />

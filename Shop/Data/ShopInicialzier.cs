@@ -122,6 +122,16 @@ namespace Shop.Data
 
                 productCategories.ForEach(p => context.ProductCategories.Add(p));
                 context.SaveChanges();
+
+                var orderStatuses = new List<OrderStatus>
+                {
+                    new OrderStatus { Status = "Awaiting Payment" },
+                    new OrderStatus { Status = "Declined" },
+                    new OrderStatus { Status = "Completed" },
+                };
+
+                orderStatuses.ForEach(o => context.OrderStatuses.Add(o));
+                context.SaveChanges();
             }
         }
     }

@@ -9,6 +9,5 @@ namespace Shop.Models
     {
         public int ID { get; set; }
         public Product Product { get; set; }
-        public Basket Basket { get; set; }
     }
 }

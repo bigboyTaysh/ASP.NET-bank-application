@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import OrderStepper from './OrderStepper';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { Alert } from '@material-ui/lab';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +33,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   bankAccountNumber: {
-    width: '25ch'
+    width: '23ch'
   },
   pin: {
     width: '10ch'
-  }
+  },
+  alert: {
+    width: '40ch'
+  },
 }));
 
 export default function PaymentForm(props) {
@@ -62,163 +66,188 @@ export default function PaymentForm(props) {
     });
   };
 
-  const handleSumbit = () => {
-    const data = {
-      apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
-      cardNumber: values.cardNumber,
-      code: values.code
-    }
+  const addOrder = () => {
+    console.log({
+      price: props.data.basketPrice,
+      items: props.data.basket.map(product => ({
+        product: product
+      }))
+    })
 
-    axios.post('https://localhost:44339/api/payment/cardSecure', {
-      apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
-      cardNumber: values.cardNumber,
-      code: values.code
+    
+    axios.post('api/orders', {
+      price: props.data.basketPrice,
+      items: props.data.basket.map(product => ({
+        product: product
+      }))
     })
       .then(function (response) {
-        setStatus(response.data.status);
+        console.log(response.data)
       })
       .catch(function (error) {
-        if(error.response){
-          setStatus(error.response.status);
-        } else {
-          setStatus("error");
-        }
+        console.log(error.response)
       })
       .then(function () {
         // always executed
-      });
+      })
+      
+}
 
-    //props.handleSetPayment(true);
-    //history.push('/summary/cashOnDelivery')
+const handleSumbit = () => {
+  const data = {
+    apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
+    cardNumber: values.cardNumber,
+    code: values.code
   }
 
-  let button = values.address.length > 5 && values.cardNumber.trim().length == 19 && values.code.trim().length == 4 ? (
+  axios.post('https://localhost:44339/api/payment/cardSecure', {
+    apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
+    cardNumber: values.cardNumber,
+    code: values.code
+  })
+    .then(function (response) {
+      if (response.data.status) {
+        addOrder();
+      } else {
+        setStatus(response.data.status);
+      }
+    })
+    .catch(function (error) {
+      if (error.response) {
+        setStatus(error.response.status);
+      } else {
+        setStatus("error");
+      }
+    })
+    .then(function () {
+      // always executed
+    });
+
+  //props.handleSetPayment(true);
+  //history.push('/summary/cashOnDelivery')
+}
+
+let button = values.address.length > 5 && values.cardNumber.trim().length == 19 && values.code.trim().length == 4 ? (
+  <Button
+    variant="contained"
+    color="primary"
+    onClick={handleSumbit}
+  >
+    Zapłać
+  </Button>
+) : (
     <Button
       variant="contained"
       color="primary"
-      onClick={handleSumbit}
+      disabled
     >
       Zapłać
     </Button>
-  ) : (
-      <Button
-        variant="contained"
-        color="primary"
-        disabled
-      >
-        Zapłać
-      </Button>
-    )
+  )
 
-  let statusText;
+let statusText;
 
-  let cardSecured =
-    <Typography>
-      Podana karta jest zabezpieczona
+let cardSecured =
+  <Typography>
+    Podana karta jest zabezpieczona
     </Typography>
 
-  let cardNotSecured =
-    <Typography>
-      Karta nie widnieje w systemie CardSecure
-    </Typography>
+let cardNotSecured =
+  <Alert className={classes.alert} severity="warning">Karta nie widnieje w systemie CardSecure</Alert>
 
-  let cardNotFound =
-    <Typography>
-      Nieprawidłowe dane karty
-    </Typography>
+let cardNotFound =
+  <Alert className={classes.alert} severity="error">Nieprawidłowe dane karty</Alert>
 
-  let wrong =
-    <Typography>
-      Coś poszło nie tak
-    </Typography>
+let wrong =
+  <Alert className={classes.alert} severity="error">Coś poszło nie tak</Alert>
 
-  if (status === true) {
-    statusText = (cardSecured)
-  } else if (status === false) {
-    statusText = (cardNotSecured)
-  } else if (status === 404) {
-    statusText = (cardNotFound)
-  } else if (status === '') {
-    statusText = ''
-  } else {
-    statusText = (wrong)
-  }
+if (status === true) {
+  statusText = (cardSecured)
+} else if (status === false) {
+  statusText = (cardNotSecured)
+} else if (status === 404) {
+  statusText = (cardNotFound)
+} else if (status === '') {
+  statusText = ''
+} else {
+  statusText = (wrong)
+}
 
-  return (
-    <div>
-      <Paper
-        className={classes.paper}
-      >
-        <Paper className={classes.paperChild}>
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="stretch"
-            spacing={2}
-          >
-            <Grid item>
-              <Paper>
-                <Typography className={classes.text}>
-                  Koszt zamówienia
-              </Typography>
-              </Paper>
-            </Grid>
-            <Grid item>
+return (
+  <div>
+    <Paper
+      className={classes.paper}
+    >
+      <Paper className={classes.paperChild}>
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+          spacing={2}
+        >
+          <Grid item>
+            <Paper>
               <Typography className={classes.text}>
-                {props.data.basketPrice} zł
-                </Typography>
-            </Grid>
-            <Grid item>
-              {statusText}
-            </Grid>
-            <form className={classes.form} noValidate autoComplete="off">
-              <Grid item>
-                <TextField
-                  required
-                  label="Adres"
-                  name="address"
-                  onChange={handleInputChange}
-                  id="address"
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <NumberFormat
-                  required
-                  label="Numer karty płatniczej"
-                  onChange={handleInputChange}
-                  name="cardNumber"
-                  id="cardNumber"
-                  variant="outlined"
-                  customInput={TextField}
-                  className={classes.bankAccountNumber}
-                  isNumericString
-                  format="#### #### #### ####"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <NumberFormat
-                  required
-                  label="Kod"
-                  onChange={handleInputChange}
-                  name="code"
-                  id="code"
-                  variant="outlined"
-                  customInput={TextField}
-                  className={classes.pin}
-                  isNumericString
-                  format="####"
-                />
-              </Grid>
-            </form>
-            <Grid item>
-              {button}
-            </Grid>
+                Koszt zamówienia
+              </Typography>
+            </Paper>
           </Grid>
-        </Paper>
+          <Grid item>
+            <Typography className={classes.text}>
+              {props.data.basketPrice} zł
+                </Typography>
+          </Grid>
+          <Grid item>
+            {statusText}
+          </Grid>
+          <form className={classes.form} noValidate autoComplete="off">
+            <Grid item>
+              <TextField
+                required
+                label="Adres"
+                name="address"
+                onChange={handleInputChange}
+                id="address"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <NumberFormat
+                required
+                label="Numer karty płatniczej"
+                onChange={handleInputChange}
+                name="cardNumber"
+                id="cardNumber"
+                variant="outlined"
+                customInput={TextField}
+                className={classes.bankAccountNumber}
+                isNumericString
+                format="#### #### #### ####"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <NumberFormat
+                required
+                label="Kod"
+                onChange={handleInputChange}
+                name="code"
+                id="code"
+                variant="outlined"
+                customInput={TextField}
+                className={classes.pin}
+                isNumericString
+                format="####"
+              />
+            </Grid>
+          </form>
+          <Grid item>
+            {button}
+          </Grid>
+        </Grid>
       </Paper>
-      <OrderStepper step={1} />
-    </div>
-  );
+    </Paper>
+    <OrderStepper step={1} />
+  </div>
+);
 }
