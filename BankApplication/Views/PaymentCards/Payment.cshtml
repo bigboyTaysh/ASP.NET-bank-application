@@ -3,5 +3,84 @@
     ViewBag.Title = "Payment";
 }
 
-<h2>Payment</h2>
+<h2>Potwierdzenie płatności</h2>
 
+<div class="card text-center">
+    <div class="card-header">
+        <h3>
+            @ViewBag.acquirer.Name
+        </h3>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Czy potwierdzasz wskazaną płatność? </h5>
+        <br />
+        <div class="row">
+            <div class="col-sm text-align-right">
+                <p class="card-text font-weight-bold">Numer płatności: </p>
+            </div>
+            :
+            <div class="col-sm text-align-left">
+                <p class="card-text">@ViewBag.orderId</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm text-align-right">
+                <p class="card-text font-weight-bold">Całkowity koszt: </p>
+            </div>
+            :
+            <div class="col-sm text-align-left">
+                <p class="card-text">@ViewBag.price.ToString("#.##") zł</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm text-align-right">
+                <p class="card-text font-weight-bold">Płatność kartą: </p>
+            </div>
+            :
+            <div class="col-sm text-align-left">
+                <p class="card-text">@ViewBag.cardNumber</p>
+            </div>
+        </div>
+
+        <br />
+        <br />
+
+
+        <div class="row">
+            <div class="col-sm text-align-right">
+                <a href="#" class="btn btn-primary">Potwierdź</a>
+            </div>
+            <div class="col-sm text-align-left">
+                <a href="#" class="btn btn-danger">Anuluj</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        <div class="row">
+            <div class="col-sm text-align-right">
+                Czas do anulowania płatności:
+            </div>
+            :
+            <div class="col-sm text-align-left timer">
+                30 s
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        let seconds = 30;
+
+        setInterval(() => {
+            seconds = seconds - 1;
+            if (seconds < 10 && !$(".timer").hasClass("text-danger")) {
+                $(".timer").addClass("text-danger");
+            }
+            $(".timer").text(seconds + " s");
+            
+            if (seconds < 1) {
+                window.location.reload();
+            }
+        }, 1000);
+    });
+</script>

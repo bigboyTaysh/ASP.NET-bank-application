@@ -212,6 +212,7 @@ namespace BankApplication.Controllers
             TempData["orderId"] = orderId;
             TempData["cardNumber"] = cardNumber;
             TempData["price"] = content.Price;
+            TempData["acquirer"] = acquirer;
 
             return RedirectToAction("CardPaymentConfirmation");
         }
@@ -219,7 +220,7 @@ namespace BankApplication.Controllers
         [HttpGet]
         public ActionResult CardPaymentConfirmation()
         {
-            if (TempData["orderId"] == null || TempData["cardNumber"] == null || TempData["price"] == null)
+            if (TempData["orderId"] == null || TempData["cardNumber"] == null || TempData["price"] == null || TempData["acquirer"] == null)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -227,6 +228,12 @@ namespace BankApplication.Controllers
             int orderId = (int)TempData["orderId"];
             string cardNumber = TempData["cardNumber"].ToString();
             decimal price = (decimal)TempData["price"];
+            Acquirer acquirer = (Acquirer)TempData["acquirer"];
+
+            ViewBag.orderId = orderId;
+            ViewBag.cardNumber = cardNumber;
+            ViewBag.price = price;
+            ViewBag.acquirer = acquirer;
 
             return View("Payment");
         }
