@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Payment";
 }
 
@@ -45,13 +44,12 @@
         <br />
         <br />
 
-
         <div class="row">
             <div class="col-sm text-align-right">
-                <a href="#" class="btn btn-primary">Potwierdź</a>
+                @Html.ActionLink("Potwierdź", "Status", new { status = true }, new { @class = "btn btn-primary"})
             </div>
             <div class="col-sm text-align-left">
-                <a href="#" class="btn btn-danger">Anuluj</a>
+                @Html.ActionLink("Odrzuć", "Status", new { status = false }, new { @class = "btn btn-danger" })
             </div>
         </div>
     </div>
@@ -77,7 +75,7 @@
                 $(".timer").addClass("text-danger");
             }
             $(".timer").text(seconds + " s");
-            
+
             if (seconds < 1) {
                 window.location.reload();
             }

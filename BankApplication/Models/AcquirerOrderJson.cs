@@ -7,7 +7,7 @@ using System.Web;
 namespace BankApplication.Models
 {
     [NotMapped]
-    public class AcquirerOrder
+    public class AcquirerOrderJson
     {
         public int ID { get; set; }
         public decimal Price { get; set; }

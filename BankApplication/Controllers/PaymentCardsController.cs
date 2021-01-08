@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using System.Web.UI;
 
 namespace BankApplication.Controllers
 
@@ -192,9 +193,6 @@ namespace BankApplication.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            //var bank = _context.Banks.FirstOrDefault();
-            //json.apiKey = bank.ApiKey;
-
             HttpResponseMessage response = await client.GetAsync(acquirer.URL + "api/orders/" + orderId);
 
             if (!response.IsSuccessStatusCode)
@@ -202,7 +200,7 @@ namespace BankApplication.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var content = JsonConvert.DeserializeObject<AcquirerOrder>(response.Content.ReadAsStringAsync().Result);
+            var content = JsonConvert.DeserializeObject<AcquirerOrderJson>(response.Content.ReadAsStringAsync().Result);
 
             if (content.Status.Status != "Awaiting Payment")
             {
@@ -217,6 +215,7 @@ namespace BankApplication.Controllers
             return RedirectToAction("CardPaymentConfirmation");
         }
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*", Location = OutputCacheLocation.None)]
         [HttpGet]
         public ActionResult CardPaymentConfirmation()
         {
@@ -235,8 +234,51 @@ namespace BankApplication.Controllers
             ViewBag.price = price;
             ViewBag.acquirer = acquirer;
 
+            TempData["statusOrderId"] = orderId;
+            TempData["statusCardNumber"] = cardNumber;
+            TempData["statusPrice"] = price;
+            TempData["statusAcquirer"] = acquirer;
+
+            TempData.Remove("orderId");
+            TempData.Remove("cardNumber");
+            TempData.Remove("price");
+            TempData.Remove("acquirer");
+
             return View("Payment");
         }
+
+        [HttpGet]
+        public ActionResult Status(bool status)
+        {
+            if (TempData["statusOrderId"] == null ||
+                TempData["statusCardNumber"] == null ||
+                TempData["statusPrice"] == null ||
+                TempData["statusAcquirer"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            int orderId = (int)TempData["statusOrderId"];
+            string cardNumber = TempData["statusCardNumber"].ToString();
+            decimal price = (decimal)TempData["statusPrice"];
+            Acquirer acquirer = (Acquirer)TempData["statusAcquirer"];
+
+            TempData.Remove("statusOrderId");
+            TempData.Remove("statusCardNumber");
+            TempData.Remove("statusPrice");
+            TempData.Remove("statusAcquirer");
+
+            client.PostAsJsonAsync(acquirer.URL + "api/orders/updateStatus", new { id = orderId, status = status, apiKey = acquirer.ApiKey});
+
+            return RedirectToAction("RedirectToUrl", null, new { url = acquirer.URL + "api/orders/" + orderId });
+        }
+
+        public ActionResult RedirectToUrl(string url)
+        {
+            return Redirect(url);
+        }
+
+
 
         protected override void Dispose(bool disposing)
         {

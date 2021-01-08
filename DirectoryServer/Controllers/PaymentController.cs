@@ -42,13 +42,13 @@ namespace DirectoryServer.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> CardSecure([FromBody] SecureCardJson json)
         {
-            if (!_context.Acquirers.Any(a => a.ApiKey == json.apiKey))
+            if (!_context.Acquirers.Any(a => a.ApiKey == json.ApiKey))
             {
                 return StatusCode(403);
             }
 
             var bank = _context.Banks.FirstOrDefault();
-            json.apiKey = bank.ApiKey;
+            json.ApiKey = bank.ApiKey;
 
             HttpResponseMessage response = await client.PostAsJsonAsync(bank.URL + "paymentCards/cardSecured", json);
 

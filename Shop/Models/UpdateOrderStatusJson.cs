@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DirectoryServer.Models
+namespace Shop.Models
 {
     [NotMapped]
-    public class SecureCardJson
+    public class UpdateOrderStatusJson
     {
+        public int ID { get; set; }
         public string ApiKey { get; set; }
-        public string CardNumber { get; set; }
-        public string Code { get; set; }
+        public bool Status { get; set; }
     }
 }

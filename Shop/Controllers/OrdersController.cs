@@ -93,6 +93,23 @@ namespace Shop.Controllers
             return CreatedAtAction("GetOrder", new { id = order.ID }, order);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> UpdateStatus(UpdateOrderStatusJson order)
+        {
+            var response = Response;
+            /*
+            order.Date = DateTime.Now;
+            order.Status = _context.OrderStatuses.SingleOrDefault(o => o.Status == "Awaiting Payment");
+
+            order.Items.ForEach(i => i.Product = _context.Products.Find(i.Product.ID));
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+            */
+
+            return Ok();
+        }
+
         // DELETE: api/Orders/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
