@@ -77,9 +77,9 @@ namespace Shop.Controllers
             return NoContent();
         }
 
-        // POST: api/Orders
+        // POST: api/Orders/PostOrder
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("PostOrder")]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
             order.Date = DateTime.Now;
@@ -93,21 +93,31 @@ namespace Shop.Controllers
             return CreatedAtAction("GetOrder", new { id = order.ID }, order);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> UpdateStatus(UpdateOrderStatusJson order)
+        [HttpPost("UpdateStatus")]
+        public async Task<ActionResult> UpdateStatus(UpdateOrderStatusJson orderInfo)
         {
-            var response = Response;
-            /*
-            order.Date = DateTime.Now;
-            order.Status = _context.OrderStatuses.SingleOrDefault(o => o.Status == "Awaiting Payment");
+            if (_context.Banks.Any(b => b.ApiKey == orderInfo.ApiKey))
+            {
+                var order = await _context.Orders.SingleOrDefaultAsync(o => o.ID == orderInfo.ID);
+                if (order != null)
+                {
+                    if (orderInfo.Status)
+                    {
+                        order.Status = await _context.OrderStatuses.SingleOrDefaultAsync(s => s.Status == "Completed");
+                    }
+                    else
+                    {
+                        order.Status = await _context.OrderStatuses.SingleOrDefaultAsync(s => s.Status == "Declined");
+                    }
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
 
-            order.Items.ForEach(i => i.Product = _context.Products.Find(i.Product.ID));
-
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-            */
-
-            return Ok();
+            return NoContent();
         }
 
         // DELETE: api/Orders/5

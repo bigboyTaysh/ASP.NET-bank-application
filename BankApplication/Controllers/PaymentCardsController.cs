@@ -268,17 +268,11 @@ namespace BankApplication.Controllers
             TempData.Remove("statusPrice");
             TempData.Remove("statusAcquirer");
 
-            client.PostAsJsonAsync(acquirer.URL + "api/orders/updateStatus", new { id = orderId, status = status, apiKey = acquirer.ApiKey});
+            var response = client.PostAsJsonAsync(acquirer.URL + "api/orders/updateStatus", new { id = orderId, status = status, apiKey = acquirer.ApiKey});
 
-            return RedirectToAction("RedirectToUrl", null, new { url = acquirer.URL + "api/orders/" + orderId });
+
+            return Redirect(acquirer.URL + "api/orders/" + orderId);
         }
-
-        public ActionResult RedirectToUrl(string url)
-        {
-            return Redirect(url);
-        }
-
-
 
         protected override void Dispose(bool disposing)
         {
