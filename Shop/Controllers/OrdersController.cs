@@ -32,7 +32,11 @@ namespace Shop.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                .Include(o => o.Items)
+                    .ThenInclude(i => i.Product)
+                .Include(o => o.Status)
+                .SingleAsync(o => o.ID == id);
 
             if (order == null)
             {

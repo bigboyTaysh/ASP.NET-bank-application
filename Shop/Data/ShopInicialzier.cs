@@ -132,6 +132,25 @@ namespace Shop.Data
 
                 orderStatuses.ForEach(o => context.OrderStatuses.Add(o));
                 context.SaveChanges();
+
+                var directoryServer = new DirectoryServer()
+                {
+                    Name = "Main Directory Server",
+                    ApiKey = "ad777c2b-d332-4107-838a-b37738fa8e1f"
+                };
+
+                context.DirectoryServers.Add(directoryServer);
+                context.SaveChanges();
+
+                var bank = new Bank()
+                {
+                    Name = "Bank",
+                    URL = "https://localhost:44377/",
+                    ApiKey = "2a9f86fc-8fd6-439d-99af-30d743180d6a"
+                };
+
+                context.Banks.Add(bank);
+                context.SaveChanges();
             }
         }
     }

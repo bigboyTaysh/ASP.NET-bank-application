@@ -67,14 +67,6 @@ export default function PaymentForm(props) {
   };
 
   const addOrder = () => {
-    console.log({
-      price: props.data.basketPrice,
-      items: props.data.basket.map(product => ({
-        product: product
-      }))
-    })
-
-    
     axios.post('api/orders', {
       price: props.data.basketPrice,
       items: props.data.basket.map(product => ({
@@ -82,24 +74,17 @@ export default function PaymentForm(props) {
       }))
     })
       .then(function (response) {
-        console.log(response.data)
+        window.location =
+         'https://localhost:44377/paymentCards/cardPayment?orderId=' + response.data.id
+         + '&apiKey=' + '2a9f86fc-8fd6-439d-99af-30d743180d6a'
+         + '&cardNumber=' + values.cardNumber;
       })
       .catch(function (error) {
-        console.log(error.response)
+        setStatus("error");
       })
-      .then(function () {
-        // always executed
-      })
-      
 }
 
 const handleSumbit = () => {
-  const data = {
-    apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
-    cardNumber: values.cardNumber,
-    code: values.code
-  }
-
   axios.post('https://localhost:44339/api/payment/cardSecure', {
     apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
     cardNumber: values.cardNumber,
@@ -119,12 +104,8 @@ const handleSumbit = () => {
         setStatus("error");
       }
     })
-    .then(function () {
-      // always executed
-    });
 
   //props.handleSetPayment(true);
-  //history.push('/summary/cashOnDelivery')
 }
 
 let button = values.address.length > 5 && values.cardNumber.trim().length == 19 && values.code.trim().length == 4 ? (

@@ -26,6 +26,8 @@ namespace Shop.Data
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Picture> Pictures { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<Bank> Banks { get; set; }
+        public DbSet<DirectoryServer> DirectoryServers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

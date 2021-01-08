@@ -13,6 +13,8 @@ using System.Net.Http;
 using System.Web.Http.Description;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace BankApplication.Controllers
 
@@ -21,6 +23,7 @@ namespace BankApplication.Controllers
     public class PaymentCardsController : Controller
     {
         private BankContext db = new BankContext();
+        static HttpClient client = new HttpClient();
 
         // GET: PaymentCards
         public async Task<ActionResult> Index()
@@ -172,6 +175,60 @@ namespace BankApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> CardPayment(int? orderId, string apiKey, string cardNumber)
+        {
+            if (orderId == null || String.IsNullOrEmpty(apiKey) || String.IsNullOrEmpty(cardNumber))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var acquirer = db.Acquirers.SingleOrDefault(a => a.ApiKey == apiKey);
+
+            if (acquirer == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            //var bank = _context.Banks.FirstOrDefault();
+            //json.apiKey = bank.ApiKey;
+
+            HttpResponseMessage response = await client.GetAsync(acquirer.URL + "api/orders/" + orderId);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var content = JsonConvert.DeserializeObject<AcquirerOrder>(response.Content.ReadAsStringAsync().Result);
+
+            if (content.Status.Status != "Awaiting Payment")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            TempData["orderId"] = orderId;
+            TempData["cardNumber"] = cardNumber;
+            TempData["price"] = content.Price;
+
+            return RedirectToAction("CardPaymentConfirmation");
+        }
+
+        [HttpGet]
+        public ActionResult CardPaymentConfirmation()
+        {
+            if (TempData["orderId"] == null || TempData["cardNumber"] == null || TempData["price"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            int orderId = (int)TempData["orderId"];
+            string cardNumber = TempData["cardNumber"].ToString();
+            decimal price = (decimal)TempData["price"];
+
+            return View("Payment");
         }
 
         protected override void Dispose(bool disposing)
