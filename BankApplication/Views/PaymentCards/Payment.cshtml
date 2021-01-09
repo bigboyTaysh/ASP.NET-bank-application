@@ -69,15 +69,19 @@
     $(document).ready(function () {
         let seconds = 30;
 
-        setInterval(() => {
+        let count = setInterval(() => {
             seconds = seconds - 1;
             if (seconds < 10 && !$(".timer").hasClass("text-danger")) {
                 $(".timer").addClass("text-danger");
             }
             $(".timer").text(seconds + " s");
 
-            if (seconds < 1) {
-                window.location.reload();
+            if (seconds === 1) {
+                window.location.replace("@ViewBag.acquirer.URL" + "summary/" + "@ViewBag.orderId");
+
+            } else if (seconds < 1) {
+                $(".btn").addClass("disabled");
+                clearInterval(count);
             }
         }, 1000);
     });
