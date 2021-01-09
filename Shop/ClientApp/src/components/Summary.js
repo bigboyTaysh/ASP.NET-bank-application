@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paperChild: {
     margin: "auto",
-    width: "60%"
+    width: "80%"
   },
   successIcon: {
     fontSize: theme.typography.pxToRem(70),
@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     margin: theme.spacing(5),
   },
+  bold: {
+    fontWeight: "bold"
+  }
 }));
 
 export default function Summary(props) {
@@ -60,7 +63,6 @@ export default function Summary(props) {
     if (!order && !error) {
       axios.get('api/orders/' + orderId)
         .then(function (response) {
-          console.log(response.data)
           setOrder(response.data)
         })
         .catch(function (error) {
@@ -103,12 +105,12 @@ export default function Summary(props) {
 
     if (order.status.status === 'Completed') {
       icon = <CheckCircleOutline className={classes.successIcon} />;
-      status = 'Zamówienie zostało przyjęte';
-      date = 'Data przyjęcia zamówienia: '
+      status = 'Przyjęto do realizacji';
+      date = 'Data płatności: '
     } else if (order.status.status === 'Declined') {
       icon = <RemoveCircleOutline className={classes.failureIcon} />;
       status = 'Płatność odrzucona';
-      date = 'Data anulowania zamówienia: ';
+      date = 'Data anulowania: ';
     } else if (order.status.status === 'Awaiting Payment') {
       icon = <Timer className={classes.waitIcon} />;
       status = 'Oczekiwanie na płatność';
@@ -131,7 +133,19 @@ export default function Summary(props) {
           {status}
         </Typography>
       </Grid>
+      <Typography variant="subtitle1" className={classes.bold}>
+        Numer zamówienia:&nbsp;
+        </Typography>
       <Typography variant="subtitle1">
+        {order.id}
+      </Typography>
+      <Typography variant="subtitle1" className={classes.bold}>
+        Płatność kartą:&nbsp;
+        </Typography>
+      <Typography variant="subtitle1">
+        {order.cardNumber}
+      </Typography>
+      <Typography variant="subtitle1" className={classes.bold}>
         {date}
       </Typography>
       <Typography variant="subtitle1">
@@ -141,7 +155,7 @@ export default function Summary(props) {
       </Typography>
       <Grid item xs={12} className={classes.grid}>
         <Typography variant="h5">
-          Cena całkowita
+          Wartość zamówienia
           </Typography>
         <Typography variant="h5">
           {order.price} zł

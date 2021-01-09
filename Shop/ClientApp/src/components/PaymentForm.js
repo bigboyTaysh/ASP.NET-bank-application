@@ -85,7 +85,7 @@ export default function PaymentForm(props) {
     })
       .then(function (response) {
         props.handleBasketReset();
-        
+
         window.location =
           'https://localhost:44377/paymentCards/cardPayment?orderId=' + response.data.id
           + '&apiKey=' + '2a9f86fc-8fd6-439d-99af-30d743180d6a'
@@ -93,7 +93,7 @@ export default function PaymentForm(props) {
       })
       .catch(function (error) {
         handleClose();
-        setStatus("error");
+        setStatus(error);
       })
   }
 
@@ -118,7 +118,7 @@ export default function PaymentForm(props) {
         if (error.response) {
           setStatus(error.response.status);
         } else {
-          setStatus("error");
+          setStatus(error);
         }
       })
 
@@ -127,7 +127,7 @@ export default function PaymentForm(props) {
 
   let button = values.address.length > 5 &&
     values.cardNumber.trim().length === 19 &&
-    values.code.trim().length === 4 ? (
+    values.code.trim().length === 4 && props.data.basketPrice > 0 ? (
       <Button
         variant="contained"
         color="primary"

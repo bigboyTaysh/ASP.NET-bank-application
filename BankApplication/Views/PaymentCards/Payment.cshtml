@@ -4,6 +4,8 @@
 
 <h2>Potwierdzenie płatności</h2>
 
+@Html.AntiForgeryToken()
+
 <div class="card text-center">
     <div class="card-header">
         <h3>
@@ -28,7 +30,7 @@
             </div>
             :
             <div class="col-sm text-align-left">
-                <p class="card-text">@ViewBag.price.ToString("#.##") zł</p>
+                <p class="card-text">@ViewBag.price.ToString("#.##") @ViewBag.currency</p>
             </div>
         </div>
         <div class="row">
@@ -46,7 +48,7 @@
 
         <div class="row">
             <div class="col-sm text-align-right">
-                @Html.ActionLink("Potwierdź", "Status", new { status = true }, new { @class = "btn btn-primary"})
+                @Html.ActionLink("Potwierdź", "Status", new { status = true }, new { @class = "btn btn-primary" })
             </div>
             <div class="col-sm text-align-left">
                 @Html.ActionLink("Odrzuć", "Status", new { status = false }, new { @class = "btn btn-danger" })
@@ -67,7 +69,7 @@
 </div>
 <script>
     $(document).ready(function () {
-        let seconds = 30;
+        let seconds = 5;
 
         let count = setInterval(() => {
             seconds = seconds - 1;
@@ -77,8 +79,21 @@
             $(".timer").text(seconds + " s");
 
             if (seconds === 1) {
-                window.location.replace("@ViewBag.acquirer.URL" + "summary/" + "@ViewBag.orderId");
+                let token = $('input[name="__RequestVerificationToken"]').val();
 
+                $.ajax({
+                    url: '@Url.RouteUrl(new { controller = "Account", action = "LogOff" })',
+                    type: 'POST',
+                    data: {
+                        __RequestVerificationToken: token,
+                    },
+                    success: function (result) {
+                        window.location.replace("@ViewBag.acquirer.URL" + "summary/" + "@ViewBag.orderId");
+                    },
+                    error: function () {
+                        window.location.reload();
+                    }
+                });
             } else if (seconds < 1) {
                 $(".btn").addClass("disabled");
                 clearInterval(count);

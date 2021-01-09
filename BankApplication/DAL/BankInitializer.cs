@@ -89,7 +89,8 @@ namespace BankApplication.DAL
                 new TransactionType {Type = "CASH_WITHDRAWAL"},
                 new TransactionType {Type = "CASH_DEPOSIT"},
                 new TransactionType {Type = "CURR_EXCHANGE"},
-                new TransactionType {Type = "CREDIT_TRANSFER"}
+                new TransactionType {Type = "CREDIT_TRANSFER"},
+                new TransactionType {Type = "CARD_PAYMENT"},
             };
 
             transactionTypes.ForEach(t => context.TransactionTypes.Add(t));
@@ -112,8 +113,8 @@ namespace BankApplication.DAL
             var bankAccounts = new List<BankAccount>
             {
                 new BankAccount {
-                    Balance = 10.50m,
-                    AvailableFounds = 10.50m,
+                    Balance = 100.50m,
+                    AvailableFounds = 100.50m,
                     Lock = 0m,
                     BankAccountNumber = "12 1234 1234 1234 1234 1234 1230",
                     CreationDate = new DateTime(2020, 06, 04),
@@ -122,8 +123,8 @@ namespace BankApplication.DAL
                 },
 
                 new BankAccount {
-                    Balance = 0m,
-                    AvailableFounds = 0m,
+                    Balance = 50m,
+                    AvailableFounds = 50m,
                     Lock = 0m,
                     BankAccountNumber = "12 1234 1234 1234 1234 1234 1231",
                     CreationDate = new DateTime(2020, 06, 03),
@@ -132,8 +133,8 @@ namespace BankApplication.DAL
                 },
 
                 new BankAccount {
-                    Balance = 0m,
-                    AvailableFounds = 0m,
+                    Balance = 20m,
+                    AvailableFounds = 20m,
                     Lock = 0m,
                     BankAccountNumber = "12 1234 1234 1234 1234 1234 1232",
                     CreationDate = new DateTime(2020, 09, 06),

@@ -11,6 +11,7 @@ namespace Shop.Models
         public decimal Price { get; set; }
         public string CardNumber { get; set; }
         public DateTime Date { get; set; }
+        public string Currency { get; set; }
         public virtual OrderStatus Status { get; set; }
         public virtual List<BasketItem> Items { get; set; }
     }

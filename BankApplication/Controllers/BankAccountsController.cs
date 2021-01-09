@@ -160,8 +160,17 @@ namespace BankApplication.Controllers
                 bankAccount.CreationDate = DateTime.Today;
                 bankAccount.Currency = db.Currencies.Single(c => c.Code == CurrencyCode);
 
-                db.BankAccounts.Add(bankAccount);
+                PaymentCard paymentCard = new PaymentCard
+                {
+                    PaymentCardNumber = PaymentCardsController.NewPaymentCardNumber(),
+                    Code = new Random().Next(0, 9999).ToString("D4"),
+                    Blocked = false,
+                    SecureCard = true,
+                };
 
+                db.BankAccounts.Add(bankAccount);
+                paymentCard.BankAccount = bankAccount;
+                db.PaymentCards.Add(paymentCard);
                 db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts.Add(bankAccount);
 
                 db.SaveChanges();

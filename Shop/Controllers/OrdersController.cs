@@ -84,7 +84,7 @@ namespace Shop.Controllers
         {
             order.Date = DateTime.Now;
             order.Status = _context.OrderStatuses.SingleOrDefault(o => o.Status == "Awaiting Payment");
-
+            order.Currency = "PLN";
             order.Items.ForEach(i => i.Product = _context.Products.Find(i.Product.ID));
 
             _context.Orders.Add(order);

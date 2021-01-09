@@ -201,12 +201,22 @@ namespace BankApplication.Controllers
                         CurrencyID = db.Currencies.Single(c => c.Code == "PLN").ID
                     };
 
+                    PaymentCard paymentCard = new PaymentCard
+                    {
+                        PaymentCardNumber = PaymentCardsController.NewPaymentCardNumber(),
+                        Code = new Random().Next(0, 9999).ToString("D4"),
+                        Blocked = false,
+                        SecureCard = true,
+                    };
+
                     db.BankAccounts.Add(bankAccount);
                     profile.BankAccounts.Add(bankAccount);
+                    paymentCard.BankAccount = bankAccount;
                     db.Profiles.Add(profile);
+                    db.PaymentCards.Add(paymentCard);
                     db.SaveChanges();
 
-                    SendMail("wolskiworldwidebank@gmail.com", "Tytuł testowy", "Właśnie się zarejestrowałeś " + profile.Email);
+                    //SendMail("wolskiworldwidebank@gmail.com", "Tytuł testowy", "Właśnie się zarejestrowałeś " + profile.Email);
 
                     return RedirectToAction("Index", "Home");
                 }

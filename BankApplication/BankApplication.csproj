@@ -569,9 +569,9 @@
     <Content Include="Views\PaymentCards\Create.cshtml" />
     <Content Include="Views\PaymentCards\Delete.cshtml" />
     <Content Include="Views\PaymentCards\Details.cshtml" />
-    <Content Include="Views\PaymentCards\Edit.cshtml" />
     <Content Include="Views\PaymentCards\Index.cshtml" />
     <Content Include="Views\PaymentCards\Payment.cshtml" />
+    <Content Include="Views\PaymentCards\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
