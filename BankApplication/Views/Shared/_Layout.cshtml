@@ -15,6 +15,7 @@
     @Scripts.Render("~/bundles/main")
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     @RenderSection("scripts", required: false)
 
 
@@ -31,6 +32,15 @@
                     <li class="nav-item">
                         @Html.ActionLink("Strona główna", "Index", "Home", null, new { @class = "nav-link" })
                     </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a href="@Url.RouteUrl(new { controller = "PaymentCards", action = "Index" })" class="nav-link">
+                                Karty
+                                <i class="bi bi-credit-card"></i>
+                            </a>
+                        </li>
+                    }
                     @if (User.IsInRole("Admin"))
                     {
                         <li class="nav-item">
@@ -76,9 +86,8 @@
                                 @Html.ActionLink("Przyznane kredyty", "Index", "Credits", null, new { @class = "dropdown-item" })
                                 @Html.ActionLink("Wnioski", "Index", "CreditApplications", null, new { @class = "dropdown-item" })
                             </div>
-                        </li>
+                        </li> 
                     }
-
                     <li class="nav-item">
                         @Html.ActionLink("Partnerzy", "Index", "Acquirers", null, new { @class = "nav-link" })
                     </li>

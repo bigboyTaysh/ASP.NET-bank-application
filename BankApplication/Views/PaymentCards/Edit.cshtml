@@ -1,0 +1,57 @@
+﻿@model BankApplication.Models.PaymentCard
+
+@{
+    ViewBag.Title = "Karty";
+}
+
+<h2>Ustawienia karty płatniczej</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal col-md-offset-2">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.BankAccount)
+        @Html.HiddenFor(model => model.PaymentCardNumber)
+        @Html.HiddenFor(model => model.Code)
+
+        <div class="form-group align-items-center">
+            @Html.LabelFor(model => model.PaymentCardNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <label>@Model.PaymentCardNumber</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-1">
+                @Html.LabelFor(model => model.Blocked, "Blokada karty", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-sm-6">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.Blocked)
+                        @Html.ValidationMessageFor(model => model.Blocked, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-1">
+                @Html.LabelFor(model => model.SecureCard, "Usługa SecureCard", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-sm-6">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.SecureCard)
+                        @Html.ValidationMessageFor(model => model.SecureCard, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.ActionLink("Wróć", "Index", null, new { @class = "btn btn-outline-dark" })
+                <input type="submit" value="Zapisz" class="btn btn-outline-primary" />
+            </div>
+        </div>
+    </div>
+}

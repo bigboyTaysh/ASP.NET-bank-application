@@ -148,9 +148,15 @@ namespace BankApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "BankAccountTypeID")] BankAccount bankAccount, string CurrencyCode)
         {
-            //HttpPostedFileBase file = Request.Files["FileName"];
 
-            //if (ModelState.IsValid && file != null && file.ContentLength > 0)
+
+            if ((db.BankAccountTypes.Find(bankAccount.BankAccountTypeID).Type == "FOR_CUR_ACC" && CurrencyCode == "PLN") ||
+                (db.BankAccountTypes.Find(bankAccount.BankAccountTypeID).Type != "FOR_CUR_ACC" && CurrencyCode != "PLN")
+                )
+            {
+                ModelState.AddModelError("CurrencyCode", "Nieprawidłowa waluta");
+            }
+
             if (ModelState.IsValid)
             {
                 bankAccount.Balance = 0.0m;
@@ -160,8 +166,17 @@ namespace BankApplication.Controllers
                 bankAccount.CreationDate = DateTime.Today;
                 bankAccount.Currency = db.Currencies.Single(c => c.Code == CurrencyCode);
 
-                db.BankAccounts.Add(bankAccount);
+                PaymentCard paymentCard = new PaymentCard
+                {
+                    PaymentCardNumber = PaymentCardsController.NewPaymentCardNumber(),
+                    Code = new Random().Next(0, 9999).ToString("D4"),
+                    Blocked = false,
+                    SecureCard = true,
+                };
 
+                db.BankAccounts.Add(bankAccount);
+                paymentCard.BankAccount = bankAccount;
+                db.PaymentCards.Add(paymentCard);
                 db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts.Add(bankAccount);
 
                 db.SaveChanges();

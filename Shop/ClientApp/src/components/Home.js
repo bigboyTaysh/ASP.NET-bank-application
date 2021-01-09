@@ -13,8 +13,6 @@ export class Home extends Component {
     this.state = {
       categories: [],
       products: [],
-      itemsCount: 0,
-      basket: [],
       categoriesLoading: true,
       productsLoading: true,
       skeleton: [0, 1, 2],

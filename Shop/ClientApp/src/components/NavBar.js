@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     marginLeft: theme.spacing(10),
+    marginRight: theme.spacing(10),
     color: "#f8f9fa",
     '&:hover': {
       color: "#f8f9fa",
@@ -154,7 +155,7 @@ export default function NavBar(props) {
         <Toolbar>
           <Typography className={classes.title} variant="h3" noWrap>
             <Link to="/" className={classes.link}>
-              Giga sklep
+              Giga Pizza
             </Link>
           </Typography>
           <div className={classes.grow} />
@@ -165,7 +166,7 @@ export default function NavBar(props) {
               </Badge>
             </IconButton>
           </Link>
-          <div className={classes.sectionDesktop}>
+          {/* <div className={classes.sectionDesktop}>
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -188,7 +189,7 @@ export default function NavBar(props) {
             >
               <MoreIcon />
             </IconButton>
-          </div>
+          </div> */}
         </Toolbar>
       </AppBar>
       {renderMobileMenu}

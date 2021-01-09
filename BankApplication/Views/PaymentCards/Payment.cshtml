@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Payment";
+}
+
+<h2>Potwierdzenie płatności</h2>
+
+@Html.AntiForgeryToken()
+
+<div class="card text-center">
+    <div class="card-header">
+        <h3>
+            @ViewBag.acquirer.Name
+        </h3>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Czy potwierdzasz wskazaną płatność? </h5>
+        <br />
+        <div class="row">
+            <div class="col-sm text-align-right">
+                <p class="card-text font-weight-bold">Numer płatności: </p>
+            </div>
+            :
+            <div class="col-sm text-align-left">
+                <p class="card-text">@ViewBag.orderId</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm text-align-right">
+                <p class="card-text font-weight-bold">Całkowity koszt: </p>
+            </div>
+            :
+            <div class="col-sm text-align-left">
+                <p class="card-text">@ViewBag.price.ToString("#.##") @ViewBag.currency</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm text-align-right">
+                <p class="card-text font-weight-bold">Płatność kartą: </p>
+            </div>
+            :
+            <div class="col-sm text-align-left">
+                <p class="card-text">@ViewBag.cardNumber</p>
+            </div>
+        </div>
+
+        <br />
+        <br />
+
+        <div class="row">
+            <div class="col-sm text-align-right">
+                @Html.ActionLink("Potwierdź", "Status", new { status = true }, new { @class = "btn btn-primary" })
+            </div>
+            <div class="col-sm text-align-left">
+                @Html.ActionLink("Odrzuć", "Status", new { status = false }, new { @class = "btn btn-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        <div class="row">
+            <div class="col-sm text-align-right">
+                Czas do anulowania płatności:
+            </div>
+            :
+            <div class="col-sm text-align-left timer">
+                30 s
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        let seconds = 30;
+
+        let count = setInterval(() => {
+            seconds = seconds - 1;
+            if (seconds < 10 && !$(".timer").hasClass("text-danger")) {
+                $(".timer").addClass("text-danger");
+            }
+            $(".timer").text(seconds + " s");
+
+            if (seconds === 1) {
+                let token = $('input[name="__RequestVerificationToken"]').val();
+
+                $.ajax({
+                    url: '@Url.RouteUrl(new { controller = "Account", action = "LogOff" })',
+                    type: 'POST',
+                    data: {
+                        __RequestVerificationToken: token,
+                    },
+                    success: function (result) {
+                        window.location.replace("@ViewBag.acquirer.URL" + "summary/" + "@ViewBag.orderId");
+                    },
+                    error: function () {
+                        window.location.reload();
+                    }
+                });
+            } else if (seconds < 1) {
+                $(".btn").addClass("disabled");
+                clearInterval(count);
+            }
+        }, 1000);
+    });
+</script>

@@ -14,5 +14,8 @@ namespace BankApplication.Models
         public string URL { get; set; }
         [Display(Name = "Opis")]
         public string Description { get; set; }
+        [Display(Name = "Numer konta")]
+        public string BankAccountNumebr { get; set; }
+        public string ApiKey { get; set; }
     }
 }
