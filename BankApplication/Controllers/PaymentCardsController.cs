@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Cors;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using System.Web.UI;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 
 namespace BankApplication.Controllers
 
@@ -269,6 +271,8 @@ namespace BankApplication.Controllers
             TempData.Remove("statusAcquirer");
 
             client.PostAsJsonAsync(acquirer.URL + "api/orders/updateStatus", new { id = orderId, status = status, apiKey = acquirer.ApiKey});
+            
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
             return Redirect(acquirer.URL + "summary/" + orderId);
         }
@@ -280,6 +284,14 @@ namespace BankApplication.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().Authentication;
+            }
         }
     }
 }
