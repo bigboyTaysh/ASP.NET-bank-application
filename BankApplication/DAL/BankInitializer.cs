@@ -1,4 +1,5 @@
-﻿using BankApplication.Models;
+﻿using BankApplication.Helper;
+using BankApplication.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -54,34 +55,36 @@ namespace BankApplication.DAL
                     Name = "euro",
                     Code = "EUR",
                     EffectiveDate = DateTime.Now,
-                    Bid = 0.0000m,
-                    Ask = 0.0000m
+                    Bid = 4.4601m,
+                    Ask = 4.5503m
                 },
                 new Currency {
                     Name = "dolar amerykański",
                     Code = "USD",
                     EffectiveDate = DateTime.Now,
-                    Bid = 0.0000m,
-                    Ask = 0.0000m
+                    Bid = 3.6382m,
+                    Ask = 3.7118m
                 },
                 new Currency {
                     Name = "frank szwajcarski",
                     Code = "CHF",
                     EffectiveDate = DateTime.Now,
-                    Bid = 0.0000m,
-                    Ask = 0.0000m
+                    Bid = 4.1106m,
+                    Ask = 4.1936m
                 },
                 new Currency {
                     Name = "funt szterling",
                     Code = "GBP",
                     EffectiveDate = DateTime.Now,
-                    Bid = 0.0000m,
-                    Ask = 0.0000m
+                    Bid = 4.9354m,
+                    Ask = 5.0352m
                 },
             };
 
             currencies.ForEach(c => context.Currencies.Add(c));
             context.SaveChanges();
+
+            RefreshCurrency.RefreshCurrenciesAsync().ConfigureAwait(false);
 
             var transactionTypes = new List<TransactionType>
             {
@@ -163,6 +166,14 @@ namespace BankApplication.DAL
                     Blocked = true,
                     SecureCard = false,
                     BankAccount = bankAccounts[1]
+                },
+                new PaymentCard
+                {
+                    PaymentCardNumber = "1234 1234 1234 1232",
+                    Code = "3201",
+                    Blocked = false,
+                    SecureCard = true,
+                    BankAccount = bankAccounts[2]
                 },
             };
             paymentCards.ForEach(p => context.PaymentCards.Add(p));

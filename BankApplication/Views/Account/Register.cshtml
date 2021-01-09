@@ -60,7 +60,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.BankAccountTypeID, "Typ konta", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <select name="BankAccountTypeID" style="width: 150px">
+            <select name="BankAccountTypeID" style="width: 100%">
                 @foreach (var item in (List<BankApplication.Models.BankAccountType>)ViewBag.BankAccountTypes)
                 {
                     <option value="@item.ID">
@@ -71,10 +71,6 @@
                         else if (item.Type == "PAY_ACC_FOR_ADULT")
                         {
                             @:Superkonto
-                        }
-                        else if (item.Type == "FOR_CUR_ACC")
-                        {
-                            @:Konto walutowe
                         }
                     </option>
                 }

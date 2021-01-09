@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using System.Web.UI;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using BankApplication.Helper;
 
 namespace BankApplication.Controllers
 
@@ -301,6 +302,8 @@ namespace BankApplication.Controllers
             TempData.Remove("statusCurrency");
             TempData.Remove("statusAcquirer");
 
+            
+
             if (status)
             {
                 var bankAccount = db.PaymentCards
@@ -320,6 +323,7 @@ namespace BankApplication.Controllers
                     }
                     else
                     {
+                        RefreshCurrency.RefreshCurrenciesAsync().ConfigureAwait(false);
                         var exchangedCurrency = CurrenciesController.ExchangeCurrencyBid(bankAccount.Currency.Code, currencyTo.Code, price);
                         value = exchangedCurrency + (exchangedCurrency * commision);
                     }

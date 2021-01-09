@@ -150,7 +150,7 @@ namespace BankApplication.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.BankAccountTypes = db.BankAccountTypes.ToList();
+            ViewBag.BankAccountTypes = db.BankAccountTypes.Where(t => t.Type != "FOR_CUR_ACC").ToList();
             return View();
         }
 
