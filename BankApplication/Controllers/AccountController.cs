@@ -96,6 +96,7 @@ namespace BankApplication.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, model.RememberMe });
                 case SignInStatus.Failure:
                 default:
+                    ViewBag.ReturnUrl = returnUrl;
                     ModelState.AddModelError("", "Nieprawidłowa próba logowania.");
                     return View(model);
             }
