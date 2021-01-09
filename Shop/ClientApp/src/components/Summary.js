@@ -4,6 +4,7 @@ import OrderStepper from './OrderStepper';
 import ProductList from './ProductList';
 import axios from "axios";
 import { Grid, makeStyles, Paper, Typography } from '@material-ui/core';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
   paperChild: {
     margin: "auto",
     width: "60%"
+  },
+  successIcon: {
+    fontSize: theme.typography.pxToRem(70),
+    color: "#4caf50"
   }
 }));
 
@@ -43,7 +48,7 @@ export default function Summary(props) {
 
   if (payment && props.match.params.id === 'cashOnDelivery') {
     content = <div>
-      <ProductList data={{basket: basket}}/>
+      <ProductList data={{ basket: basket }} />
       <Paper
         className={classes.paper}
       >
@@ -55,19 +60,16 @@ export default function Summary(props) {
             alignItems="center"
             spacing={2}
           >
-            <Grid item xs={12} >
-              <Paper>
-                <Typography className={classes.text}>
-                  Koszt zamówienia
+            <Grid item xs={12}>
+              <CheckCircleOutlineIcon className={classes.successIcon} />
+              <Typography variant="h4">
+                Zamówienie zostało przyjęte
               </Typography>
-              </Paper>
             </Grid>
-            <Grid item xs={8}>
-              <Paper>
-                <Typography className={classes.text}>
-                  {basketPrice} zł
+            <Grid item xs={12} >
+              <Typography className={classes.text}>
+                Koszt zamówienia: {basketPrice} zł
               </Typography>
-              </Paper>
             </Grid>
           </Grid>
         </Paper>
