@@ -6,10 +6,10 @@ import { Basket } from './components/Basket';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import NavBar from './components/NavBar';
+import Summary from './components/Summary';
+import PaymentForm from './components/PaymentForm';
 
 import './custom.css'
-import { Summary } from './components/Summary';
-import PaymentForm from './components/PaymentForm';
 
 export default class App extends Component {
   static displayName = App.name;

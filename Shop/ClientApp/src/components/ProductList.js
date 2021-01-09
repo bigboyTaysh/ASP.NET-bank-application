@@ -89,7 +89,8 @@ export default function SimpleAccordion(props) {
                       </div>
                     }
                   </div>
-                  <div className={classes.column}>
+                  {props.handleProductRemoveClick != undefined &&
+                    <div className={classes.column}>
                     <Typography onClick={(event) => event.stopPropagation()}>
                       <Button
                         onFocus={(event) => event.stopPropagation()}
@@ -97,12 +98,13 @@ export default function SimpleAccordion(props) {
                         color="secondary"
                         variant="contained"
                         className={classes.delete}
-                        onClick={() => {handleProductRemoveClick(index)}}
+                        onClick={() => { handleProductRemoveClick(index) }}
                       >
                         Usuń
-                  </Button>
+                      </Button>
                     </Typography>
                   </div>
+                  }
                 </AccordionSummary>
                 <AccordionDetails>
                   <div className={classes.column}>
