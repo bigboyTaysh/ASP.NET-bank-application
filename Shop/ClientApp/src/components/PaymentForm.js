@@ -78,6 +78,7 @@ export default function PaymentForm(props) {
   const addOrder = () => {
     axios.post('api/orders/postOrder', {
       price: props.data.basketPrice,
+      cardNumber: values.cardNumber,
       items: props.data.basket.map(product => ({
         product: product
       }))

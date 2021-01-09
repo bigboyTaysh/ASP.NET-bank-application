@@ -3,18 +3,15 @@ import { Redirect, useHistory } from 'react-router-dom';
 import OrderStepper from './OrderStepper';
 import ProductList from './ProductList';
 import axios from "axios";
-import { CircularProgress, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import { Button, CircularProgress, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
+import { CheckCircleOutline, RemoveCircleOutline, Timer } from '@material-ui/icons';
+import Moment from 'react-moment';
+
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: theme.spacing(1),
-    width: theme.spacing(16),
-    height: theme.spacing(16),
-  },
   paper: {
     marginTop: 20,
-    padding: theme.spacing(4),
+    padding: theme.spacing(5),
     textAlign: 'center',
     backgroundColor: "#3d3d3d",
   },
@@ -27,8 +24,19 @@ const useStyles = makeStyles((theme) => ({
   },
   successIcon: {
     fontSize: theme.typography.pxToRem(70),
-    color: "#4caf50"
-  }
+    color: "green"
+  },
+  failureIcon: {
+    fontSize: theme.typography.pxToRem(70),
+    color: "red"
+  },
+  waitIcon: {
+    fontSize: theme.typography.pxToRem(70),
+    color: "orange"
+  },
+  grid: {
+    margin: theme.spacing(5),
+  },
 }));
 
 export default function Summary(props) {
@@ -60,15 +68,22 @@ export default function Summary(props) {
         })
     }
   }, []);
-  
+
   const redirect = () => {
     history.push('/')
+  }
+
+  const handleSumbit = () => {
+    window.location =
+      'https://localhost:44377/paymentCards/cardPayment?orderId=' + order.id
+      + '&apiKey=' + '2a9f86fc-8fd6-439d-99af-30d743180d6a'
+      + '&cardNumber=' + order.cardNumber;
   }
 
   if (payment && orderId === 'cashOnDelivery') {
     content =
       <Grid item xs={12} >
-        <CheckCircleOutlineIcon className={classes.successIcon} />
+        <CheckCircleOutline className={classes.successIcon} />
         <Typography variant="h4">
           Zamówienie zostało przyjęte
         </Typography>
@@ -84,12 +99,56 @@ export default function Summary(props) {
         </Typography>
       </Grid>
   } else if (order) {
-    content =
-      <Grid item xs={12}>
+    let icon, status, pay, date;
+
+    if (order.status.status === 'Completed') {
+      icon = <CheckCircleOutline className={classes.successIcon} />;
+      status = 'Zamówienie zostało przyjęte';
+      date = 'Data przyjęcia zamówienia: '
+    } else if (order.status.status === 'Declined') {
+      icon = <RemoveCircleOutline className={classes.failureIcon} />;
+      status = 'Płatność odrzucona';
+      date = 'Data anulowania zamówienia: ';
+    } else if (order.status.status === 'Awaiting Payment') {
+      icon = <Timer className={classes.waitIcon} />;
+      status = 'Oczekiwanie na płatność';
+      date = 'Data złożenia: ';
+      pay = <Grid item xs={12} className={classes.grid}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSumbit}
+        >
+          Zapłać
+      </Button>
+      </Grid>
+    }
+
+    content = <div>
+      <Grid item xs={12} className={classes.grid}>
+        {icon}
         <Typography variant="h4">
-          Załadowano
+          {status}
         </Typography>
       </Grid>
+      <Typography variant="subtitle1">
+        {date}
+      </Typography>
+      <Typography variant="subtitle1">
+        <Moment format="HH:mm DD-MM-YYYY">
+          {order.date}
+        </Moment>
+      </Typography>
+      <Grid item xs={12} className={classes.grid}>
+        <Typography variant="h5">
+          Cena całkowita
+          </Typography>
+        <Typography variant="h5">
+          {order.price} zł
+        </Typography>
+      </Grid>
+      {pay}
+    </div>
   }
 
   if (payment && basket) {

@@ -109,6 +109,8 @@ namespace Shop.Controllers
                     {
                         order.Status = await _context.OrderStatuses.SingleOrDefaultAsync(s => s.Status == "Declined");
                     }
+                    order.Date = DateTime.Now;
+
                     await _context.SaveChangesAsync();
                 }
                 else

@@ -9,6 +9,7 @@ namespace Shop.Models
     {
         public int ID { get; set; }
         public decimal Price { get; set; }
+        public string CardNumber { get; set; }
         public DateTime Date { get; set; }
         public virtual OrderStatus Status { get; set; }
         public virtual List<BasketItem> Items { get; set; }
