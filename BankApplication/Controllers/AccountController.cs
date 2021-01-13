@@ -166,6 +166,11 @@ namespace BankApplication.Controllers
                 ModelState.AddModelError("PESEL", "Widnieje już taki numer PESEL w bazie");
             }
 
+            if (db.Profiles.Any(p => p.Email == model.Email))
+            {
+                ModelState.AddModelError("Email", "Adres email jest już zajęty");
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -295,6 +300,11 @@ namespace BankApplication.Controllers
                     if (db.Profiles.Any(p => p.PESEL == model.PESEL))
                     {
                         ModelState.AddModelError("PESEL", "Widnieje już taki numer PESEL w bazie");
+                    }
+
+                    if (db.Profiles.Any(p => p.Email == model.Email))
+                    {
+                        ModelState.AddModelError("Email", "Adres email jest już zajęty");
                     }
 
                     var result = await UserManager.CreateAsync(user, model.Password);
