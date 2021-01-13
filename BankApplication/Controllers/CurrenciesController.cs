@@ -208,6 +208,7 @@ namespace BankApplication.Models
 
         public static decimal ExchangeCurrencyBid(string from, string to, decimal value)
         {
+            RefreshCurrency.RefreshCurrenciesAsync().ConfigureAwait(false);
             BankContext db = new BankContext();
             return db.Currencies.Single( c => c.Code == to).Ask * value / db.Currencies.Single(c => c.Code == from).Bid;
         }

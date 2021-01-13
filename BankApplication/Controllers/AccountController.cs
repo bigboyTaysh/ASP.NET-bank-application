@@ -177,14 +177,8 @@ namespace BankApplication.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     UserManager.AddToRole(user.Id, "User");
 
-                    // Aby uzyskać więcej informacji o sposobie włączania potwierdzania konta i resetowaniu hasła, odwiedź stronę https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Wyślij wiadomość e-mail z tym łączem
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Potwierdź konto", "Potwierdź konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
                     Profile profile = new Profile 
                     { 
                         Email = model.Email,
@@ -220,14 +214,11 @@ namespace BankApplication.Controllers
                     db.PaymentCards.Add(paymentCard);
                     db.SaveChanges();
 
-                    //SendMail("wolskiworldwidebank@gmail.com", "Tytuł testowy", "Właśnie się zarejestrowałeś " + profile.Email);
-
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }
 
-            // Dotarcie do tego miejsca wskazuje, że wystąpił błąd, wyświetl ponownie formularz
             ViewBag.BankAccountTypes = db.BankAccountTypes.ToList();
             return View(model);
         }

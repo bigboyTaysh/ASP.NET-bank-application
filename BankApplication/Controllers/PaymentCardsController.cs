@@ -309,7 +309,6 @@ namespace BankApplication.Controllers
                     }
                     else
                     {
-                        RefreshCurrency.RefreshCurrenciesAsync().ConfigureAwait(false);
                         var exchangedCurrency = CurrenciesController.ExchangeCurrencyBid(bankAccount.Currency.Code, currencyTo.Code, price);
                         value = exchangedCurrency + (exchangedCurrency * commision);
                     }
@@ -350,7 +349,6 @@ namespace BankApplication.Controllers
             }
 
             client.PostAsJsonAsync(acquirer.URL + "api/orders/updateStatus", new { id = orderId, status = status, apiKey = acquirer.ApiKey});
-            
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
             return Redirect(acquirer.URL + "summary/" + orderId);
