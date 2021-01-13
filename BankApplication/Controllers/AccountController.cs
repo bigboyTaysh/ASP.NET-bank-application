@@ -294,6 +294,11 @@ namespace BankApplication.Controllers
                 } 
                 else if (User.IsInRole("Worker"))
                 {
+                    if (db.Profiles.Any(p => p.PESEL == model.PESEL))
+                    {
+                        ModelState.AddModelError("PESEL", "Widnieje już taki numer PESEL w bazie");
+                    }
+
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {

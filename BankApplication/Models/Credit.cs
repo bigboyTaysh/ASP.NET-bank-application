@@ -39,7 +39,6 @@ namespace BankApplication.Models
 
         [Display(Name = "Spłacono")]
         public bool IsPaidOff { get; set; }
-        public CreditType TypeID { get; set; }
         public virtual CreditType Type { get; set; }
     }
 }

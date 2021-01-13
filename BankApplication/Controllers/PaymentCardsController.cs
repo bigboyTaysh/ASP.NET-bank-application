@@ -263,46 +263,26 @@ namespace BankApplication.Controllers
             ViewBag.currency = currency;
             ViewBag.acquirer = acquirer;
 
-            TempData["statusOrderId"] = orderId;
-            TempData["statusCardNumber"] = cardNumber;
-            TempData["statusPrice"] = price;
-            TempData["statusCurrency"] = currency;
-            TempData["statusAcquirer"] = acquirer;
-
-            TempData.Remove("orderId");
-            TempData.Remove("cardNumber");
-            TempData.Remove("price");
-            TempData.Remove("currency");
-            TempData.Remove("acquirer");
-
             return View("Payment");
         }
 
         [HttpGet]
         public ActionResult Status(bool status)
         {
-            if (TempData["statusOrderId"] == null ||
-                TempData["statusCardNumber"] == null ||
-                TempData["statusPrice"] == null ||
-                TempData["statusAcquirer"] == null ||
-                TempData["statusCurrency"] == null)
+            if (TempData["orderId"] == null ||
+                TempData["cardNumber"] == null ||
+                TempData["price"] == null ||
+                TempData["acquirer"] == null ||
+                TempData["currency"] == null)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            int orderId = (int)TempData["statusOrderId"];
-            string cardNumber = TempData["statusCardNumber"].ToString();
-            decimal price = (decimal)TempData["statusPrice"];
-            string currency = TempData["statusCurrency"].ToString();
-            Acquirer acquirer = (Acquirer)TempData["statusAcquirer"];
-
-            TempData.Remove("statusOrderId");
-            TempData.Remove("statusCardNumber");
-            TempData.Remove("statusPrice");
-            TempData.Remove("statusCurrency");
-            TempData.Remove("statusAcquirer");
-
-            
+            int orderId = (int)TempData["orderId"];
+            string cardNumber = TempData["cardNumber"].ToString();
+            decimal price = (decimal)TempData["price"];
+            string currency = TempData["currency"].ToString();
+            Acquirer acquirer = (Acquirer)TempData["acquirer"];
 
             if (status)
             {
