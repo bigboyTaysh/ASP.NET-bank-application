@@ -148,7 +148,7 @@ namespace BankApplication.Controllers
                                 return default;
                             }
                             
-                        } 
+                        }
                         else if ((t.TransactionType.Type == "TRANSFER" || t.TransactionType.Type == "CURR_EXCHANGE") && t.ToBankAccountNumber == bankAccountNumber)
                         {
                             if
@@ -165,6 +165,22 @@ namespace BankApplication.Controllers
                                 return default;
                             }
 
+                        }
+                        else if (t.TransactionType.Type == "CARD_PAYMENT")
+                        {
+                            if
+                            (
+                                (t.ReceiverName ?? "").Contains(senderReceiver) &&
+                                t.ValueTo >= amountFromNN &&
+                                t.ValueTo <= amountToNN
+                            )
+                            {
+                                return t;
+                            }
+                            else
+                            {
+                                return default;
+                            }
                         }
                         else if (t.TransactionType.Type == "CASH_DEPOSIT")
                         {

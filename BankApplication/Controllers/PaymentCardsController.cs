@@ -290,6 +290,12 @@ namespace BankApplication.Controllers
             string currency = TempData["currency"].ToString();
             Acquirer acquirer = (Acquirer)TempData["acquirer"];
 
+            TempData.Remove("orderId");
+            TempData.Remove("cardNumber");
+            TempData.Remove("price");
+            TempData.Remove("acquirer");
+            TempData.Remove("currency");
+
             if (status)
             {
                 var bankAccount = db.PaymentCards

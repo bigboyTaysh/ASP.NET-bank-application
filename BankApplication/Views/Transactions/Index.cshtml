@@ -165,6 +165,10 @@
                         {
                             @:Przelew
                         }
+                        else if (item.Type == "CARD_PAYMENT")
+                        {
+                            @:Płatność kartą
+                        }
                         else if (item.Type == "CASH_DEPOSIT")
                         {
                             @:Wpłata
@@ -229,8 +233,6 @@
         var dataFrom = $(".data-from").val();
         var dataTo = $(".data-to").val();
         var type = $(".type").val();
-
-        console.log(type);
 
         $.post("@Url.Action("Transactions", "Transactions")",
             {

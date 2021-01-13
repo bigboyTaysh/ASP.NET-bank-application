@@ -47,6 +47,19 @@
                             </td>
                         </tr>
                     }
+                    else if (item.TransactionType.Type == "CARD_PAYMENT")
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="gray-text">
+                                @Html.DisplayFor(modelItem => item.ReceiverName)
+                            </td>
+                        </tr>
+                    }
                     else
                     { 
                         <tr>
@@ -78,6 +91,14 @@
                         @Html.DisplayFor(modelItem => item.CurrencyFrom.Code)
                     </span>
                 }
+            }
+            else if (item.TransactionType.Type == "CARD_PAYMENT")
+            {
+
+                <span style="color: red">
+                    -@Html.DisplayFor(modelItem => item.ValueTo)
+                    @Html.DisplayFor(modelItem => item.CurrencyTo.Code)
+                </span>
             }
             else if (item.TransactionType.Type == "CASH_DEPOSIT")
             {
@@ -159,34 +180,38 @@
                         <br />
                     }
 
-                    <span class="gray-text">
-                        Numer konta
-                    </span>
-                    <br />
-                    @if (item.TransactionType.Type == "CREDIT_TRANSFER")
+                    @if (item.TransactionType.Type != "CARD_PAYMENT")
                     {
-                        <span>
-                            @Html.DisplayFor(modelItem => item.ToBankAccountNumber)
+                        <span class="gray-text">
+                            Numer konta
                         </span>
-                    }
-                    else
-                    {
-                        if (item.ToBankAccountNumber == ViewBag.BankAccountNumber)
-                        {
-                            <span>
-                                @Html.DisplayFor(modelItem => item.FromBankAccountNumber)
-                            </span>
-                        }
-                        else
+                        <br />
+                        if (item.TransactionType.Type == "CREDIT_TRANSFER")
                         {
                             <span>
                                 @Html.DisplayFor(modelItem => item.ToBankAccountNumber)
                             </span>
                         }
+                        else
+                        {
+                            if (item.ToBankAccountNumber == ViewBag.BankAccountNumber)
+                            {
+                                <span>
+                                    @Html.DisplayFor(modelItem => item.FromBankAccountNumber)
+                                </span>
+                            }
+                            else
+                            {
+                                <span>
+                                    @Html.DisplayFor(modelItem => item.ToBankAccountNumber)
+                                </span>
+                            }
+                        }
+
+                        <br />
+                        <br />
                     }
 
-                    <br />
-                    <br />
 
                     @if (item.TransactionType.Type == "TRANSFER")
                     {
@@ -246,6 +271,14 @@
                             </span>
                         }
                     }
+                    else if (item.TransactionType.Type == "CARD_PAYMENT")
+                    {
+
+                        <span style="color: red">
+                            -@Html.DisplayFor(modelItem => item.ValueTo)
+                            @Html.DisplayFor(modelItem => item.CurrencyTo.Code)
+                        </span>
+                    }
                     else if (item.TransactionType.Type == "CASH_DEPOSIT")
                     {
                         <span style="color: green">
@@ -300,6 +333,14 @@
                                 @Html.DisplayFor(modelItem => item.CurrencyFrom.Code)
                             </span>
                         }
+                    }
+                    else if (item.TransactionType.Type == "CARD_PAYMENT")
+                    {
+
+                        <span>
+                            @Html.DisplayFor(modelItem => item.BalanceAfterTransactionUserTo)
+                            @Html.DisplayFor(modelItem => item.CurrencyTo.Code)
+                        </span>
                     }
                     else if (item.TransactionType.Type == "CASH_DEPOSIT")
                     {
