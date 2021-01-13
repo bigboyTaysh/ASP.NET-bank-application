@@ -186,7 +186,6 @@ namespace BankApplication.DAL
                     FirstName = "John",
                     LastName="Travolta",
                     Email = user.UserName,
-                    Login = user.UserName,
                     BankAccounts = new List<BankAccount>(){bankAccounts[0], bankAccounts[2]}
                 },
                 new Profile
@@ -194,11 +193,10 @@ namespace BankApplication.DAL
                     FirstName = "John",
                     LastName="Travolta",
                     Email = user2.UserName,
-                    Login = user2.UserName,
                     BankAccounts = new List<BankAccount>(){bankAccounts[1]}
                 },
-                new Profile { Email = user3.UserName, Login = user3.UserName},
-                new Profile { Email = worker.UserName, Login = worker.UserName},
+                new Profile { Email = user3.UserName},
+                new Profile { Email = worker.UserName},
             };
 
             profiles.ForEach(p => context.Profiles.Add(p));

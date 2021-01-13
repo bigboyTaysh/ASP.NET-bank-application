@@ -28,7 +28,7 @@ namespace BankApplication.Controllers
             }
             else
             {
-                return View(db.Profiles.Single(p => p.Login == User.Identity.Name).CreditApplications
+                return View(db.Profiles.Single(p => p.Email == User.Identity.Name).CreditApplications
                     .OrderByDescending(c => c.DateOfSubmission)
                     .ThenByDescending(c => c.ID).ToList());
             }

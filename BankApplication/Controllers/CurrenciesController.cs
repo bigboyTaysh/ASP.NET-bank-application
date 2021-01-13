@@ -29,7 +29,7 @@ namespace BankApplication.Models
         [HttpPost]
         public PartialViewResult GetBankAccounts(string code)
         {
-            var bankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts.Where(b => b.Currency.Code == code).ToList();
+            var bankAccounts = db.Profiles.Single(p => p.Email == User.Identity.Name).BankAccounts.Where(b => b.Currency.Code == code).ToList();
             return PartialView("BankAccountList", bankAccounts);
         }
 
@@ -97,7 +97,7 @@ namespace BankApplication.Models
 
                 transaction.TransactionTypeID = db.TransactionTypes.Single(t => t.Type == "CURR_EXCHANGE").ID;
                 transaction.Description = "Wymiana waluty";
-                transaction.ReceiverName = db.Profiles.Single(p => p.Login == User.Identity.Name).FullName;
+                transaction.ReceiverName = db.Profiles.Single(p => p.Email == User.Identity.Name).FullName;
 
                 transaction.Date = DateTime.Now;
                 db.Transactions.Add(transaction);

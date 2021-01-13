@@ -182,7 +182,6 @@ namespace BankApplication.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Potwierdź konto", "Potwierdź konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
                     Profile profile = new Profile 
                     { 
-                        Login = model.Email,
                         Email = model.Email,
                         FirstName = model.FirstName,
                         LastName = model.LastName,
@@ -276,7 +275,6 @@ namespace BankApplication.Controllers
                         // await UserManager.SendEmailAsync(user.Id, "Potwierdź konto", "Potwierdź konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
                         Profile profile = new Profile
                         {
-                            Login = model.Email,
                             Email = model.Email,
                             FirstName = model.FirstName,
                             LastName = model.LastName,
@@ -312,7 +310,6 @@ namespace BankApplication.Controllers
                         // await UserManager.SendEmailAsync(user.Id, "Potwierdź konto", "Potwierdź konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
                         Profile profile = new Profile
                         {
-                            Login = model.Email,
                             Email = model.Email,
                             FirstName = model.FirstName,
                             LastName = model.LastName,

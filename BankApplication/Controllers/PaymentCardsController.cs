@@ -43,7 +43,7 @@ namespace BankApplication.Controllers
             {
                 var profile = await db.Profiles
                     .Include(p => p.BankAccounts)
-                    .SingleOrDefaultAsync(p => p.Login == User.Identity.Name);
+                    .SingleOrDefaultAsync(p => p.Email == User.Identity.Name);
 
                 var bankAccounts = profile.BankAccounts.Select(b => b.ID);
 
@@ -198,7 +198,7 @@ namespace BankApplication.Controllers
 
             var profile = await db.Profiles
                     .Include(p => p.BankAccounts)
-                    .SingleOrDefaultAsync(p => p.Login == User.Identity.Name);
+                    .SingleOrDefaultAsync(p => p.Email == User.Identity.Name);
 
             var bankAccounts = profile.BankAccounts.Select(b => b.ID);
 
@@ -262,6 +262,12 @@ namespace BankApplication.Controllers
             ViewBag.price = price;
             ViewBag.currency = currency;
             ViewBag.acquirer = acquirer;
+
+            TempData["orderId"] = orderId;
+            TempData["cardNumber"] = cardNumber;
+            TempData["price"] = price;
+            TempData["acquirer"] = acquirer;
+            TempData["currency"] = currency;
 
             return View("Payment");
         }
