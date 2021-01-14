@@ -153,7 +153,6 @@ export default function PaymentForm(props) {
         })
         .catch(function (error) {
           handleClose();
-          console.log(error)
           if (error.response) {
             setStatus(error.response.status);
           } else {

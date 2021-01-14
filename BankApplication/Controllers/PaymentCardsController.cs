@@ -206,7 +206,7 @@ namespace BankApplication.Controllers
                 return Redirect(acquirer.URL);
             }
 
-            HttpResponseMessage response = await client.GetAsync(acquirer.URL + "api/orders/" + orderId);
+            HttpResponseMessage response = await client.GetAsync(acquirer.URL + acquirer.OrderDetailsPath + orderId);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -347,10 +347,10 @@ namespace BankApplication.Controllers
                 }
             }
 
-            client.PostAsJsonAsync(acquirer.URL + "api/orders/updateStatus", new { id = orderId, status = status, apiKey = acquirer.ApiKey});
+            client.PostAsJsonAsync(acquirer.URL + acquirer.UpdateOrderStatusPath, new { id = orderId, status = status, apiKey = acquirer.ApiKey});
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
-            return Redirect(acquirer.URL + "summary/" + orderId);
+            return Redirect(acquirer.URL + acquirer.OrderSummaryPath + orderId);
         }
 
         public static string NewPaymentCardNumber()

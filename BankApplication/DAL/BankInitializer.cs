@@ -206,6 +206,9 @@ namespace BankApplication.DAL
             {
                 Name = "Giga Pizza",
                 URL = "https://localhost:44395/",
+                OrderDetailsPath = "api/orders/",
+                UpdateOrderStatusPath = "api/orders/updateStatus",
+                OrderSummaryPath = "summary/",
                 Description = "Brak pomysłu na obiad? Zamów pizzę online. Giga Pizza to giga przyjemność!",
                 BankAccountNumebr = "52 7949 1333 2906 6136 7434 4779",
                 ApiKey = "2a9f86fc-8fd6-439d-99af-30d743180d6a"

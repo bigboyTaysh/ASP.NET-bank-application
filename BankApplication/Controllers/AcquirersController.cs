@@ -51,7 +51,7 @@ namespace BankApplication.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,Name,URL,Description")] Acquirer acquirer)
+        public async Task<ActionResult> Create([Bind(Include = "ID,Name,URL,OrderDetailsPath,UpdateOrderStatusPath,OrderSummaryPath,Description")] Acquirer acquirer)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace BankApplication.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,URL,Description")] Acquirer acquirer)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,URL,OrderDetailsPath,UpdateOrderStatusPath,OrderSummaryPath,Description")] Acquirer acquirer)
         {
             if (ModelState.IsValid)
             {

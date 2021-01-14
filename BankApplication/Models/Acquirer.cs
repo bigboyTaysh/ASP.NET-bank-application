@@ -12,6 +12,12 @@ namespace BankApplication.Models
         [Display(Name = "Nazwa")]
         public string Name { get; set; }
         public string URL { get; set; }
+        [Display(Name = "Szczegóły")]
+        public string OrderDetailsPath { get; set; }
+        [Display(Name = "Aktualizacja")]
+        public string UpdateOrderStatusPath { get; set; }
+        [Display(Name = "Podsumowanie")]
+        public string OrderSummaryPath { get; set; }
         [Display(Name = "Opis")]
         public string Description { get; set; }
         [Display(Name = "Numer konta")]

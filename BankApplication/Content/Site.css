@@ -51,7 +51,7 @@ body > div.container.body-content > h2 {
 }
 
 
-a:link {
+a:link:not(.btn) {
     text-decoration: inherit;
     color: inherit;
     cursor: pointer;
