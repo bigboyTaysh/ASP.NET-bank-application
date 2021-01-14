@@ -57,7 +57,7 @@ a:link {
     cursor: pointer;
 }
 
-a:visited {
+a:visited:not(.btn) {
     text-decoration: inherit;
     color: inherit;
     cursor: pointer;
