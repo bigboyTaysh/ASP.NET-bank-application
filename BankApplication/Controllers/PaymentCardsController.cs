@@ -161,14 +161,7 @@ namespace BankApplication.Controllers
                 var paymentCard = db.PaymentCards.SingleOrDefaultAsync(p => p.PaymentCardNumber == cardNumber && p.Code == code).Result;
                 if (paymentCard != null)
                 {
-                    if (paymentCard.SecureCard)
-                    {
-                        return Json(new { status = true });
-                    }
-                    else
-                    {
-                        return Json(new { status = false });
-                    }
+                    return Json(new { status = paymentCard.SecureCard });
                 }
                 else
                 {
