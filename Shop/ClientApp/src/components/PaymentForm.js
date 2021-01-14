@@ -62,19 +62,31 @@ export default function PaymentForm(props) {
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
-    if(!bank){
+    if (!bank) {
       fetchBank();
+    } else if (!directoryServer) {
+      fetchDirectoryServer();
     }
   });
 
   async function fetchBank() {
     const token = await authService.getAccessToken();
-    const response = await fetch( 'api/banks', {
+    const response = await fetch('api/banks', {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
     });
 
     const data = await response.json();
     setBank(data)
+  }
+
+  async function fetchDirectoryServer() {
+    const token = await authService.getAccessToken();
+    const response = await fetch('api/directoryServers', {
+      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+    });
+
+    const data = await response.json();
+    setDirectoryServer(data);
   }
 
   const handleChange = (event) => {
@@ -97,7 +109,7 @@ export default function PaymentForm(props) {
   };
 
   const addOrder = () => {
-    if(bank){
+    if (bank) {
       axios.post('api/orders/postOrder', {
         price: props.data.basketPrice,
         cardNumber: values.cardNumber,
@@ -107,10 +119,10 @@ export default function PaymentForm(props) {
       })
         .then(function (response) {
           props.handleBasketReset();
-  
+
           window.location =
             bank.url + bank.path + '?orderId=' + response.data.id
-            + '&apiKey=' + '2a9f86fc-8fd6-439d-99af-30d743180d6a'
+            + '&apiKey=' + bank.apiKey
             + '&cardNumber=' + values.cardNumber;
         })
         .catch(function (error) {
@@ -125,28 +137,32 @@ export default function PaymentForm(props) {
   const handleSumbit = () => {
     handleToggle();
 
-    axios.post('https://localhost:44339/api/payment/cardSecure', {
-      apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
-      cardNumber: values.cardNumber,
-      code: values.code
-    })
-      .then(function (response) {
-        if (response.data.status) {
-          addOrder();
-        } else {
+    if (directoryServer) {
+      axios.post(directoryServer.url + directoryServer.path, {
+        apiKey: directoryServer.apiKey,
+        cardNumber: values.cardNumber,
+        code: values.code
+      })
+        .then(function (response) {
+          if (response.data.status) {
+            addOrder();
+          } else {
+            handleClose();
+            setStatus(response.data.status);
+          }
+        })
+        .catch(function (error) {
           handleClose();
-          setStatus(response.data.status);
-        }
-      })
-      .catch(function (error) {
-        handleClose();
-        console.log(error)
-        if (error.response) {
-          setStatus(error.response.status);
-        } else {
-          setStatus(error);
-        }
-      })
+          console.log(error)
+          if (error.response) {
+            setStatus(error.response.status);
+          } else {
+            setStatus(error);
+          }
+        })
+    } else {
+      history.push('/')
+    }
   }
 
   let button = values.address.length > 5 &&
