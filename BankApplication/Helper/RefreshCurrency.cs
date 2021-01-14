@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -39,7 +40,7 @@ namespace BankApplication.Helper
             ExchangeRatesSeries res = new ExchangeRatesSeries();
             using (HttpClient client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 HttpResponseMessage response = await client
                     .GetAsync($"http://api.nbp.pl/api/exchangerates/rates/c/{currency}/?format=json")

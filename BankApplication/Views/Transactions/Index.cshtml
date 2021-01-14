@@ -220,19 +220,19 @@
 </table>
 
 <script>
-    var page = 1;
-    var active = false;
+    let page = 1;
+    let active = false;
 
     function searchTransactions(page, append) {
         active = true;
-        var bankAccountNumber = $(".active > .details-type > div.bankAccountSelect").text();
-        var senderReceiver = $(".sender-receiver").val();
-        var description = $(".description").val();
-        var amountFrom = $(".amount-from").val();
-        var amountTo = $(".amount-to").val();
-        var dataFrom = $(".data-from").val();
-        var dataTo = $(".data-to").val();
-        var type = $(".type").val();
+        let bankAccountNumber = $(".active > .details-type > div.bankAccountSelect").text();
+        let senderReceiver = $(".sender-receiver").val();
+        let description = $(".description").val();
+        let amountFrom = $(".amount-from").val();
+        let amountTo = $(".amount-to").val();
+        let dataFrom = $(".data-from").val();
+        let dataTo = $(".data-to").val();
+        let type = $(".type").val();
 
         $.post("@Url.Action("Transactions", "Transactions")",
             {
@@ -247,7 +247,7 @@
                 type: type,
             },
             function (data) {
-                if (append == "append") {
+                if (append === true) {
                     $(".table-transactions-result").append(data);
                 } else {
                     $(".loading-container").hide();
@@ -269,9 +269,9 @@
     });
 
     $(window).scroll(function () {
-        if (($(window).scrollTop() + $(window).height() >= $("body").height() + 70) && !active) {
+        if (($(window).scrollTop() + $(window).height() >= $("body").height() + 10) && !active) {
             page++;
-            searchTransactions(page, "append");
+            searchTransactions(page, true);
         }
     });
 
@@ -279,17 +279,19 @@
 
     $(".sender-receiver, .description, .amount-from, .amount-to, .data-from, .data-to")
         .on("keyup change paste", function () {
+            page = 1;
             searchTransactions(1);
         }
     );
 
     $(".type").on("select2:select", function () {
+        page = 1;
         searchTransactions(1);
     });
 
     $(".submit-cash-deposit").on("click", function () {
-        var value = $(".value-deposit-withdrawal").val();
-        var bankAccountNumber = $(".bankAccountSelect").text();
+        let value = $(".value-deposit-withdrawal").val();
+        let bankAccountNumber = $(".bankAccountSelect").text();
 
         if (parseFloat(value) > 0) {
             $.post("Transactions/CashDeposit", { bankAccountNumber: bankAccountNumber, value: value }, function (data) {
@@ -303,8 +305,8 @@
     });
 
     $(".submit-cash-withdrawal").on("click", function () {
-        var value = $(".value-deposit-withdrawal").val();
-        var bankAccountNumber = $(".bankAccountSelect").text();
+        let value = $(".value-deposit-withdrawal").val();
+        let bankAccountNumber = $(".bankAccountSelect").text();
 
         if (parseFloat(value) > 0) {
             $.post("Transactions/CashWithdrawal", { bankAccountNumber: bankAccountNumber, value: value }, function (data) {

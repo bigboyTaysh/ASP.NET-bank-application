@@ -243,7 +243,7 @@ namespace BankApplication.Controllers
             //                ((t.ValueFrom >= amountFromNN && t.ValueFrom <= amountToNN) || (t.ValueTo >= amountFromNN && t.ValueTo <= amountToNN)));
 
 
-            int pageSize = (size ?? 10);
+            int pageSize = (size ?? 3);
             int pageNumber = (page ?? 1);
 
             ViewBag.Count = transactionsList.Count;
