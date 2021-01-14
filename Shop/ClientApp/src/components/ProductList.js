@@ -90,7 +90,7 @@ export default function SimpleAccordion(props) {
                         </div>
                       }
                     </div>
-                    {props.handleProductRemoveClick != undefined &&
+                    {props.handleProductRemoveClick !== undefined &&
                       <div className={classes.column}>
                         <Typography onClick={(event) => event.stopPropagation()}>
                           <Button
