@@ -327,7 +327,7 @@ namespace BankApplication.Controllers
 
                         Transaction transaction = new Transaction
                         {
-                            ValueTo = price,
+                            ValueTo = value,
                             BalanceAfterTransactionUserTo = bankAccount.Balance,
 
                             FromBankAccountNumber = bankAccount.BankAccountNumber,
