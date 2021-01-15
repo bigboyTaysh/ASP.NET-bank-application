@@ -83,8 +83,8 @@
     </div>
 }
 
-<div class="search-transactions-group">
-    <div class="col-md-6">
+<div class="search-transactions-group row text-center">
+    <div class="col">
         <span class="gray-text">
             Nadawca/Odbiorca
         </span>
@@ -116,7 +116,7 @@
         <br />
     </div>
 
-    <div class="col-md-6">
+    <div class="col">
         <span class="gray-text">
             Opis
         </span>
@@ -128,7 +128,7 @@
         <br />
 
         <span class="gray-text">
-            do
+            Kwotda do
         </span>
         <br />
         <span>
@@ -138,7 +138,7 @@
         <br />
 
         <span class="gray-text">
-            Data od
+            Data do
         </span>
         <br />
         <span>
@@ -147,51 +147,51 @@
         <br />
         <br />
     </div>
+</div>
 
-    <div class="col-md-6 col-md-offset-3">
-        <span class="gray-text" style="text-align: center">
-            Typ transakcji
-        </span>
-        <br />
-        <span>
-            <select class="type">
-                <option value="0">
-                    Wszystkie
+<div class="text-center">
+    <span class="gray-text" style="text-align: center">
+        Typ transakcji
+    </span>
+    <br />
+    <span>
+        <select class="type">
+            <option value="0">
+                Wszystkie
+            </option>
+            @foreach (var item in (List<BankApplication.Models.TransactionType>)ViewBag.Types)
+            {
+                <option value="@item.ID">
+                    @if (item.Type == "TRANSFER")
+                    {
+                        @:Przelew
+                    }
+                    else if (item.Type == "CARD_PAYMENT")
+                    {
+                        @:Płatność kartą
+                    }
+                    else if (item.Type == "CASH_DEPOSIT")
+                    {
+                        @:Wpłata
+                    }
+                    else if (item.Type == "CASH_WITHDRAWAL")
+                    {
+                        @:Wypłata
+                    }
+                    else if (item.Type == "CURR_EXCHANGE")
+                    {
+                        @:Wymiana waluty
+                    }
+                    else if (item.Type == "CREDIT_TRANSFER")
+                    {
+                        @:Kredyt/Rata
+                    }
                 </option>
-                @foreach (var item in (List<BankApplication.Models.TransactionType>)ViewBag.Types)
-                {
-                    <option value="@item.ID">
-                        @if (item.Type == "TRANSFER")
-                        {
-                            @:Przelew
-                        }
-                        else if (item.Type == "CARD_PAYMENT")
-                        {
-                            @:Płatność kartą
-                        }
-                        else if (item.Type == "CASH_DEPOSIT")
-                        {
-                            @:Wpłata
-                        }
-                        else if (item.Type == "CASH_WITHDRAWAL")
-                        {
-                            @:Wypłata
-                        }
-                        else if (item.Type == "CURR_EXCHANGE")
-                        {
-                            @:Wymiana waluty
-                        }
-                        else if (item.Type == "CREDIT_TRANSFER")
-                        {
-                            @:Kredyt/Rata
-                        }
-                    </option>
-                }
-            </select>
-        </span>
-        <br />
-        <br />
-    </div>
+            }
+        </select>
+    </span>
+    <br />
+    <br />
 </div>
 
 <table class="table">
@@ -209,10 +209,10 @@
         </tr>
     </thead>
     <tbody class="table-transactions-result">
-        <tr class="loading-container">
-            <td colspan="5">
-                <div>
-                    <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+        <tr>
+            <td colspan="5" class="border-top-0">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
                 </div>
             </td>
         </tr>
@@ -250,8 +250,6 @@
                 if (append === true) {
                     $(".table-transactions-result").append(data);
                 } else {
-                    $(".loading-container").hide();
-
                     if (data != "") {
                         $(".table-transactions-result").html(data);
                     } else if (data === "" && page == 1){
