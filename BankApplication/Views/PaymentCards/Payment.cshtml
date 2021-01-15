@@ -71,6 +71,11 @@
     $(document).ready(function () {
         let seconds = 30;
 
+        $(".btn").on("click", function () {
+            $(".btn").addClass("disabled");
+            clearInterval(count);
+        });
+
         let count = setInterval(() => {
             seconds = seconds - 1;
             if (seconds < 10 && !$(".timer").hasClass("text-danger")) {
@@ -78,7 +83,9 @@
             }
             $(".timer").text(seconds + " s");
 
-            if (seconds === 1) {
+            if (seconds < 1) {
+                $(".btn").addClass("disabled");
+
                 let token = $('input[name="__RequestVerificationToken"]').val();
 
                 $.ajax({
@@ -88,14 +95,13 @@
                         __RequestVerificationToken: token,
                     },
                     success: function (result) {
-                        window.location.replace("@ViewBag.acquirer.URL" + "summary/" + "@ViewBag.orderId");
+                        window.location.replace("@ViewBag.acquirer.URL" + "@ViewBag.acquirer.OrderSummaryPath" + "@ViewBag.orderId");
                     },
                     error: function () {
                         window.location.reload();
                     }
                 });
-            } else if (seconds < 1) {
-                $(".btn").addClass("disabled");
+
                 clearInterval(count);
             }
         }, 1000);
