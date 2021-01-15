@@ -62,13 +62,13 @@
             @Html.DisplayFor(modelItem => item.NumberOfMonthsToEnd)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.StartDate)
+            @item.StartDate.ToString("dd.MM.yyyy")
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.EndDate)
+            @item.EndDate?.ToString("dd.MM.yyyy")
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.LastPayment)
+            @item.LastPayment?.ToString("dd.MM.yyyy")
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.IsPaidOff)

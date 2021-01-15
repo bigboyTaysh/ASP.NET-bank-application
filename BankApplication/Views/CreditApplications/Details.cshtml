@@ -55,17 +55,7 @@
         </span>
         <br />
         <span>
-            @Html.DisplayFor(model => model.DateOfSubmission)
-        </span>
-        <br />
-        <br />
-
-        <span class="gray-text">
-            @Html.DisplayNameFor(model => model.DateOfSubmission)
-        </span>
-        <br />
-        <span>
-            @Html.DisplayFor(model => model.DateOfSubmission)
+            @Model.DateOfSubmission.ToString("dd.MM.yyyy")
         </span>
         <br />
         <br />

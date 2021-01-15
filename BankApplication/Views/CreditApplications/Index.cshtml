@@ -70,7 +70,7 @@
             <td>
                 <a href="/CreditApplications/Details/@Html.DisplayFor(modelItem => item.ID)">
                     <div style="height:100%;width:100%">
-                        @Html.DisplayFor(modelItem => item.DateOfSubmission)
+                        @item.DateOfSubmission.ToString("dd.MM.yyyy")
                     </div>
                 </a>
             </td>

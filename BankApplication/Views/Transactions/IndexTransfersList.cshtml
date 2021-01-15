@@ -72,7 +72,7 @@
             }
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Date)
+            @item.Date.ToString("dd.MM.yyyy")
         </td>
         <td>
             @if (item.TransactionType.Type == "TRANSFER" || item.TransactionType.Type == "CURR_EXCHANGE")
@@ -371,7 +371,7 @@
                     </span>
                     <br />
                     <span>
-                        @Html.DisplayFor(modelItem => item.Date)
+                        @item.Date.ToString("dd.MM.yyyy")
                     </span>
                     <br />
                     <br />
