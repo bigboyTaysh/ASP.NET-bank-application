@@ -91,6 +91,7 @@
 
         $(".btn").on("click", function () {
             $(".btn").addClass("disabled");
+            $('#staticBackdrop').modal('toggle');
             clearInterval(count);
         });
 
