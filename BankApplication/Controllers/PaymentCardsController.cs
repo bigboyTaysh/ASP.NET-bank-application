@@ -116,7 +116,7 @@ namespace BankApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "ID,PaymentCardNumber,Code,Blocked,SecureCard")] PaymentCard paymentCard)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && db.PaymentCards.Any(p => p.ID == paymentCard.ID))
             {
                 db.Entry(paymentCard).State = EntityState.Modified;
                 await db.SaveChangesAsync();
