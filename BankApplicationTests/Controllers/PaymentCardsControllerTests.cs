@@ -32,12 +32,14 @@ namespace BankApplication.Controllers.Tests
             new UserStore<ApplicationUser>(new ApplicationDbContext()));
         */
 
+        ClaimsPrincipal user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.Name, "email1@wp.pl")
+                                   }));
+
         [TestMethod()]
         public async Task IndexTest()
         {
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-                                        new Claim(ClaimTypes.Name, "email1@wp.pl")
-                                   }));
+
             var controller = new PaymentCardsController();
             controller.ControllerContext = new ControllerContext
             {
@@ -100,7 +102,37 @@ namespace BankApplication.Controllers.Tests
         {
             var controller = new PaymentCardsController();
             var result = await controller.CardPayment(0, "badkey", "cardnumber") as RedirectToRouteResult;
-            //Assert.IsTrue(result.RouteValues.Any(r => r.Value == "Index"));
+            Assert.IsTrue((string)result.RouteValues["action"] == "Index");
+        }
+
+        [TestMethod()]
+        public void CardPaymentConfirmationTest_NullTempData()
+        {
+            var controller = new PaymentCardsController();
+            var result = controller.CardPaymentConfirmation() as RedirectToRouteResult;
+            Assert.IsTrue((string)result.RouteValues["action"] == "Index");
+        }
+
+        [TestMethod()]
+        public void CardPaymentConfirmationTest_DefiniedTempData()
+        {
+            var controller = new PaymentCardsController();
+            controller.TempData.Add("orderId", 0);
+            controller.TempData.Add("cardNumber", "cardNumber");
+            controller.TempData.Add("price", 1m);
+            controller.TempData.Add("currency", "currency");
+            controller.TempData.Add("date", new DateTime());
+            controller.TempData.Add("acquirer", new Acquirer());
+
+            var result = controller.CardPaymentConfirmation() as ViewResult;
+            Assert.IsTrue(result.ViewName == "Payment");
+        }
+
+        [TestMethod()]
+        public void StatusTest_NullTempData()
+        {
+            var controller = new PaymentCardsController();
+            var result = controller.Status(false) as RedirectToRouteResult;
             Assert.IsTrue((string)result.RouteValues["action"] == "Index");
         }
     }
