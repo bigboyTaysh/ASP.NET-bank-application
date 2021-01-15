@@ -226,6 +226,7 @@ namespace BankApplication.Controllers
             TempData["cardNumber"] = cardNumber;
             TempData["price"] = content.Price;
             TempData["currency"] = content.Currency;
+            TempData["date"] = content.Date;
             TempData["acquirer"] = acquirer;
 
             return RedirectToAction("CardPaymentConfirmation");
@@ -238,8 +239,9 @@ namespace BankApplication.Controllers
             if (TempData["orderId"] == null ||
                 TempData["cardNumber"] == null ||
                 TempData["price"] == null ||
-                TempData["acquirer"] == null ||
-                TempData["currency"] == null)
+                TempData["currency"] == null ||
+                TempData["date"] == null ||
+                TempData["acquirer"] == null)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -248,19 +250,22 @@ namespace BankApplication.Controllers
             string cardNumber = TempData["cardNumber"].ToString();
             decimal price = (decimal)TempData["price"];
             string currency = TempData["currency"].ToString();
+            DateTime date = DateTime.Parse(TempData["date"].ToString());
             Acquirer acquirer = (Acquirer)TempData["acquirer"];
 
             ViewBag.orderId = orderId;
             ViewBag.cardNumber = cardNumber;
             ViewBag.price = price;
             ViewBag.currency = currency;
+            ViewBag.date = date;
             ViewBag.acquirer = acquirer;
 
             TempData["orderId"] = orderId;
             TempData["cardNumber"] = cardNumber;
             TempData["price"] = price;
-            TempData["acquirer"] = acquirer;
             TempData["currency"] = currency;
+            TempData["date"] = date;
+            TempData["acquirer"] = acquirer;
 
             return View("Payment");
         }
@@ -271,8 +276,9 @@ namespace BankApplication.Controllers
             if (TempData["orderId"] == null ||
                 TempData["cardNumber"] == null ||
                 TempData["price"] == null ||
-                TempData["acquirer"] == null ||
-                TempData["currency"] == null)
+                TempData["currency"] == null ||
+                TempData["date"] == null ||
+                TempData["acquirer"] == null)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -281,13 +287,15 @@ namespace BankApplication.Controllers
             string cardNumber = TempData["cardNumber"].ToString();
             decimal price = (decimal)TempData["price"];
             string currency = TempData["currency"].ToString();
+            DateTime date = DateTime.Parse(TempData["date"].ToString());
             Acquirer acquirer = (Acquirer)TempData["acquirer"];
 
             TempData.Remove("orderId");
             TempData.Remove("cardNumber");
             TempData.Remove("price");
-            TempData.Remove("acquirer");
             TempData.Remove("currency");
+            TempData.Remove("date");
+            TempData.Remove("acquirer");
 
             if (status)
             {
