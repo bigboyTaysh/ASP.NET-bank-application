@@ -21,16 +21,8 @@ using System.Web.Helpers;
 namespace BankApplication.Controllers.Tests
 {
     [TestClass()]
-    public class PaymentCardsControllerTests
+    public class PaymentCardsUnitTests
     {
-
-        /*
-        RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(
-                new RoleStore<IdentityRole>(new ApplicationDbContext()));
-
-        UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(
-            new UserStore<ApplicationUser>(new ApplicationDbContext()));
-        */
 
         ClaimsPrincipal user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
                                         new Claim(ClaimTypes.Name, "email1@wp.pl")
