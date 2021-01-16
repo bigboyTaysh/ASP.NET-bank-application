@@ -1,9 +1,11 @@
 import { Backdrop, Button, CircularProgress, Grid, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import OrderStepper from './OrderStepper';
 import axios from 'axios';
 import { Alert } from '@material-ui/lab';
+import authService from './api-authorization/AuthorizeService';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,14 +49,45 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PaymentForm(props) {
   const classes = useStyles();
+  let history = useHistory();
   const [cardPayment, setCardPayment] = React.useState('');
   const [status, setStatus] = React.useState('');
+  const [bank, setBank] = React.useState(props.data.bank);
+  const [directoryServer, setDirectoryServer] = React.useState();
   const [values, setValues] = React.useState({
     address: '',
     cardNumber: '',
     code: ''
   });
   const [open, setOpen] = React.useState(false);
+
+  useEffect(() => {
+    if (!bank) {
+      fetchBank();
+    } else if (!directoryServer) {
+      fetchDirectoryServer();
+    }
+  });
+
+  async function fetchBank() {
+    const token = await authService.getAccessToken();
+    const response = await fetch('api/banks', {
+      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+    });
+
+    const data = await response.json();
+    setBank(data)
+  }
+
+  async function fetchDirectoryServer() {
+    const token = await authService.getAccessToken();
+    const response = await fetch('api/directoryServers', {
+      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+    });
+
+    const data = await response.json();
+    setDirectoryServer(data);
+  }
 
   const handleChange = (event) => {
     setCardPayment(event.target.value);
@@ -76,53 +109,59 @@ export default function PaymentForm(props) {
   };
 
   const addOrder = () => {
-    axios.post('api/orders/postOrder', {
-      price: props.data.basketPrice,
-      cardNumber: values.cardNumber,
-      items: props.data.basket.map(product => ({
-        product: product
-      }))
-    })
-      .then(function (response) {
-        props.handleBasketReset();
+    if (bank) {
+      axios.post('api/orders/postOrder', {
+        price: props.data.basketPrice,
+        cardNumber: values.cardNumber,
+        items: props.data.basket.map(product => ({
+          product: product
+        }))
+      })
+        .then(function (response) {
+          props.handleBasketReset();
 
-        window.location =
-          'https://localhost:44377/paymentCards/cardPayment?orderId=' + response.data.id
-          + '&apiKey=' + '2a9f86fc-8fd6-439d-99af-30d743180d6a'
-          + '&cardNumber=' + values.cardNumber;
-      })
-      .catch(function (error) {
-        handleClose();
-        setStatus(error);
-      })
+          window.location =
+            bank.url + bank.path + '?orderId=' + response.data.id
+            + '&apiKey=' + bank.apiKey
+            + '&cardNumber=' + values.cardNumber;
+        })
+        .catch(function (error) {
+          handleClose();
+          setStatus(error);
+        })
+    } else {
+      history.push('/')
+    }
   }
 
   const handleSumbit = () => {
     handleToggle();
 
-    axios.post('https://localhost:44339/api/payment/cardSecure', {
-      apiKey: "ad777c2b-d332-4107-838a-b37738fa8e1f",
-      cardNumber: values.cardNumber,
-      code: values.code
-    })
-      .then(function (response) {
-        if (response.data.status) {
-          addOrder();
-        } else {
+    if (directoryServer) {
+      axios.post(directoryServer.url + directoryServer.path, {
+        apiKey: directoryServer.apiKey,
+        cardNumber: values.cardNumber,
+        code: values.code
+      })
+        .then(function (response) {
+          if (response.data.status) {
+            addOrder();
+          } else {
+            handleClose();
+            setStatus(response.data.status);
+          }
+        })
+        .catch(function (error) {
           handleClose();
-          setStatus(response.data.status);
-        }
-      })
-      .catch(function (error) {
-        handleClose();
-        if (error.response) {
-          setStatus(error.response.status);
-        } else {
-          setStatus(error);
-        }
-      })
-
-    //props.handleSetPayment(true);
+          if (error.response) {
+            setStatus(error.response.status);
+          } else {
+            setStatus(error);
+          }
+        })
+    } else {
+      history.push('/')
+    }
   }
 
   let button = values.address.length > 5 &&

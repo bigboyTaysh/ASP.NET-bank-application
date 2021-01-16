@@ -89,11 +89,11 @@ namespace BankApplication.DAL
             var transactionTypes = new List<TransactionType>
             {
                 new TransactionType {Type = "TRANSFER"},
+                new TransactionType {Type = "CARD_PAYMENT"},
                 new TransactionType {Type = "CASH_WITHDRAWAL"},
                 new TransactionType {Type = "CASH_DEPOSIT"},
                 new TransactionType {Type = "CURR_EXCHANGE"},
                 new TransactionType {Type = "CREDIT_TRANSFER"},
-                new TransactionType {Type = "CARD_PAYMENT"},
             };
 
             transactionTypes.ForEach(t => context.TransactionTypes.Add(t));
@@ -186,7 +186,6 @@ namespace BankApplication.DAL
                     FirstName = "John",
                     LastName="Travolta",
                     Email = user.UserName,
-                    Login = user.UserName,
                     BankAccounts = new List<BankAccount>(){bankAccounts[0], bankAccounts[2]}
                 },
                 new Profile
@@ -194,11 +193,10 @@ namespace BankApplication.DAL
                     FirstName = "John",
                     LastName="Travolta",
                     Email = user2.UserName,
-                    Login = user2.UserName,
                     BankAccounts = new List<BankAccount>(){bankAccounts[1]}
                 },
-                new Profile { Email = user3.UserName, Login = user3.UserName},
-                new Profile { Email = worker.UserName, Login = worker.UserName},
+                new Profile { Email = user3.UserName},
+                new Profile { Email = worker.UserName},
             };
 
             profiles.ForEach(p => context.Profiles.Add(p));
@@ -208,6 +206,9 @@ namespace BankApplication.DAL
             {
                 Name = "Giga Pizza",
                 URL = "https://localhost:44395/",
+                OrderDetailsPath = "api/orders/",
+                UpdateOrderStatusPath = "api/orders/updateStatus",
+                OrderSummaryPath = "summary/",
                 Description = "Brak pomysłu na obiad? Zamów pizzę online. Giga Pizza to giga przyjemność!",
                 BankAccountNumebr = "52 7949 1333 2906 6136 7434 4779",
                 ApiKey = "2a9f86fc-8fd6-439d-99af-30d743180d6a"

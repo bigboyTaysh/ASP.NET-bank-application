@@ -177,7 +177,7 @@ namespace BankApplication.Controllers
                 db.BankAccounts.Add(bankAccount);
                 paymentCard.BankAccount = bankAccount;
                 db.PaymentCards.Add(paymentCard);
-                db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts.Add(bankAccount);
+                db.Profiles.Single(p => p.Email == User.Identity.Name).BankAccounts.Add(bankAccount);
 
                 db.SaveChanges();
                 return RedirectToAction("Index", "Home");

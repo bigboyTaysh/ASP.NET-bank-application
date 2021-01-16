@@ -136,6 +136,8 @@ namespace Shop.Data
                 var directoryServer = new DirectoryServer()
                 {
                     Name = "Main Directory Server",
+                    URL = "https://localhost:44339/",
+                    Path = "api/payment/cardSecure",
                     ApiKey = "ad777c2b-d332-4107-838a-b37738fa8e1f"
                 };
 
@@ -146,6 +148,7 @@ namespace Shop.Data
                 {
                     Name = "Bank",
                     URL = "https://localhost:44377/",
+                    Path = "paymentCards/cardPayment",
                     ApiKey = "2a9f86fc-8fd6-439d-99af-30d743180d6a"
                 };
 

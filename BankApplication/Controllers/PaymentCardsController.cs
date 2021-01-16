@@ -43,7 +43,7 @@ namespace BankApplication.Controllers
             {
                 var profile = await db.Profiles
                     .Include(p => p.BankAccounts)
-                    .SingleOrDefaultAsync(p => p.Login == User.Identity.Name);
+                    .SingleOrDefaultAsync(p => p.Email == User.Identity.Name);
 
                 var bankAccounts = profile.BankAccounts.Select(b => b.ID);
 
@@ -116,7 +116,7 @@ namespace BankApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "ID,PaymentCardNumber,Code,Blocked,SecureCard")] PaymentCard paymentCard)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && db.PaymentCards.Any(p => p.ID == paymentCard.ID))
             {
                 db.Entry(paymentCard).State = EntityState.Modified;
                 await db.SaveChangesAsync();
@@ -161,14 +161,7 @@ namespace BankApplication.Controllers
                 var paymentCard = db.PaymentCards.SingleOrDefaultAsync(p => p.PaymentCardNumber == cardNumber && p.Code == code).Result;
                 if (paymentCard != null)
                 {
-                    if (paymentCard.SecureCard)
-                    {
-                        return Json(new { status = true });
-                    }
-                    else
-                    {
-                        return Json(new { status = false });
-                    }
+                    return Json(new { status = paymentCard.SecureCard });
                 }
                 else
                 {
@@ -198,7 +191,7 @@ namespace BankApplication.Controllers
 
             var profile = await db.Profiles
                     .Include(p => p.BankAccounts)
-                    .SingleOrDefaultAsync(p => p.Login == User.Identity.Name);
+                    .SingleOrDefaultAsync(p => p.Email == User.Identity.Name);
 
             var bankAccounts = profile.BankAccounts.Select(b => b.ID);
 
@@ -213,7 +206,7 @@ namespace BankApplication.Controllers
                 return Redirect(acquirer.URL);
             }
 
-            HttpResponseMessage response = await client.GetAsync(acquirer.URL + "api/orders/" + orderId);
+            HttpResponseMessage response = await client.GetAsync(acquirer.URL + acquirer.OrderDetailsPath + orderId);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -233,6 +226,7 @@ namespace BankApplication.Controllers
             TempData["cardNumber"] = cardNumber;
             TempData["price"] = content.Price;
             TempData["currency"] = content.Currency;
+            TempData["date"] = content.Date;
             TempData["acquirer"] = acquirer;
 
             return RedirectToAction("CardPaymentConfirmation");
@@ -245,8 +239,9 @@ namespace BankApplication.Controllers
             if (TempData["orderId"] == null ||
                 TempData["cardNumber"] == null ||
                 TempData["price"] == null ||
-                TempData["acquirer"] == null ||
-                TempData["currency"] == null)
+                TempData["currency"] == null ||
+                TempData["date"] == null ||
+                TempData["acquirer"] == null)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -255,25 +250,22 @@ namespace BankApplication.Controllers
             string cardNumber = TempData["cardNumber"].ToString();
             decimal price = (decimal)TempData["price"];
             string currency = TempData["currency"].ToString();
+            DateTime date = DateTime.Parse(TempData["date"].ToString());
             Acquirer acquirer = (Acquirer)TempData["acquirer"];
 
             ViewBag.orderId = orderId;
             ViewBag.cardNumber = cardNumber;
             ViewBag.price = price;
             ViewBag.currency = currency;
+            ViewBag.date = date;
             ViewBag.acquirer = acquirer;
 
-            TempData["statusOrderId"] = orderId;
-            TempData["statusCardNumber"] = cardNumber;
-            TempData["statusPrice"] = price;
-            TempData["statusCurrency"] = currency;
-            TempData["statusAcquirer"] = acquirer;
-
-            TempData.Remove("orderId");
-            TempData.Remove("cardNumber");
-            TempData.Remove("price");
-            TempData.Remove("currency");
-            TempData.Remove("acquirer");
+            TempData["orderId"] = orderId;
+            TempData["cardNumber"] = cardNumber;
+            TempData["price"] = price;
+            TempData["currency"] = currency;
+            TempData["date"] = date;
+            TempData["acquirer"] = acquirer;
 
             return View("Payment");
         }
@@ -281,28 +273,29 @@ namespace BankApplication.Controllers
         [HttpGet]
         public ActionResult Status(bool status)
         {
-            if (TempData["statusOrderId"] == null ||
-                TempData["statusCardNumber"] == null ||
-                TempData["statusPrice"] == null ||
-                TempData["statusAcquirer"] == null ||
-                TempData["statusCurrency"] == null)
+            if (TempData["orderId"] == null ||
+                TempData["cardNumber"] == null ||
+                TempData["price"] == null ||
+                TempData["currency"] == null ||
+                TempData["date"] == null ||
+                TempData["acquirer"] == null)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            int orderId = (int)TempData["statusOrderId"];
-            string cardNumber = TempData["statusCardNumber"].ToString();
-            decimal price = (decimal)TempData["statusPrice"];
-            string currency = TempData["statusCurrency"].ToString();
-            Acquirer acquirer = (Acquirer)TempData["statusAcquirer"];
+            int orderId = (int)TempData["orderId"];
+            string cardNumber = TempData["cardNumber"].ToString();
+            decimal price = (decimal)TempData["price"];
+            string currency = TempData["currency"].ToString();
+            DateTime date = DateTime.Parse(TempData["date"].ToString());
+            Acquirer acquirer = (Acquirer)TempData["acquirer"];
 
-            TempData.Remove("statusOrderId");
-            TempData.Remove("statusCardNumber");
-            TempData.Remove("statusPrice");
-            TempData.Remove("statusCurrency");
-            TempData.Remove("statusAcquirer");
-
-            
+            TempData.Remove("orderId");
+            TempData.Remove("cardNumber");
+            TempData.Remove("price");
+            TempData.Remove("currency");
+            TempData.Remove("date");
+            TempData.Remove("acquirer");
 
             if (status)
             {
@@ -323,7 +316,6 @@ namespace BankApplication.Controllers
                     }
                     else
                     {
-                        RefreshCurrency.RefreshCurrenciesAsync().ConfigureAwait(false);
                         var exchangedCurrency = CurrenciesController.ExchangeCurrencyBid(bankAccount.Currency.Code, currencyTo.Code, price);
                         value = exchangedCurrency + (exchangedCurrency * commision);
                     }
@@ -335,7 +327,7 @@ namespace BankApplication.Controllers
 
                         Transaction transaction = new Transaction
                         {
-                            ValueTo = price,
+                            ValueTo = value,
                             BalanceAfterTransactionUserTo = bankAccount.Balance,
 
                             FromBankAccountNumber = bankAccount.BankAccountNumber,
@@ -363,11 +355,10 @@ namespace BankApplication.Controllers
                 }
             }
 
-            client.PostAsJsonAsync(acquirer.URL + "api/orders/updateStatus", new { id = orderId, status = status, apiKey = acquirer.ApiKey});
-            
+            client.PostAsJsonAsync(acquirer.URL + acquirer.UpdateOrderStatusPath, new { id = orderId, status = status, apiKey = acquirer.ApiKey});
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
-            return Redirect(acquirer.URL + "summary/" + orderId);
+            return Redirect(acquirer.URL + acquirer.OrderSummaryPath + orderId);
         }
 
         public static string NewPaymentCardNumber()

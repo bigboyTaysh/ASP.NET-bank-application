@@ -83,8 +83,8 @@
     </div>
 }
 
-<div class="search-transactions-group">
-    <div class="col-md-6">
+<div class="search-transactions-group row text-center">
+    <div class="col">
         <span class="gray-text">
             Nadawca/Odbiorca
         </span>
@@ -116,7 +116,7 @@
         <br />
     </div>
 
-    <div class="col-md-6">
+    <div class="col">
         <span class="gray-text">
             Opis
         </span>
@@ -128,7 +128,7 @@
         <br />
 
         <span class="gray-text">
-            do
+            Kwotda do
         </span>
         <br />
         <span>
@@ -138,7 +138,7 @@
         <br />
 
         <span class="gray-text">
-            Data od
+            Data do
         </span>
         <br />
         <span>
@@ -147,47 +147,51 @@
         <br />
         <br />
     </div>
+</div>
 
-    <div class="col-md-6 col-md-offset-3">
-        <span class="gray-text" style="text-align: center">
-            Typ transakcji
-        </span>
-        <br />
-        <span>
-            <select class="type">
-                <option value="0">
-                    Wszystkie
+<div class="text-center">
+    <span class="gray-text" style="text-align: center">
+        Typ transakcji
+    </span>
+    <br />
+    <span>
+        <select class="type">
+            <option value="0">
+                Wszystkie
+            </option>
+            @foreach (var item in (List<BankApplication.Models.TransactionType>)ViewBag.Types)
+            {
+                <option value="@item.ID">
+                    @if (item.Type == "TRANSFER")
+                    {
+                        @:Przelew
+                    }
+                    else if (item.Type == "CARD_PAYMENT")
+                    {
+                        @:Płatność kartą
+                    }
+                    else if (item.Type == "CASH_DEPOSIT")
+                    {
+                        @:Wpłata
+                    }
+                    else if (item.Type == "CASH_WITHDRAWAL")
+                    {
+                        @:Wypłata
+                    }
+                    else if (item.Type == "CURR_EXCHANGE")
+                    {
+                        @:Wymiana waluty
+                    }
+                    else if (item.Type == "CREDIT_TRANSFER")
+                    {
+                        @:Kredyt/Rata
+                    }
                 </option>
-                @foreach (var item in (List<BankApplication.Models.TransactionType>)ViewBag.Types)
-                {
-                    <option value="@item.ID">
-                        @if (item.Type == "TRANSFER")
-                        {
-                            @:Przelew
-                        }
-                        else if (item.Type == "CASH_DEPOSIT")
-                        {
-                            @:Wpłata
-                        }
-                        else if (item.Type == "CASH_WITHDRAWAL")
-                        {
-                            @:Wypłata
-                        }
-                        else if (item.Type == "CURR_EXCHANGE")
-                        {
-                            @:Wymiana waluty
-                        }
-                        else if (item.Type == "CREDIT_TRANSFER")
-                        {
-                            @:Kredyt/Rata
-                        }
-                    </option>
-                }
-            </select>
-        </span>
-        <br />
-        <br />
-    </div>
+            }
+        </select>
+    </span>
+    <br />
+    <br />
 </div>
 
 <table class="table">
@@ -205,10 +209,10 @@
         </tr>
     </thead>
     <tbody class="table-transactions-result">
-        <tr class="loading-container">
-            <td colspan="5">
-                <div>
-                    <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+        <tr>
+            <td colspan="5" class="border-top-0">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
                 </div>
             </td>
         </tr>
@@ -216,21 +220,19 @@
 </table>
 
 <script>
-    var page = 1;
-    var active = false;
+    let page = 1;
+    let active = false;
 
     function searchTransactions(page, append) {
         active = true;
-        var bankAccountNumber = $(".active > .details-type > div.bankAccountSelect").text();
-        var senderReceiver = $(".sender-receiver").val();
-        var description = $(".description").val();
-        var amountFrom = $(".amount-from").val();
-        var amountTo = $(".amount-to").val();
-        var dataFrom = $(".data-from").val();
-        var dataTo = $(".data-to").val();
-        var type = $(".type").val();
-
-        console.log(type);
+        let bankAccountNumber = $(".active > .details-type > div.bankAccountSelect").text();
+        let senderReceiver = $(".sender-receiver").val();
+        let description = $(".description").val();
+        let amountFrom = $(".amount-from").val();
+        let amountTo = $(".amount-to").val();
+        let dataFrom = $(".data-from").val();
+        let dataTo = $(".data-to").val();
+        let type = $(".type").val();
 
         $.post("@Url.Action("Transactions", "Transactions")",
             {
@@ -245,11 +247,9 @@
                 type: type,
             },
             function (data) {
-                if (append == "append") {
+                if (append === true) {
                     $(".table-transactions-result").append(data);
                 } else {
-                    $(".loading-container").hide();
-
                     if (data != "") {
                         $(".table-transactions-result").html(data);
                     } else if (data === "" && page == 1){
@@ -267,9 +267,9 @@
     });
 
     $(window).scroll(function () {
-        if (($(window).scrollTop() + $(window).height() >= $("body").height() + 70) && !active) {
+        if (($(window).scrollTop() + $(window).height() >= $("body").height() + 10) && !active) {
             page++;
-            searchTransactions(page, "append");
+            searchTransactions(page, true);
         }
     });
 
@@ -277,17 +277,19 @@
 
     $(".sender-receiver, .description, .amount-from, .amount-to, .data-from, .data-to")
         .on("keyup change paste", function () {
+            page = 1;
             searchTransactions(1);
         }
     );
 
     $(".type").on("select2:select", function () {
+        page = 1;
         searchTransactions(1);
     });
 
     $(".submit-cash-deposit").on("click", function () {
-        var value = $(".value-deposit-withdrawal").val();
-        var bankAccountNumber = $(".bankAccountSelect").text();
+        let value = $(".value-deposit-withdrawal").val();
+        let bankAccountNumber = $(".bankAccountSelect").text();
 
         if (parseFloat(value) > 0) {
             $.post("Transactions/CashDeposit", { bankAccountNumber: bankAccountNumber, value: value }, function (data) {
@@ -301,8 +303,8 @@
     });
 
     $(".submit-cash-withdrawal").on("click", function () {
-        var value = $(".value-deposit-withdrawal").val();
-        var bankAccountNumber = $(".bankAccountSelect").text();
+        let value = $(".value-deposit-withdrawal").val();
+        let bankAccountNumber = $(".bankAccountSelect").text();
 
         if (parseFloat(value) > 0) {
             $.post("Transactions/CashWithdrawal", { bankAccountNumber: bankAccountNumber, value: value }, function (data) {

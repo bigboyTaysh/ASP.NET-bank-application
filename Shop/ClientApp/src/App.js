@@ -10,6 +10,7 @@ import Summary from './components/Summary';
 import PaymentForm from './components/PaymentForm';
 
 import './custom.css'
+import authService from './components/api-authorization/AuthorizeService';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -22,7 +23,7 @@ export default class App extends Component {
       basketPrice: 0,
       basket: [],
       payment: false,
-      cardPayment: false
+      cardPayment: false,
     };
   }
 
@@ -112,8 +113,9 @@ export default class App extends Component {
             }
           />
           <Route exact path='/payment'
-            render={() =>
+            render={(props) =>
               <PaymentForm
+                {...props}
                 data={this.state}
                 handleBasketReset={this.handleBasketReset}
                 handleSetCardPayment={this.handleSetCardPayment}

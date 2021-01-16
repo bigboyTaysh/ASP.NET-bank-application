@@ -17,6 +17,15 @@
         <br />
         <div class="row">
             <div class="col-sm text-align-right">
+                <p class="card-text font-weight-bold">Data zamówienia: </p>
+            </div>
+            :
+            <div class="col-sm text-align-left">
+                <p class="card-text">@ViewBag.date.ToString("HH:mm dd.MM.yyyy")</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm text-align-right">
                 <p class="card-text font-weight-bold">Numer płatności: </p>
             </div>
             :
@@ -67,9 +76,24 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="d-flex" style="margin: 0 auto">
+            <div class="spinner-border" role="status">
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
         let seconds = 30;
+
+        $(".btn").on("click", function () {
+            $(".btn").addClass("disabled");
+            $('#staticBackdrop').modal('toggle');
+            clearInterval(count);
+        });
 
         let count = setInterval(() => {
             seconds = seconds - 1;
@@ -78,7 +102,10 @@
             }
             $(".timer").text(seconds + " s");
 
-            if (seconds === 1) {
+            if (seconds < 1) {
+                $('#staticBackdrop').modal('toggle');
+                $(".btn").addClass("disabled");
+
                 let token = $('input[name="__RequestVerificationToken"]').val();
 
                 $.ajax({
@@ -88,14 +115,13 @@
                         __RequestVerificationToken: token,
                     },
                     success: function (result) {
-                        window.location.replace("@ViewBag.acquirer.URL" + "summary/" + "@ViewBag.orderId");
+                        window.location.replace("@ViewBag.acquirer.URL" + "@ViewBag.acquirer.OrderSummaryPath" + "@ViewBag.orderId");
                     },
                     error: function () {
                         window.location.reload();
                     }
                 });
-            } else if (seconds < 1) {
-                $(".btn").addClass("disabled");
+
                 clearInterval(count);
             }
         }, 1000);

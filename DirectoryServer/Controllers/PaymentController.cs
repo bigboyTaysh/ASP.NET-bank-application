@@ -50,7 +50,7 @@ namespace DirectoryServer.Controllers
             var bank = _context.Banks.FirstOrDefault();
             json.ApiKey = bank.ApiKey;
 
-            HttpResponseMessage response = await client.PostAsJsonAsync(bank.URL + "paymentCards/cardSecured", json);
+            HttpResponseMessage response = await client.PostAsJsonAsync(bank.URL + bank.Path, json);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {

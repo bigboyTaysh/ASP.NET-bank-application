@@ -24,7 +24,7 @@ namespace BankApplication.Controllers
             } else
             {
 
-                return View(db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts);
+                return View(db.Profiles.Single(p => p.Email == User.Identity.Name).BankAccounts);
             }
         }
 

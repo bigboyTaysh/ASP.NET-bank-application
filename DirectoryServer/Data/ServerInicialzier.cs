@@ -26,6 +26,7 @@ namespace DirectoryServer.Data
                 {
                     Name = "Bank",
                     URL = "https://localhost:44377/",
+                    Path = "paymentCards/cardSecured",
                     ApiKey = "06b9e986-9609-4892-933f-9ced84f3e1c8"
                 };
 

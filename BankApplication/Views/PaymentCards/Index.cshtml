@@ -33,8 +33,16 @@
                     <h5 class="card-title">
                         Dostępne środki: @Html.DisplayFor(modelItem => item.BankAccount.AvailableFounds) @Html.DisplayFor(modelItem => item.BankAccount.Currency.Code)
                     </h5>
+                    <h6 class="card-title">
+                        <a data-toggle="collapse" href="#collapse@(item.ID)" role="button" aria-expanded="false" aria-controls="collapse@(item.ID)">
+                            Pokaż kod
+                        </a>
+                    </h6>
+                    <h5 class="collapse" id="collapse@(item.ID)">
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </h5>
                     <br />
-                    <div class="row d-flex justify-content-around">
+                    <div class="row justify-content-around">
                         <p class="card-text">
                             Blokada karty:
                             @if (item.Blocked)
@@ -57,10 +65,9 @@
                                 <i class="bi bi-shield-minus" style="margin-left: 10px;"></i>
                             }
                         </p>
-                    </div>
-
-                    <div class="float-right buttons noselect">
-                        @Html.ActionLink("Edytuj", "Edit", new { id = item.ID }, new { @class = "btn btn-outline-light" })
+                        <div class="float-right buttons noselect">
+                            @Html.ActionLink("Edytuj", "Edit", new { id = item.ID }, new { @class = "btn btn-outline-light" })
+                        </div>
                     </div>
                 </div>
             </div>

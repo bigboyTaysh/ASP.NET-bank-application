@@ -40,7 +40,7 @@ namespace BankApplication.Controllers
             }
             else
             {
-                var bankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
+                var bankAccounts = db.Profiles.Single(p => p.Email == User.Identity.Name).BankAccounts;
                 var bankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == bankAccountNumber);
 
                 if (bankAccount != null && bankAccounts.Any(b => b.BankAccountNumber == bankAccount.BankAccountNumber))
@@ -148,7 +148,7 @@ namespace BankApplication.Controllers
                                 return default;
                             }
                             
-                        } 
+                        }
                         else if ((t.TransactionType.Type == "TRANSFER" || t.TransactionType.Type == "CURR_EXCHANGE") && t.ToBankAccountNumber == bankAccountNumber)
                         {
                             if
@@ -165,6 +165,22 @@ namespace BankApplication.Controllers
                                 return default;
                             }
 
+                        }
+                        else if (t.TransactionType.Type == "CARD_PAYMENT")
+                        {
+                            if
+                            (
+                                (t.ReceiverName ?? "").Contains(senderReceiver) &&
+                                t.ValueTo >= amountFromNN &&
+                                t.ValueTo <= amountToNN
+                            )
+                            {
+                                return t;
+                            }
+                            else
+                            {
+                                return default;
+                            }
                         }
                         else if (t.TransactionType.Type == "CASH_DEPOSIT")
                         {
@@ -227,7 +243,7 @@ namespace BankApplication.Controllers
             //                ((t.ValueFrom >= amountFromNN && t.ValueFrom <= amountToNN) || (t.ValueTo >= amountFromNN && t.ValueTo <= amountToNN)));
 
 
-            int pageSize = (size ?? 10);
+            int pageSize = (size ?? 3);
             int pageNumber = (page ?? 1);
 
             ViewBag.Count = transactionsList.Count;
@@ -277,7 +293,7 @@ namespace BankApplication.Controllers
         {
             ViewBag.TransactionTypeID = new SelectList(db.TransactionTypes, "ID", "Type");
             ViewBag.CurrencyToID = new SelectList(db.Currencies, "ID", "Code");
-            ViewBag.BankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
+            ViewBag.BankAccounts = db.Profiles.Single(p => p.Email == User.Identity.Name).BankAccounts;
             return View("Transfer");
         }
 
@@ -288,7 +304,7 @@ namespace BankApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Transfer([Bind(Include = "ReceiverName,ToBankAccountNumber,Description,ValueTo,CurrencyToID")] Transaction transaction, int BankAccountID)
         {
-            var bankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
+            var bankAccounts = db.Profiles.Single(p => p.Email == User.Identity.Name).BankAccounts;
             var bankAccount = db.BankAccounts.SingleOrDefault(b => b.ID == BankAccountID);
             var toBankAccount = db.BankAccounts.SingleOrDefault(b => b.BankAccountNumber == transaction.ToBankAccountNumber);
             var currencyTo = db.Currencies.Single(c => c.ID == transaction.CurrencyToID);
@@ -361,7 +377,7 @@ namespace BankApplication.Controllers
 
             ViewBag.TransactionTypeID = new SelectList(db.TransactionTypes, "ID", "Type", transaction.TransactionTypeID);
             ViewBag.CurrencyToID = new SelectList(db.Currencies, "ID", "Code", transaction.CurrencyToID);
-            ViewBag.BankAccounts = db.Profiles.Single(p => p.Login == User.Identity.Name).BankAccounts;
+            ViewBag.BankAccounts = db.Profiles.Single(p => p.Email == User.Identity.Name).BankAccounts;
 
             return View("Transfer", transaction);
         }

@@ -78,7 +78,7 @@
                         @Html.ActionLink(item.BankAccountNumber, "Details", "BankAccounts", new { id = item.BankAccountTypeID }, new { @class = "btn btn-default", target = "_blank" })
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CreationDate)
+                        @item.CreationDate.ToString("dd.MM.yyyy")
                     </td>
                     <td>
                         @Html.ActionLink("Stan", "Index", "Transactions", new { bankAccountNumber = item.BankAccountNumber }, new { @class = "btn btn-default", target = "_blank" })
