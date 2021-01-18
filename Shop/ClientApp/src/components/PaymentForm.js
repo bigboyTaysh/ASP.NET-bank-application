@@ -192,7 +192,7 @@ export default function PaymentForm(props) {
     </Typography>
 
   let cardNotSecured =
-    <Alert className={classes.alert} severity="warning">Karta nie widnieje w systemie CardSecure</Alert>
+    <Alert className={classes.alert} severity="warning">Karta nie ma włączonej usługi SecureCard</Alert>
 
   let cardNotFound =
     <Alert className={classes.alert} severity="error">Nieprawidłowe dane karty</Alert>

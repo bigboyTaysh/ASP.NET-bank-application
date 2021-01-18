@@ -65,10 +65,10 @@
             @item.StartDate.ToString("dd.MM.yyyy")
         </td>
         <td>
-            @item.EndDate?.ToString("dd.MM.yyyy")
+            @(item.EndDate?.ToString("dd.MM.yyyy"))
         </td>
         <td>
-            @item.LastPayment?.ToString("dd.MM.yyyy")
+            @(item.LastPayment?.ToString("dd.MM.yyyy"))
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.IsPaidOff)

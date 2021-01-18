@@ -28,6 +28,9 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">
+                        Numer karty: @item.PaymentCardNumber
+                    </h5>
+                    <h5 class="card-title">
                         Numer konta: @item.BankAccount.BankAccountNumber.Substring(0, 2) ... @item.BankAccount.BankAccountNumber.Substring(28, 4)
                     </h5>
                     <h5 class="card-title">
@@ -47,22 +50,22 @@
                             Blokada karty:
                             @if (item.Blocked)
                             {
-                                <i class="bi bi-check2-square" style="margin-left: 10px;"></i>
+                                <i class="bi bi-check2-square" style="margin-left: 10px; font-size: 25px"></i>
                             }
                             else
                             {
-                                <i class="bi bi-dash-square" style="margin-left: 10px;"></i>
+                                <i class="bi bi-dash-square" style="margin-left: 10px; font-size: 25px"></i>
                             }
                         </p>
                         <p class="card-text">
-                            Usługa CardSecure:
+                            Usługa SecureCard:
                             @if (item.SecureCard)
                             {
-                                <i class="bi bi-shield-plus" style="margin-left: 10px;"></i>
+                                <i class="bi bi-shield-plus" style="margin-left: 10px; font-size: 25px"></i>
                             }
                             else
                             {
-                                <i class="bi bi-shield-minus" style="margin-left: 10px;"></i>
+                                <i class="bi bi-shield-minus" style="margin-left: 10px;  font-size: 25px"></i>
                             }
                         </p>
                         <div class="float-right buttons noselect">
