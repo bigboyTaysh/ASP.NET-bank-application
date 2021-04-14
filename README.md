@@ -1,5 +1,5 @@
 # BankApplication
-aplikacja bankowa z systemem płatności kartą w aplikacji Shop
+aplikacja bankowa z systemem płatności kartą w aplikacji Shop  
 asp.net MCV5, Razor, Bootstrap, jQuery, Ajax
 
 Użytkownik:
@@ -21,8 +21,9 @@ Administrator:
 - zarządzanie pracownikami
 
 # Shop
-aplikacja sklepu internetowego udostepniająca płatności za pomocą karty w BankApplication
+aplikacja sklepu internetowego udostepniająca płatności za pomocą karty w BankApplication  
 asp.net web api, React, Axios, Material UI
 
 # Direcotry Serwer
-aplikacja będąca serwerem pośredniczącym wykorzystywanym do płatności kartą
+aplikacja będąca serwerem pośredniczącym wykorzystywanym do płatności kartą  
+asp.net web api
