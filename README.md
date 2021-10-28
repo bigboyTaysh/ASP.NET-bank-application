@@ -20,8 +20,8 @@
 # BankApplication
 banking application with virtual card payment system in the [Shop](#shop) application  
 
-![4](https://user-images.githubusercontent.com/47925883/139247485-79a23f8e-f614-45d9-ae4e-efe07fe9bed1.jpg)
-![image](https://user-images.githubusercontent.com/47925883/139248866-a0ea235b-92fc-49d6-a5d1-68a6617d50c2.png)
+<img src="https://user-images.githubusercontent.com/47925883/139247485-79a23f8e-f614-45d9-ae4e-efe07fe9bed1.jpg" width="80%">
+<img src="https://user-images.githubusercontent.com/47925883/139248866-a0ea235b-92fc-49d6-a5d1-68a6617d50c2.png" width="50%">
 
 ## Modules
 User:
@@ -55,21 +55,20 @@ an online store application that enables card payments in [BankApplication](#ban
 ## Example scenario
 
 _Adding selected products to the basket and choosing a payment method, e.g. card payment:_
-![11](https://user-images.githubusercontent.com/47925883/139249648-82874bf9-a676-45f7-8ffb-327c398bdea0.jpg)  
-
-![13](https://user-images.githubusercontent.com/47925883/139249750-e2d1c116-72e8-407b-bffa-12641d2b3b6f.jpg)
+<img src="https://user-images.githubusercontent.com/47925883/139249648-82874bf9-a676-45f7-8ffb-327c398bdea0.jpg" width="80%">
+<img src="https://user-images.githubusercontent.com/47925883/139249750-e2d1c116-72e8-407b-bffa-12641d2b3b6f.jpg" width="80%">
 
 _Entering the delivery address and card number with security code:_
 
-![14](https://user-images.githubusercontent.com/47925883/139249927-8530e065-a8a1-4036-a03b-0cfb8a8050ac.jpg)
-
+<img src="https://user-images.githubusercontent.com/47925883/139249927-8530e065-a8a1-4036-a03b-0cfb8a8050ac.jpg" width="60%">
 
 _Confirmation of payment in the bank after logging in:_
 
-![17](https://user-images.githubusercontent.com/47925883/139247716-248e3f8c-a087-4474-bb0d-758eda97e480.jpg)
+<img src="https://user-images.githubusercontent.com/47925883/139247716-248e3f8c-a087-4474-bb0d-758eda97e480.jpg" width="50%">
 
 _Order summary:_  
-![18](https://user-images.githubusercontent.com/47925883/139251686-3a33bc4c-08a9-49ce-b7fe-ef004dc91912.png)
+
+<img src="https://user-images.githubusercontent.com/47925883/139251686-3a33bc4c-08a9-49ce-b7fe-ef004dc91912.png" width="80%">
 
 
 ## Technology stack
