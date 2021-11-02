@@ -68,7 +68,7 @@ _Confirmation of payment in the bank after logging in:_
 
 _Order summary:_  
 
-<img src="https://user-images.githubusercontent.com/47925883/139251686-3a33bc4c-08a9-49ce-b7fe-ef004dc91912.png" width="80%">
+<img src="https://user-images.githubusercontent.com/47925883/139904640-8c5a7da3-da1e-439e-85dd-1652047aa242.png" width="80%">
 
 
 ## Technology stack
